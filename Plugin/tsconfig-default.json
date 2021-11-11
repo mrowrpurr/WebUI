@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+        "alwaysStrict": true,
+        "noImplicitAny": true,
+        "noImplicitThis": true,
+        "strict": true,
+        "module": "System",
+        "target": "ES5",
+        "lib": [
+            "ES2015"
+        ],
+        "paths": {
+            "chai": ["./node_modules/@types/chai"]
+        }
+    },
+    "include": ["./*.ts"]   
+}
