@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <style>
+            iframe {
+                position: absolute;
+            }
+        </style>
+        <script>
+            function addUI(id, relativeFilepath, x, y, height, width, visible) {
+
+                // var iframeId        = "webhost-" + id.replaceAll(" ", "-")
+                var iframe          = document.createElement("iframe")
+                // iframe.id           = iframeId
+                iframe.style.left   = (window.innerWidth  * (x / 100)).toFixed()      + "px"
+                iframe.style.top    = (window.innerHeight * (y / 100)).toFixed()      + "px"
+                iframe.style.height = (window.innerHeight * (height / 100)).toFixed() + "px"
+                iframe.style.width  = (window.innerWidth  * (width / 100)).toFixed()  + "px"
+                iframe.src          = relativeFilepath
+                iframe.frameBorder  = 0
+                // iframe.onload       = function() {  window.skyrimPlatform.sendMessage({ "event": "webhost-onload",    "webhost-id": id }); }
+                // iframe.onmessage = function(e) { window.skyrimPlatform.sendMessage("WebPlatform", id, e.data); }
+                // if (! visible) iframe.style.display = "none"
+                document.body.appendChild(iframe)
+            }
+            function removeUI(id) {
+                var iframeId = "webhost-" + id.replaceAll(" ", "-");
+                var iframe = document.getElementById(iframeId);
+                document.body.removeChild(iframe)
+            }
+            function hideUI(id) {
+                var iframeId = "webhost-" + id.replaceAll(" ", "-");
+                var iframe = document.getElementById(iframeId);
+                iframe.style.display = "none";
+            }
+            function showUI(id) {
+                var iframeId = "webhost-" + id.replaceAll(" ", "-")
+                var iframe = document.getElementById(iframeId)
+                iframe.style.display = "block";
+            }
+            function sendMessage(id, message) {
+                var iframeId = "webhost-" + id.replaceAll(" ", "-")
+                var iframe = document.getElementById(iframeId)
+                iframe.postMessage(message)
+            }
+            window.addEventListener("message", function(message) {
+                alert("I got a message! from: " + message.source + " data:" + JSON.stringify(message.data));
+            }, false);
+        </script>
+    </head>
+    <body>
+        <h1>HELLO WORLD?</h1>
+    </body>
+</html>

@@ -1,0 +1,15 @@
+<style>
+    body {
+        background-color: lightgray;
+        opacity: 0.7;
+        color: green;
+    }
+</style>
+<script>
+    function clickButton() {
+        parent.postMessage({ "hello this is my message": 123, "another key": { "sub object": 69 }})
+        document.getElementById("foo").innerText = Date.now()
+    }
+</script>
+<h1 id="foo">I AM IFRAME please?</h1>
+<button onclick="clickButton()">Click Me For Alert!</button>
