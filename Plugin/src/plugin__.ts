@@ -9,7 +9,7 @@ import {
     on,
     Ui
 } from "skyrimPlatform"
-import { initUI, showUI, addUI, focusUI, onAnyWebMessage, unfocusUI, hideUI } from "./WebPlatform"
+import { initUI, showUI, addUI, focusUI, onAnyWebMessage, unfocusUI, hideUI } from "./WebUI"
 
 initUI()
 

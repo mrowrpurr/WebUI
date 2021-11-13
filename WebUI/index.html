@@ -1,0 +1,80 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <style>
+            iframe {
+                position: absolute
+            }
+            body {
+                overflow: hidden;
+            }
+        </style>
+        <script>
+            window.onerror = function(msg, url, linenumber) {
+                alert('Error message: '+msg+'\nURL: '+url+'\nLine Number: '+linenumber)
+                return true
+            }
+
+            var _uiFrames = {}
+
+            function addUI(id, relativeFilepath, x, y, height, width, visible) {
+                var iframeId        = "webhost-" + id.replace(" ", "-")
+                var iframe          = document.createElement("iframe")
+                iframe.id           = iframeId
+                iframe.style.left   = (window.innerWidth  * (x / 100)).toFixed()      + "px"
+                iframe.style.top    = (window.innerHeight * (y / 100)).toFixed()      + "px"
+                iframe.style.height = (window.innerHeight * (height / 100)).toFixed() + "px"
+                iframe.style.width  = (window.innerWidth  * (width / 100)).toFixed()  + "px"
+                iframe.src          = relativeFilepath
+                iframe.frameBorder  = 0
+                iframe.scrolling    = "no"
+
+                // iframe.onload = function() {
+                //     window.skyrimPlatform.sendMessage("WebPlatform", "OnLoad", id, "")
+                // }
+                if (! visible) iframe.style.display = "none"
+                document.body.appendChild(iframe)
+                _uiFrames[iframe.contentWindow] = id
+            }
+
+            function removeUI(id) {
+                var iframeId = "webhost-" + id.replaceAll(" ", "-")
+                var iframe = document.getElementById(iframeId)
+                document.body.removeChild(iframe)
+            }
+
+            function hideUI(id) {
+                var iframeId = "webhost-" + id.replaceAll(" ", "-")
+                var iframe = document.getElementById(iframeId)
+                iframe.style.display = "none"
+            }
+
+            function showUI(id) {
+                var iframeId = "webhost-" + id.replaceAll(" ", "-")
+                var iframe = document.getElementById(iframeId)
+                iframe.style.display = "block"
+            }
+
+            function sendMessage(id, message) {
+                var iframeId = "webhost-" + id.replaceAll(" ", "-")
+                var iframe = document.getElementById(iframeId)
+                iframe.postMessage(message)
+            }
+
+            window.addEventListener("message", function(message) {
+                // alert("Hiiiii")
+                // window.skyrimPlatform.sendMessage(1, 2, 3, "yay");
+                var id = _uiFrames[message.source]
+                if (id) {
+                    window.skyrimPlatform.sendMessage("WebPlatform", "OnMessage", id, message.data)
+                } else {
+                    window.skyrimPlatform.sendMessage("WebPlatform", "OnMessage", "???", message.data)
+                }
+            }, false)
+
+        </script>
+    </head>
+    <body>
+    </body>
+</html>

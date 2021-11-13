@@ -4,7 +4,7 @@ import { browser, on, Debug, printConsole } from "skyrimPlatform";
 * TODO
 */
 export function initUI() {
-    browser.loadUrl("file:///UI/WebPlatform/index.html")
+    browser.loadUrl("file:///Data/WebUI/index.html")
 }
 
 /**
@@ -56,7 +56,7 @@ export function unfocusUI() {
 * @param y - TODO
 * @returns The arithmetic mean of `x` and `y`
 */
-export function addUI(id: string, url: string, x: number, y: number, height: number, width: number, visible: boolean) {
+export function addUI(id: string, url: string, x: number, y: number, height: number, width: number, visible: boolean = true) {
     browser.executeJavaScript(`addUI(${JSON.stringify(id)}, ${JSON.stringify(url)}, ${JSON.stringify(x)}, ${JSON.stringify(y)}, ${JSON.stringify(height)}, ${JSON.stringify(width)}, ${JSON.stringify(visible)});`)
 }
 
@@ -70,7 +70,13 @@ export function postMessage(id: string, message: string) {
 /**
 * TODO
 */
-export function localFilePath(relativeToSkyrimFolder: string, webPlatformUiFolder: string = "UI/WebPlatform") : string {
+export function localFilePath(relativeToSkyrimFolder: string, webPlatformUiFolder: string = "/Data/WebUI") : string {
+    if (! relativeToSkyrimFolder.startsWith("/"))
+        relativeToSkyrimFolder = "/" + relativeToSkyrimFolder
+
+    if (relativeToSkyrimFolder.startsWith(webPlatformUiFolder))
+        return relativeToSkyrimFolder.replace(webPlatformUiFolder, ".")
+
     const dotDots = webPlatformUiFolder.split(/[\\/]/).map(_ => "..").join("/")
     return dotDots + "/" + relativeToSkyrimFolder
 }
