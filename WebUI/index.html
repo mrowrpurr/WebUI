@@ -18,6 +18,7 @@
 
             var _uiFrames = {}
             var _uiIsMenu = {}
+            var _activeComponents = []
 
             function addUI(id, relativeFilepath, x, y, height, width, visible, isMenu) {
 
@@ -80,14 +81,18 @@
             }
 
             function showComponent(id) {
-                if (_uiIsMenu[id])
+                if (_uiIsMenu[id]) {
                     window.skyrimPlatform.sendMessage("WebUI", "EnterMenuMode")
+                    _activeComponents.push(id)
+                }
                 getIframe(id).style.display = "block"
             }
 
             function hideComponent(id) {
-                if (_uiIsMenu[id])
+                if (_uiIsMenu[id]) {
                     window.skyrimPlatform.sendMessage("WebUI", "LeaveMenuMode")
+                    _activeComponents.pop()
+                }
                 getIframe(id).style.display = "none"
             }
 
@@ -98,6 +103,13 @@
             function getIframe(id) {
                 return document.getElementById("webui-" + id.replace(/ /g, "-"))
             }
+
+            window.addEventListener("keydown", function(e) {
+                if (e.keyCode == 27 && _activeComponents.length) {
+                    var activeComponentId = _activeComponents[_activeComponents.length - 1]
+                    hideComponent(activeComponentId)
+                }
+            })
 
             // window.addEventListener("message", function(message) {
             //     // alert("Hiiiii")

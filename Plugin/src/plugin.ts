@@ -1,24 +1,30 @@
-import { on, printConsole, Debug, Game, Ui } from "skyrimPlatform"
+import { on, printConsole, Debug, Game, Ui, browser, once } from "skyrimPlatform"
 import * as JMap from "JContainers/JMap"
 import * as WebUI from "./WebUI"
 
 WebUI.initUI()
 WebUI.showUI()
 
-let messageContainerId = 0
-
 export function main() {
 
+    let messageContainerId = 0
     let enableMenuMode  = false
     let disableMenuMode = false
+
+    once("update", () => {
+        if (messageContainerId == 0)
+            messageContainerId = Game.getFormFromFile(0xd7d, "PapyrusToSkyrimPlatform.esp")!.getFormID()
+    })
 
     on("update", () => {
         if (enableMenuMode) {
             enableMenuMode = false
             Ui.openCustomMenu("InvisibleCustomMenu", 0)
+            browser.setFocused(true)
         } else if (disableMenuMode) {
             disableMenuMode = false
             Ui.closeCustomMenu()
+            browser.setFocused(false)
         }
     })
 
@@ -32,10 +38,6 @@ export function main() {
 
     // TODO - Move to PapyrusToSkyrimPlatform.ts
     on("containerChanged", (event) => {
-
-        if (messageContainerId == 0)
-            messageContainerId = Game.getFormFromFile(0xd7d, "PapyrusToSkyrimPlatform.esp")!.getFormID()
-
         if (event.newContainer.getFormID() == messageContainerId) {
             const eventRef  = parseInt(event.baseObj.getName())
             const eventName = JMap.getStr(eventRef, "event")
@@ -66,13 +68,12 @@ export function main() {
                             WebUI.toggleComponent(componentMessageTarget)
                             break;
                     }
+                } else if (componentMessageEvent == "SetCarryWeight") {
+                    const newWeight = JMap.getInt(componentMessageData, "weight")
+                    WebUI.postMessage("CarryWeightWidget", newWeight)
                 } else {
-                    WebUI.postMessage(componentMessageTarget, dataRef)
+                    Debug.messageBox("Unknown event: " + componentMessageEvent)
                 }
-
-            } else if (eventName == "SetCarryWeight") {
-                const newWeight = JMap.getInt(dataRef, "value")
-                WebUI.postMessage("CarryingCapacityWidget", newWeight)
 
             } else {
                 Debug.messageBox("EVENT: " + eventName)
