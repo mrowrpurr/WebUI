@@ -56,8 +56,8 @@ export function unfocusUI() {
 * @param y - TODO
 * @returns The arithmetic mean of `x` and `y`
 */
-export function addUI(id: string, url: string, x: number, y: number, height: number, width: number, visible: boolean = true) {
-    browser.executeJavaScript(`addUI(${JSON.stringify(id)}, ${JSON.stringify(url)}, ${JSON.stringify(x)}, ${JSON.stringify(y)}, ${JSON.stringify(height)}, ${JSON.stringify(width)}, ${JSON.stringify(visible)});`)
+export function addUI(id: string, url: string, x: number, y: number, height: number, width: number, visible: boolean, isMenu: boolean) {
+    browser.executeJavaScript(`addUI(${JSON.stringify(id)}, ${JSON.stringify(url)}, ${JSON.stringify(x)}, ${JSON.stringify(y)}, ${JSON.stringify(height)}, ${JSON.stringify(width)}, ${JSON.stringify(visible)}, ${JSON.stringify(isMenu)});`)
 }
 
 /**
@@ -67,17 +67,21 @@ export function postMessage(id: string, message: any) {
     browser.executeJavaScript(`sendMessage(${JSON.stringify(id)}, ${JSON.stringify(message)});`)
 }
 
+export function toggleComponent(id: string) {
+    browser.executeJavaScript(`toggleComponent(${JSON.stringify(id)});`)
+}
+
 /**
 * TODO
 */
-export function localFilePath(relativeToSkyrimFolder: string, webPlatformUiFolder: string = "/Data/WebUI") : string {
+export function localFilePath(relativeToSkyrimFolder: string, WebUIUiFolder: string = "/Data/WebUI") : string {
     if (! relativeToSkyrimFolder.startsWith("/"))
         relativeToSkyrimFolder = "/" + relativeToSkyrimFolder
 
-    if (relativeToSkyrimFolder.startsWith(webPlatformUiFolder))
-        return relativeToSkyrimFolder.replace(webPlatformUiFolder, ".")
+    if (relativeToSkyrimFolder.startsWith(WebUIUiFolder))
+        return relativeToSkyrimFolder.replace(WebUIUiFolder, ".")
 
-    const dotDots = webPlatformUiFolder.split(/[\\/]/).map(_ => "..").join("/")
+    const dotDots = WebUIUiFolder.split(/[\\/]/).map(_ => "..").join("/")
     return dotDots + "/" + relativeToSkyrimFolder
 }
 
@@ -86,7 +90,7 @@ export function localFilePath(relativeToSkyrimFolder: string, webPlatformUiFolde
 */
 export function onWebMessage(id: string, callback: (event: string, data: string) => void) {
     on("browserMessage", message => {
-        if (message.arguments.length == 4 && message.arguments[0] == "WebPlatform") {
+        if (message.arguments.length == 4 && message.arguments[0] == "WebUI") {
             const event: string = message.arguments[1] as string
             const actualId: string = message.arguments[2] as string
             if (id == actualId) {
@@ -104,7 +108,7 @@ export function onAnyWebMessage(callback: (event: string, id: string, data: stri
     on("browserMessage", message => {
         Debug.messageBox(`Browser Message: ${JSON.stringify(message)}`)
         printConsole(`Browser Message: ${JSON.stringify(message)}`)
-        if (message.arguments.length == 4 && message.arguments[0] == "WebPlatform") {
+        if (message.arguments.length == 4 && message.arguments[0] == "WebUI") {
             unfocusUI()
             const event: string = message.arguments[1] as string
             const id: string = message.arguments[2] as string

@@ -19,6 +19,7 @@ event OnInit()
 endEvent
 
 event OnPlayerLoadGame()
+    OnComponentInit()
     RegisterForModEvent("WebUI:Component:" + ComponentId, "OnComponentMessageReceived")
 endEvent
 
@@ -34,9 +35,16 @@ event OnMessage(string sender, string eventName, int eventData)
     ; Intended to be overriden
 endEvent
 
-; TODO sending message to diff components
-function SendMessageInt(string eventName, int value)             ; string componentId = "")
-    PapyrusToSkyrimPlatform.GetAPI().SendInt(eventName, value)
+function SendMessage(string eventName, int dataRef = 0, string target = "")
+    if ! target
+        target = ComponentId
+    endIf
+    int componentMessage = JMap.object()
+    JMap.setStr(componentMessage, "event", eventName)
+    JMap.setObj(componentMessage, "data", dataRef)
+    JMap.setStr(componentMessage, "sender", ComponentId)
+    JMap.setStr(componentMessage, "target", target)
+    PapyrusToSkyrimPlatform.GetAPI().SendObject("WebUI:SendMessage", componentMessage)
 endFunction
 
 event OnComponentMessageReceived(string modEventName, string _, float eventDataId, Form senderForm)
@@ -54,3 +62,23 @@ event OnComponentMessageReceived(string modEventName, string _, float eventDataI
     ;     JValue.release(eventData)
     ; endIf
 endEvent
+
+function Show()
+    SendMessage("WebUI:Show")
+endFunction
+
+function Hide()
+    SendMessage("WebUI:Hide")
+endFunction
+
+function Toggle()
+    SendMessage("WebUI:Toggle")
+endFunction
+
+; bool property IsVisible
+;     bool function get()
+;         ; SendMessage("Toggle")
+;         ; ...
+;         return true
+;     endFunction
+; endProperty

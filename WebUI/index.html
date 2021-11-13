@@ -17,12 +17,13 @@
             }
 
             var _uiFrames = {}
+            var _uiIsMenu = {}
 
-            function addUI(id, relativeFilepath, x, y, height, width, visible) {
+            function addUI(id, relativeFilepath, x, y, height, width, visible, isMenu) {
 
-                window.skyrimPlatform.sendMessage("WebPlatform", "TESTING", id, { foo: "data stuff" })
+                window.skyrimPlatform.sendMessage("WebUI", "TESTING", id, { foo: "data stuff" })
 
-                var iframeId        = "webui-" + id.replace(/ /g, "-")
+                var iframeId        = "webui-" + id.replace(/ /g, "-") //////
                 var iframe          = document.createElement("iframe")
                 iframe.id           = iframeId
                 iframe.style.left   = (window.innerWidth  * (x / 100)).toFixed()      + "px"
@@ -35,57 +36,81 @@
 
                 iframe.onload = function() {
                     // alert("LOADED")
-                    // window.skyrimPlatform.sendMessage("WebPlatform", "OnLoad", id, "")
+                    // window.skyrimPlatform.sendMessage("WebUI", "OnLoad", id, "")
                     window.skyrimPlatform.sendMessage("HELLO FROM SKYRIM PLATFORM")
                 }
 
                 if (! visible) iframe.style.display = "none"
                 
                 document.body.appendChild(iframe)
+
                 _uiFrames[iframe.contentWindow] = id
+                _uiIsMenu[id] = isMenu
             }
 
             function removeUI(id) {
-                var iframeId = "webui-" + id.replace(/ /g, "-")
+                var iframeId = "webui-" + id.replace(/ /g, "-") //////
                 var iframe = document.getElementById(iframeId)
                 document.body.removeChild(iframe)
             }
 
             function hideUI(id) {
-                var iframeId = "webui-" + id.replace(/ /g, "-")
+                var iframeId = "webui-" + id.replace(/ /g, "-") //////
                 var iframe = document.getElementById(iframeId)
                 iframe.style.display = "none"
             }
 
             function showUI(id) {
-                var iframeId = "webui-" + id.replace(/ /g, "-")
+                var iframeId = "webui-" + id.replace(/ /g, "-") //////
                 var iframe = document.getElementById(iframeId)
                 iframe.style.display = "block"
             }
 
             function sendMessage(id, message) {
-                var iframeId = "webui-" + id.replace(/ /g, "-")
+                var iframeId = "webui-" + id.replace(/ /g, "-") //////
                 var iframe = document.getElementById(iframeId)
                 iframe.contentWindow.postMessage(message)
             }
 
-            window.addEventListener("message", function(message) {
-                // alert("Hiiiii")
-                // window.skyrimPlatform.sendMessage(1, 2, 3, "yay");
-                var id = _uiFrames[message.source]
-                if (id) {
-                    window.skyrimPlatform.sendMessage("WebPlatform", "OnMessage", id, message.data)
-                } else {
-                    window.skyrimPlatform.sendMessage("WebPlatform", "OnMessage", "???", message.data)
-                }
-            }, false)
-
-            function sendTestMessage() {
-                window.skyrimPlatform.sendMessage("Helllo???")
+            function toggleComponent(id) {
+                if (isVisibleComponent(id))
+                    hideComponent(id)
+                else
+                    showComponent(id)
             }
+
+            function showComponent(id) {
+                if (_uiIsMenu[id])
+                    window.skyrimPlatform.sendMessage("WebUI", "EnterMenuMode")
+                getIframe(id).style.display = "block"
+            }
+
+            function hideComponent(id) {
+                if (_uiIsMenu[id])
+                    window.skyrimPlatform.sendMessage("WebUI", "LeaveMenuMode")
+                getIframe(id).style.display = "none"
+            }
+
+            function isVisibleComponent(id) {
+                return getIframe(id).style.display != "none"
+            }
+
+            function getIframe(id) {
+                return document.getElementById("webui-" + id.replace(/ /g, "-"))
+            }
+
+            // window.addEventListener("message", function(message) {
+            //     // alert("Hiiiii")
+            //     // window.skyrimPlatform.sendMessage(1, 2, 3, "yay");
+            //     var id = _uiFrames[message.source]
+            //     if (id) {
+            //         window.skyrimPlatform.sendMessage("WebUI", "OnMessage", id, message.data)
+            //     } else {
+            //         window.skyrimPlatform.sendMessage("WebUI", "OnMessage", "???", message.data)
+            //     }
+            // }, false)
         </script>
     </head>
     <body>
-        <button onclick="sendTestMessage()">HELLO CLICK ME</button>
     </body>
 </html>

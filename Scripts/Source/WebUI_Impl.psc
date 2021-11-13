@@ -5,29 +5,28 @@ string JDB_PATH_WEB_COMPONENTS         = ".webUI.components"
 
 ; On Mod Installation
 event OnInit()
-    RegisterWebComponentsFromFileSystem()
+    RegisterWebComponentsFromFileSystem(WEBUI_ROOT_WEB_COMPONENT_FOLDER)
 endEvent
 
 ; On Save Game Load
 event OnPlayerLoadGame()
-    RegisterWebComponentsFromFileSystem()
+    RegisterWebComponentsFromFileSystem(WEBUI_ROOT_WEB_COMPONENT_FOLDER)
 endEvent
 
-function RegisterWebComponentsFromFileSystem()
+function RegisterWebComponentsFromFileSystem(string rootFolder)
     Utility.WaitMenuMode(0.1)
 
     ; Gives back simple folder names, e.g. "Foo", not whole paths
-    string[] uiFolders = MiscUtil.FoldersInFolder(WEBUI_ROOT_WEB_COMPONENT_FOLDER)
+    string[] uiFolders = MiscUtil.FoldersInFolder(rootFolder)
     int i = 0
     while i < uiFolders.Length
         string folderName = uiFolders[i]
-        string webUiJsonFilePath = WEBUI_ROOT_WEB_COMPONENT_FOLDER + "/" + folderName + "/" + "webui.json"
+        string webUiJsonFilePath = rootFolder + "/" + folderName + "/" + "webui.json"
         ; Does this folder contain a webui.json
         if MiscUtil.FileExists(webUiJsonFilePath)
-            RegisterWebComponentFolder(WEBUI_ROOT_WEB_COMPONENT_FOLDER + "/" + folderName)
+            RegisterWebComponentFolder(rootFolder + "/" + folderName)
         else
-            ; Check for subfolders
-            Debug.MessageBox("TODO")
+            RegisterWebComponentsFromFileSystem(rootFolder + "/" + folderName)
         endIf
         i += 1
     endWhile
