@@ -18,24 +18,10 @@
         <Variable Name="ImportsFolder" Value="C:\Users\mrowr\Dropbox\Skyrim\Imports" />
     </Variables>
     <Imports>
-        <!-- To require SKSE dynamically, extract its Scripts/ directory into a new mod folder -->
         <Import>@ModsFolder\SKSE64\Scripts\Source</Import>
         <Import>@ModsFolder\PapyrusToSkyrimPlatform\Scripts\Source</Import>
-
-        <!-- These mods come with source directories by default with required .psc files -->
-        <!-- <Import>@ModsFolder\PapyrusUtil\Scripts\Source</Import> -->
-        <!-- <Import>@ModsFolder\PapyrusExtender\source\scripts</Import> -->
-        <!-- <Import>@ModsFolder\LibFire\Scripts\Source</Import> -->
-        <!-- <Import>@ModsFolder\iWantWidgets\Source\Scripts</Import> -->
-        <!-- <Import>@ModsFolder\iWantStatusBars\Source\Scripts</Import> -->
-        <!-- <Import>@ModsFolder\FISSES\scripts\source</Import> -->
-
-        <!-- These mods DO NOT come with loose .psc files or are not "mods" and need to be setup manually  -->
-        <!-- <Import>@ImportsFolder\SkyUI_5.1_SDK\Scripts\Source</Import> -->
-        <!-- <Import>@ImportsFolder\ConsoleUtil</Import> -->
-        <!-- <Import>@ImportsFolder\UIExtensions\scripts\source</Import> -->
-
-        <!-- Change this to be your default Skyrim install directory's Scripts\Source path  -->
+        <Import>@ImportsFolder\JContainers\Scripts\Source</Import>
+        <Import>@ImportsFolder\PapyrusUtil\Scripts\Source</Import>
         <Import>C:\Steam\steamapps\common\Skyrim Special Edition\Data\Scripts\Source</Import>
     </Imports>
     <Folders>

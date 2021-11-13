@@ -1,0 +1,1 @@
+ - [ ] Provide STACKABLE widgets in multiple locations, e.g. top-right top-center center etc
