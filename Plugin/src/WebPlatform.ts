@@ -1,4 +1,4 @@
-import { browser, on, Message } from "skyrimPlatform";
+import { browser, on, Debug, printConsole } from "skyrimPlatform";
 
 /**
 * TODO
@@ -78,13 +78,14 @@ export function localFilePath(relativeToSkyrimFolder: string, webPlatformUiFolde
 /**
 * TODO
 */
-export function onWebMessage(id: string, callback: (data: string) => void) {
-    on("browserMessage", event => {
-        if (event.arguments.length == 3 && event.arguments[0] == "WebPlatform") {
-            const actualId: string = event.arguments[1] as string
+export function onWebMessage(id: string, callback: (event: string, data: string) => void) {
+    on("browserMessage", message => {
+        if (message.arguments.length == 4 && message.arguments[0] == "WebPlatform") {
+            const event: string = message.arguments[1] as string
+            const actualId: string = message.arguments[2] as string
             if (id == actualId) {
-                const data = event.arguments[2] as string
-                callback(data)
+                const data = message.arguments[3] as string
+                callback(event, data)
             }
         }
     })    
@@ -93,12 +94,16 @@ export function onWebMessage(id: string, callback: (data: string) => void) {
 /**
 * TODO
 */
-export function onAnyWebMessage(callback: (id: string, data: string) => void) {
-    on("browserMessage", event => {
-        if (event.arguments.length == 3 && event.arguments[0] == "WebPlatform") {
-            const id: string = event.arguments[1] as string
-            const data = event.arguments[2] as string
-            callback(id, data)
+export function onAnyWebMessage(callback: (event: string, id: string, data: string) => void) {
+    on("browserMessage", message => {
+        Debug.messageBox(`Browser Message: ${JSON.stringify(message)}`)
+        printConsole(`Browser Message: ${JSON.stringify(message)}`)
+        if (message.arguments.length == 4 && message.arguments[0] == "WebPlatform") {
+            unfocusUI()
+            const event: string = message.arguments[1] as string
+            const id: string = message.arguments[2] as string
+            const data = message.arguments[3] as string
+            callback(event, id, data)
         }
     })    
 }
