@@ -36,9 +36,13 @@
                 iframe.scrolling    = "no"
 
                 iframe.onload = function() {
-                    // alert("LOADED")
-                    // window.skyrimPlatform.sendMessage("WebUI", "OnLoad", id, "")
-                    window.skyrimPlatform.sendMessage("HELLO FROM SKYRIM PLATFORM")
+                    iframe.contentWindow.addEventListener("keydown", function(e) {
+                        if (e.keyCode == 27 && _activeComponents.length) {
+                            var activeComponentId = _activeComponents[_activeComponents.length - 1]
+                            hideComponent(activeComponentId)
+                        }
+                    })
+                    // TODO
                 }
 
                 if (! visible) iframe.style.display = "none"
@@ -67,7 +71,7 @@
                 iframe.style.display = "block"
             }
 
-            function sendMessage(id, message) {
+            function sendMessageToComponent(id, message) {
                 var iframeId = "webui-" + id.replace(/ /g, "-") //////
                 var iframe = document.getElementById(iframeId)
                 iframe.contentWindow.postMessage(message)

@@ -1,1 +1,2 @@
  - [ ] Provide STACKABLE widgets in multiple locations, e.g. top-right top-center center etc
+ - "AddUI" should be something like "RegisterComponent" and it SHOULD NOT add the iframe to the page, that should be a separate action.

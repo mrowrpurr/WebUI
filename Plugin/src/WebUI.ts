@@ -64,7 +64,7 @@ export function addUI(id: string, url: string, x: number, y: number, height: num
 * TODO
 */
 export function postMessage(id: string, message: any) {
-    browser.executeJavaScript(`sendMessage(${JSON.stringify(id)}, ${JSON.stringify(message)});`)
+    browser.executeJavaScript(`sendMessageToComponent(${JSON.stringify(id)}, ${JSON.stringify(message)});`)
 }
 
 export function toggleComponent(id: string) {
