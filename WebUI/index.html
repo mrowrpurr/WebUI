@@ -19,7 +19,10 @@
             var _uiFrames = {}
 
             function addUI(id, relativeFilepath, x, y, height, width, visible) {
-                var iframeId        = "webhost-" + id.replace(" ", "-")
+
+                window.skyrimPlatform.sendMessage("WebPlatform", "TESTING", id, { foo: "data stuff" })
+
+                var iframeId        = "webui-" + id.replace(/ /g, "-")
                 var iframe          = document.createElement("iframe")
                 iframe.id           = iframeId
                 iframe.style.left   = (window.innerWidth  * (x / 100)).toFixed()      + "px"
@@ -30,36 +33,40 @@
                 iframe.frameBorder  = 0
                 iframe.scrolling    = "no"
 
-                // iframe.onload = function() {
-                //     window.skyrimPlatform.sendMessage("WebPlatform", "OnLoad", id, "")
-                // }
+                iframe.onload = function() {
+                    // alert("LOADED")
+                    // window.skyrimPlatform.sendMessage("WebPlatform", "OnLoad", id, "")
+                    window.skyrimPlatform.sendMessage("HELLO FROM SKYRIM PLATFORM")
+                }
+
                 if (! visible) iframe.style.display = "none"
+                
                 document.body.appendChild(iframe)
                 _uiFrames[iframe.contentWindow] = id
             }
 
             function removeUI(id) {
-                var iframeId = "webhost-" + id.replaceAll(" ", "-")
+                var iframeId = "webui-" + id.replace(/ /g, "-")
                 var iframe = document.getElementById(iframeId)
                 document.body.removeChild(iframe)
             }
 
             function hideUI(id) {
-                var iframeId = "webhost-" + id.replaceAll(" ", "-")
+                var iframeId = "webui-" + id.replace(/ /g, "-")
                 var iframe = document.getElementById(iframeId)
                 iframe.style.display = "none"
             }
 
             function showUI(id) {
-                var iframeId = "webhost-" + id.replaceAll(" ", "-")
+                var iframeId = "webui-" + id.replace(/ /g, "-")
                 var iframe = document.getElementById(iframeId)
                 iframe.style.display = "block"
             }
 
             function sendMessage(id, message) {
-                var iframeId = "webhost-" + id.replaceAll(" ", "-")
+                var iframeId = "webui-" + id.replace(/ /g, "-")
                 var iframe = document.getElementById(iframeId)
-                iframe.postMessage(message)
+                iframe.contentWindow.postMessage(message)
             }
 
             window.addEventListener("message", function(message) {
@@ -73,8 +80,12 @@
                 }
             }, false)
 
+            function sendTestMessage() {
+                window.skyrimPlatform.sendMessage("Helllo???")
+            }
         </script>
     </head>
     <body>
+        <button onclick="sendTestMessage()">HELLO CLICK ME</button>
     </body>
 </html>

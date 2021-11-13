@@ -47,20 +47,23 @@ function RegisterWebComponentFolder(string folderPath)
     int webUiJson = JValue.readFromFile(webUiJsonPath)
     if webUiJson
         if JMap.hasKey(webUiJson, "id")
-            string id = JMap.getStr(webUiJson, "id")
-            if id
-                if ! JMap.hasKey(webUiJson, "file")
-                    if MiscUtil.FileExists(folderPath + "/index.html")
-                        JMap.setStr(webUiJson, "file", "index.html")
-                    else
-                        return
-                    endIf
-                endIf
-                JMap.setStr(webUiJson, "path", folderPath)
-                JMap.setStr(webUiJson, "filepath", folderPath + "/" + JMap.getStr(webUiJson, "file"))
-                JMap.setObj(GetWebComponentsMap(), id, webUiJson)
-                PapyrusToSkyrimPlatform.GetAPI().SendObject("WebUI:RegisterComponent", webUiJson)
+            if ! JMap.hasKey(webUiJson, "id")
+                string[] folderNameParts = StringUtil.Split(folderPath, "/")
+                string folderName = folderNameParts[folderNameParts.Length - 1]
+                JMap.setStr(webUiJson, "id", folderName)
             endIf
+            string id = JMap.getStr(webUiJson, "id")
+            if ! JMap.hasKey(webUiJson, "file")
+                if MiscUtil.FileExists(folderPath + "/index.html")
+                    JMap.setStr(webUiJson, "file", "index.html")
+                else
+                    return
+                endIf
+            endIf
+            JMap.setStr(webUiJson, "path", folderPath)
+            JMap.setStr(webUiJson, "filepath", folderPath + "/" + JMap.getStr(webUiJson, "file"))
+            JMap.setObj(GetWebComponentsMap(), id, webUiJson)
+            PapyrusToSkyrimPlatform.GetAPI().SendObject("WebUI:RegisterComponent", webUiJson)
         endIf
     endIf
 endFunction
