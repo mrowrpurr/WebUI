@@ -5,12 +5,24 @@ string JDB_PATH_WEB_COMPONENTS         = ".webUI.components"
 
 ; On Mod Installation
 event OnInit()
+    ListenForRefresh()
     RegisterWebComponentsFromFileSystem(WEBUI_ROOT_WEB_COMPONENT_FOLDER)
 endEvent
 
 ; On Save Game Load
 event OnPlayerLoadGame()
+    ListenForRefresh()
     RegisterWebComponentsFromFileSystem(WEBUI_ROOT_WEB_COMPONENT_FOLDER)
+endEvent
+
+function ListenForRefresh()
+    RegisterForKey(19) ; R
+endFunction
+
+event OnKeyDown(int keyCode)
+    if Input.IsKeyPressed(42) && keyCode == 19 ; Shift + R
+        PapyrusToSkyrimPlatform.GetAPI().SendObject("WebUI:Refresh", 0) ; TODO allow simple events without objects!
+    endIf
 endEvent
 
 function RegisterWebComponentsFromFileSystem(string rootFolder)
@@ -21,12 +33,14 @@ function RegisterWebComponentsFromFileSystem(string rootFolder)
     int i = 0
     while i < uiFolders.Length
         string folderName = uiFolders[i]
-        string webUiJsonFilePath = rootFolder + "/" + folderName + "/" + "webui.json"
-        ; Does this folder contain a webui.json
-        if MiscUtil.FileExists(webUiJsonFilePath)
-            RegisterWebComponentFolder(rootFolder + "/" + folderName)
-        else
-            RegisterWebComponentsFromFileSystem(rootFolder + "/" + folderName)
+        if folderName != ".Temp"
+            string webUiJsonFilePath = rootFolder + "/" + folderName + "/" + "webui.json"
+            ; Does this folder contain a webui.json
+            if MiscUtil.FileExists(webUiJsonFilePath)
+                RegisterWebComponentFolder(rootFolder + "/" + folderName)
+            else
+                RegisterWebComponentsFromFileSystem(rootFolder + "/" + folderName)
+            endIf
         endIf
         i += 1
     endWhile
@@ -62,6 +76,7 @@ function RegisterWebComponentFolder(string folderPath)
             JMap.setStr(webUiJson, "path", folderPath)
             JMap.setStr(webUiJson, "filepath", folderPath + "/" + JMap.getStr(webUiJson, "file"))
             JMap.setObj(GetWebComponentsMap(), id, webUiJson)
+            Utility.WaitMenuMode(0.05) ; Hmmmmmm
             PapyrusToSkyrimPlatform.GetAPI().SendObject("WebUI:RegisterComponent", webUiJson)
         endIf
     endIf

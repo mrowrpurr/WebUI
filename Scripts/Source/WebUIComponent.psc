@@ -1,6 +1,8 @@
 scriptName WebUIComponent extends ReferenceAlias
 
 string _componentId
+string[] _tempFilenames
+int _nextTempFileIndex
 
 ; TODO
 string property ComponentId
@@ -15,12 +17,18 @@ endProperty
 
 event OnInit()
     OnComponentInit()
-    RegisterForModEvent("WebUI:Component:" + ComponentId, "OnComponentMessageReceived")
+    RegisterForModEvent("WebUI:ComponentEvent:" + ComponentId, "OnComponentMessageReceived")
+    _tempFilenames = new string[100]
+    int i = 0
+    while i < 100
+        _tempFilenames[i] = "Data/WebUI/.Temp/JsonSerialization/temp_" + i + ".json"
+        i += 1
+    endWhile
 endEvent
 
 event OnPlayerLoadGame()
     OnComponentInit()
-    RegisterForModEvent("WebUI:Component:" + ComponentId, "OnComponentMessageReceived")
+    RegisterForModEvent("WebUI:ComponentEvent:" + ComponentId, "OnComponentMessageReceived")
 endEvent
 
 event OnComponentInit()
@@ -31,7 +39,7 @@ event OnComponentLoad()
     ; Intended to be overriden
 endEvent
 
-event OnMessage(string sender, string eventName, int eventData)
+event OnMessage_String(string sender, string eventName, string value)
     ; Intended to be overriden
 endEvent
 
@@ -47,20 +55,26 @@ function SendMessage(string eventName, int dataRef = 0, string target = "")
     PapyrusToSkyrimPlatform.GetAPI().SendObject("WebUI:SendMessage", componentMessage)
 endFunction
 
-event OnComponentMessageReceived(string modEventName, string _, float eventDataId, Form senderForm)
-    int eventRef = eventDataId as int
-    string eventName = JMap.getStr(eventRef, "event")
-    string sender    = JMap.getStr(eventRef, "sender")
-    
-    Debug.MessageBox("On Component Message Received " + sender + " " + eventName)
+event OnComponentMessageReceived(string modEventName, string jsonData, float _, Form senderForm)
+    ; Write received JSON to temporary file
+    int tempFileIndex = _nextTempFileIndex
+    _nextTempFileIndex += 1
+    string tempFilename = _tempFilenames[tempFileIndex]
+    MiscUtil.WriteToFile(tempFilename, jsonData, append = false)
 
-    ; if eventName == "OnLoad" && sender == ComponentId
-    ;     OnComponentLoad()
-    ; else
-    ;     JValue.retain(eventData)
-    ;     OnMessage(sender, eventName, eventData)
-    ;     JValue.release(eventData)
-    ; endIf
+    ; Read JSON into JContainers object
+    int jsonDataRef = JValue.readFromFile(tempFilename)
+
+    ; Read event info
+    string eventName = JMap.getStr(jsonDataRef, "event")
+    string sender = JMap.getStr(jsonDataRef, "sender")
+    string valueType = JMap.getStr(jsonDataRef, "valueType")
+
+    if valueType == "string"
+        OnMessage_String(sender, eventName, JMap.getStr(jsonDataRef, "value"))
+    else
+        ; TODO
+    endIf
 endEvent
 
 function Show()

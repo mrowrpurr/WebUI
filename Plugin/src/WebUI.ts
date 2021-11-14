@@ -117,3 +117,7 @@ export function onAnyWebMessage(callback: (event: string, id: string, data: stri
         }
     })    
 }
+
+export function refreshAll() {
+    browser.executeJavaScript("refreshAll()")
+}

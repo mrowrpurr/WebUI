@@ -1,2 +1,4 @@
  - [ ] Provide STACKABLE widgets in multiple locations, e.g. top-right top-center center etc
  - "AddUI" should be something like "RegisterComponent" and it SHOULD NOT add the iframe to the page, that should be a separate action.
+ - [ ] Require adding "papyrus": true to webui.json for SKSE Mod Events to be sent for a component (?)
+ - [ ] SPIKE: To what extent can we expose data types to the JavaScript

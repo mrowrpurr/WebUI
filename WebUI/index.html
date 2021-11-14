@@ -11,19 +11,30 @@
             }
         </style>
         <script>
+
+            /*
+             *
+             *  TODO: store all of the original webui configs
+             *        and then refreshAll() can change positions ETC
+             *
+             */
+
+
             window.onerror = function(msg, url, linenumber) {
                 alert('Error message: '+msg+'\nURL: '+url+'\nLine Number: '+linenumber)
                 return true
             }
 
+            var _allFrames = []
             var _uiFrames = {}
             var _uiIsMenu = {}
             var _activeComponents = []
 
+            function refreshAll() {
+                _allFrames.forEach(frame => frame.contentWindow.location.reload())
+            }
+
             function addUI(id, relativeFilepath, x, y, height, width, visible, isMenu) {
-
-                window.skyrimPlatform.sendMessage("WebUI", "TESTING", id, { foo: "data stuff" })
-
                 var iframeId        = "webui-" + id.replace(/ /g, "-") //////
                 var iframe          = document.createElement("iframe")
                 iframe.id           = iframeId
@@ -37,12 +48,18 @@
 
                 iframe.onload = function() {
                     iframe.contentWindow.addEventListener("keydown", function(e) {
-                        if (e.keyCode == 27 && _activeComponents.length) {
+                        if (e.keyCode == 27 && _activeComponents.length) { // Escape
                             var activeComponentId = _activeComponents[_activeComponents.length - 1]
                             hideComponent(activeComponentId)
+                        } else if (e.keyCode == 82 && e.shiftKey) { // R
+                            refreshAll()
                         }
                     })
-                    // TODO
+                    iframe.contentWindow.webUI_SendEvent_String = (target, eventName, eventString) => {
+                        if (target == "self")
+                            target = id
+                        window.skyrimPlatform.sendMessage("WebUI", "OnComponentEvent", "string", id, id, eventName, eventString)
+                    };
                 }
 
                 if (! visible) iframe.style.display = "none"
@@ -51,6 +68,7 @@
 
                 _uiFrames[iframe.contentWindow] = id
                 _uiIsMenu[id] = isMenu
+                _allFrames.push(iframe)
             }
 
             function removeUI(id) {
@@ -115,16 +133,14 @@
                 }
             })
 
-            // window.addEventListener("message", function(message) {
-            //     // alert("Hiiiii")
-            //     // window.skyrimPlatform.sendMessage(1, 2, 3, "yay");
-            //     var id = _uiFrames[message.source]
-            //     if (id) {
-            //         window.skyrimPlatform.sendMessage("WebUI", "OnMessage", id, message.data)
-            //     } else {
-            //         window.skyrimPlatform.sendMessage("WebUI", "OnMessage", "???", message.data)
-            //     }
-            // }, false)
+            window.addEventListener("message", function(message) {
+                var id = _uiFrames[message.source]
+                if (id) {
+                    window.skyrimPlatform.sendMessage("WebUI", "OnMessage", id, message.data)
+                } else {
+                    window.skyrimPlatform.sendMessage("WebUI", "OnMessage", "Unknown", message.data)
+                }
+            }, false)
         </script>
     </head>
     <body>
