@@ -1,18 +1,19 @@
 scriptName WebUI_Impl extends ReferenceAlias
 
-string WEBUI_ROOT_WEB_COMPONENT_FOLDER = "Data/WebUI"
-string JDB_PATH_WEB_COMPONENTS         = ".webUI.components"
+string JDB_PATH_WEB_COMPONENTS = ".webUI.components"
 
 ; On Mod Installation
 event OnInit()
     ListenForRefresh()
-    RegisterWebComponentsFromFileSystem(WEBUI_ROOT_WEB_COMPONENT_FOLDER)
+    RegisterWebComponentsFromFileSystem("WebUI") ; Look outside of Data for apps *in development*
+    RegisterWebComponentsFromFileSystem("Data/WebUI")
 endEvent
 
 ; On Save Game Load
 event OnPlayerLoadGame()
     ListenForRefresh()
-    RegisterWebComponentsFromFileSystem(WEBUI_ROOT_WEB_COMPONENT_FOLDER)
+    RegisterWebComponentsFromFileSystem("WebUI") ; Look outside of Data for apps *in development*
+    RegisterWebComponentsFromFileSystem("Data/WebUI")
 endEvent
 
 function ListenForRefresh()
@@ -33,7 +34,7 @@ function RegisterWebComponentsFromFileSystem(string rootFolder)
     int i = 0
     while i < uiFolders.Length
         string folderName = uiFolders[i]
-        if folderName != ".Temp"
+        if folderName != ".Temp" && folderName != "node_modules" && folderName != ".git" ; add a webui_ignore.txt
             string webUiJsonFilePath = rootFolder + "/" + folderName + "/" + "webui.json"
             ; Does this folder contain a webui.json
             if MiscUtil.FileExists(webUiJsonFilePath)
@@ -73,6 +74,7 @@ function RegisterWebComponentFolder(string folderPath)
                     return
                 endIf
             endIf
+            JMap.setStr(webUiJson, "webui", webUiJsonPath)
             JMap.setStr(webUiJson, "path", folderPath)
             JMap.setStr(webUiJson, "filepath", folderPath + "/" + JMap.getStr(webUiJson, "file"))
             JMap.setObj(GetWebComponentsMap(), id, webUiJson)

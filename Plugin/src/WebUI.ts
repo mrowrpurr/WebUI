@@ -1,4 +1,16 @@
-import { browser, on, Debug, printConsole } from "skyrimPlatform";
+import { browser, on, Debug, printConsole } from "skyrimPlatform"
+import * as JValue from "JContainers/JValue"
+import jObjectToJson from "JObjectToJson"
+
+export function registerComponent(componentInfo: any) {
+    browser.executeJavaScript(`registerComponent(${JSON.stringify(componentInfo)})`)
+}
+
+/////////////////////////////////////////////////
+
+export function returnApiResult(requestId: string, data: any) {
+    browser.executeJavaScript(`returnApiResult(${JSON.stringify(requestId)}, ${JSON.stringify(data)})`)
+}
 
 /**
 * TODO
@@ -49,16 +61,6 @@ export function unfocusUI() {
     browser.setFocused(false)
 }
 
-/**
-* TODO
-*
-* @param x - TODO
-* @param y - TODO
-* @returns The arithmetic mean of `x` and `y`
-*/
-export function addUI(id: string, url: string, x: number, y: number, height: number, width: number, visible: boolean, isMenu: boolean) {
-    browser.executeJavaScript(`addUI(${JSON.stringify(id)}, ${JSON.stringify(url)}, ${JSON.stringify(x)}, ${JSON.stringify(y)}, ${JSON.stringify(height)}, ${JSON.stringify(width)}, ${JSON.stringify(visible)}, ${JSON.stringify(isMenu)});`)
-}
 
 /**
 * TODO
@@ -74,8 +76,8 @@ export function toggleComponent(id: string) {
 /**
 * TODO
 */
-export function localFilePath(relativeToSkyrimFolder: string, WebUIUiFolder: string = "/Data/WebUI") : string {
-    if (! relativeToSkyrimFolder.startsWith("/"))
+export function localFilePath(relativeToSkyrimFolder: string, WebUIUiFolder: string = "/Data/WebUI"): string {
+    if (!relativeToSkyrimFolder.startsWith("/"))
         relativeToSkyrimFolder = "/" + relativeToSkyrimFolder
 
     if (relativeToSkyrimFolder.startsWith(WebUIUiFolder))
@@ -98,7 +100,7 @@ export function onWebMessage(id: string, callback: (event: string, data: string)
                 callback(event, data)
             }
         }
-    })    
+    })
 }
 
 /**
@@ -115,9 +117,11 @@ export function onAnyWebMessage(callback: (event: string, id: string, data: stri
             const data = message.arguments[3] as string
             callback(event, id, data)
         }
-    })    
+    })
 }
 
 export function refreshAll() {
+    // const updatedWebuiJson = JValue.rea
+    browser.executeJavaScript("")
     browser.executeJavaScript("refreshAll()")
 }

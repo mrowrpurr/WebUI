@@ -1,148 +1,216 @@
 <!doctype html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <style>
-            iframe {
-                position: absolute
-            }
-            body {
-                overflow: hidden;
-            }
-        </style>
-        <script>
 
-            /*
-             *
-             *  TODO: store all of the original webui configs
-             *        and then refreshAll() can change positions ETC
-             *
-             */
+<head>
+    <meta charset="utf-8">
+    <style>
+        iframe {
+            position: absolute
+        }
 
+        body {
+            overflow: hidden;
+        }
+    </style>
+    <script>
 
-            window.onerror = function(msg, url, linenumber) {
-                alert('Error message: '+msg+'\nURL: '+url+'\nLine Number: '+linenumber)
-                return true
-            }
+        var components = {}
 
-            var _allFrames = []
-            var _uiFrames = {}
-            var _uiIsMenu = {}
-            var _activeComponents = []
+        function registerComponent(componentInfo) {
+            components[componentInfo.id] = componentInfo
+            addComponentIframe(componentInfo)
+        }
 
-            function refreshAll() {
-                _allFrames.forEach(frame => frame.contentWindow.location.reload())
-            }
+        function updateComponentInfo(componentInfo) {
+            components[componentInfo.id] = componentInfo
+            updateComponentIframe(componentInfo)
+        }
 
-            function addUI(id, relativeFilepath, x, y, height, width, visible, isMenu) {
-                var iframeId        = "webui-" + id.replace(/ /g, "-") //////
-                var iframe          = document.createElement("iframe")
-                iframe.id           = iframeId
-                iframe.style.left   = (window.innerWidth  * (x / 100)).toFixed()      + "px"
-                iframe.style.top    = (window.innerHeight * (y / 100)).toFixed()      + "px"
-                iframe.style.height = (window.innerHeight * (height / 100)).toFixed() + "px"
-                iframe.style.width  = (window.innerWidth  * (width / 100)).toFixed()  + "px"
-                iframe.src          = relativeFilepath
-                iframe.frameBorder  = 0
-                iframe.scrolling    = "no"
+        /*
+         *
+         *  TODO: store all of the original webui configs
+         *        and then refreshAll() can change positions ETC
+         *
+         */
 
-                iframe.onload = function() {
-                    iframe.contentWindow.addEventListener("keydown", function(e) {
-                        if (e.keyCode == 27 && _activeComponents.length) { // Escape
-                            var activeComponentId = _activeComponents[_activeComponents.length - 1]
-                            hideComponent(activeComponentId)
-                        } else if (e.keyCode == 82 && e.shiftKey) { // R
-                            refreshAll()
-                        }
-                    })
-                    iframe.contentWindow.webUI_SendEvent_String = (target, eventName, eventString) => {
-                        if (target == "self")
-                            target = id
-                        window.skyrimPlatform.sendMessage("WebUI", "OnComponentEvent", "string", id, id, eventName, eventString)
-                    };
+        window.onerror = function (msg, url, linenumber) {
+            alert('Error message: ' + msg + '\nURL: ' + url + '\nLine Number: ' + linenumber)
+            return true
+        }
+
+        function updateComponentIframe(componentInfo) {
+            componentInfo.iframe.contentWindow.location.reload()
+            componentInfo.iframe.style.left = (window.innerWidth * (componentInfo.x / 100)).toFixed() + "px"
+            componentInfo.iframe.style.top = (window.innerHeight * (componentInfo.y / 100)).toFixed() + "px"
+            componentInfo.iframe.style.height = (window.innerHeight * (componentInfo.height / 100)).toFixed() + "px"
+            componentInfo.iframe.style.width = (window.innerWidth * (componentInfo.width / 100)).toFixed() + "px"
+        }
+
+        function addComponentIframe(componentInfo) {
+            componentInfo.iframe = addUI(
+                componentInfo.id,
+                componentInfo.uri,
+                componentInfo.x,
+                componentInfo.y,
+                componentInfo.height,
+                componentInfo.width,
+                componentInfo.visible == 1,
+                componentInfo.menu == 1
+            )
+        }
+
+        var _allFrames = []
+        var _uiFrames = {}
+        var _uiIsMenu = {}
+        var _activeComponents = []
+
+        function refreshAll() {
+            for (const [id, info] of Object.entries(components)) {
+                if (info.iframe) {
+                    info.iframe.contentWindow.location.reload()
+                    // TODO update the info!
+                    info.iframe.style.left = (window.innerWidth * (info.x / 100)).toFixed() + "px"
+                    info.iframe.style.top = (window.innerHeight * (info.y / 100)).toFixed() + "px"
+                    info.iframe.style.height = (window.innerHeight * (info.height / 100)).toFixed() + "px"
+                    info.iframe.style.width = (window.innerWidth * (info.width / 100)).toFixed() + "px"
                 }
-
-                if (! visible) iframe.style.display = "none"
-                
-                document.body.appendChild(iframe)
-
-                _uiFrames[iframe.contentWindow] = id
-                _uiIsMenu[id] = isMenu
-                _allFrames.push(iframe)
             }
+        }
 
-            function removeUI(id) {
-                var iframeId = "webui-" + id.replace(/ /g, "-") //////
-                var iframe = document.getElementById(iframeId)
-                document.body.removeChild(iframe)
-            }
+        var requestResponseCallbacks = {}
 
-            function hideUI(id) {
-                var iframeId = "webui-" + id.replace(/ /g, "-") //////
-                var iframe = document.getElementById(iframeId)
-                iframe.style.display = "none"
-            }
+        function returnApiResult(requestId, data) {
+            var callback = requestResponseCallbacks[requestId]
+            callback(data)
+            delete requestResponseCallbacks[requestResponseCallbacks]
+        }
 
-            function showUI(id) {
-                var iframeId = "webui-" + id.replace(/ /g, "-") //////
-                var iframe = document.getElementById(iframeId)
-                iframe.style.display = "block"
-            }
+        function addUI(id, relativeFilepath, x, y, height, width, visible, isMenu) {
+            var iframeId = "webui-" + id.replace(/ /g, "-") //////
+            var iframe = document.createElement("iframe")
+            iframe.id = iframeId
+            iframe.style.left = (window.innerWidth * (x / 100)).toFixed() + "px"
+            iframe.style.top = (window.innerHeight * (y / 100)).toFixed() + "px"
+            iframe.style.height = (window.innerHeight * (height / 100)).toFixed() + "px"
+            iframe.style.width = (window.innerWidth * (width / 100)).toFixed() + "px"
+            iframe.src = relativeFilepath
+            iframe.frameBorder = 0
+            iframe.scrolling = "no"
 
-            function sendMessageToComponent(id, message) {
-                var iframeId = "webui-" + id.replace(/ /g, "-") //////
-                var iframe = document.getElementById(iframeId)
-                iframe.contentWindow.postMessage(message)
-            }
-
-            function toggleComponent(id) {
-                if (isVisibleComponent(id))
-                    hideComponent(id)
-                else
-                    showComponent(id)
-            }
-
-            function showComponent(id) {
-                if (_uiIsMenu[id]) {
-                    window.skyrimPlatform.sendMessage("WebUI", "EnterMenuMode")
-                    _activeComponents.push(id)
+            iframe.onload = function () {
+                iframe.contentWindow.addEventListener("keydown", function (e) {
+                    if (e.keyCode == 27 && _activeComponents.length) { // Escape
+                        var activeComponentId = _activeComponents[_activeComponents.length - 1]
+                        hideComponent(activeComponentId)
+                    } else if (e.keyCode == 82 && e.shiftKey) { // R
+                        refreshAll()
+                    }
+                })
+                iframe.contentWindow.testOneMoreTime = () => {
+                    alert("WHOA THIS WORKS!")
                 }
-                getIframe(id).style.display = "block"
+                // iframe.contentWindow.webUI_SendEvent_String = (target, eventName, eventString) => {
+                //     if (target == "self")
+                //         target = id
+                //     window.skyrimPlatform.sendMessage("WebUI", "OnComponentEvent", "string", id, id, eventName, eventString)
+                // };
             }
 
-            function hideComponent(id) {
-                if (_uiIsMenu[id]) {
-                    window.skyrimPlatform.sendMessage("WebUI", "LeaveMenuMode")
-                    _activeComponents.pop()
-                }
-                getIframe(id).style.display = "none"
-            }
+            if (!visible) iframe.style.display = "none"
 
-            function isVisibleComponent(id) {
-                return getIframe(id).style.display != "none"
-            }
+            document.body.appendChild(iframe)
 
-            function getIframe(id) {
-                return document.getElementById("webui-" + id.replace(/ /g, "-"))
-            }
+            ////
+            _uiFrames[iframe.contentWindow] = id
+            _uiIsMenu[id] = isMenu
+            _allFrames.push(iframe)
 
-            window.addEventListener("keydown", function(e) {
-                if (e.keyCode == 27 && _activeComponents.length) {
-                    var activeComponentId = _activeComponents[_activeComponents.length - 1]
-                    hideComponent(activeComponentId)
-                }
+            return iframe
+        }
+
+        async function componentApiRequest(route, parameters) {
+            return new Promise((resolve, reject) => {
+                var requestId = Math.random().toString()
+                requestResponseCallbacks[requestId] = resolve
+                var id = "shit-we-do-not-have-the-id" // TODO
+                window.skyrimPlatform.sendMessage("WebUI", "OnComponentApiRequest", id, requestId, route, parameters)
             })
+        }
 
-            window.addEventListener("message", function(message) {
-                var id = _uiFrames[message.source]
-                if (id) {
-                    window.skyrimPlatform.sendMessage("WebUI", "OnMessage", id, message.data)
-                } else {
-                    window.skyrimPlatform.sendMessage("WebUI", "OnMessage", "Unknown", message.data)
-                }
-            }, false)
-        </script>
-    </head>
-    <body>
-    </body>
+        function removeUI(id) {
+            var iframeId = "webui-" + id.replace(/ /g, "-") //////
+            var iframe = document.getElementById(iframeId)
+            document.body.removeChild(iframe)
+        }
+
+        function hideUI(id) {
+            var iframeId = "webui-" + id.replace(/ /g, "-") //////
+            var iframe = document.getElementById(iframeId)
+            iframe.style.display = "none"
+        }
+
+        function showUI(id) {
+            var iframeId = "webui-" + id.replace(/ /g, "-") //////
+            var iframe = document.getElementById(iframeId)
+            iframe.style.display = "block"
+        }
+
+        function sendMessageToComponent(id, message) {
+            var iframeId = "webui-" + id.replace(/ /g, "-") //////
+            var iframe = document.getElementById(iframeId)
+            iframe.contentWindow.postMessage(message)
+        }
+
+        function toggleComponent(id) {
+            if (isVisibleComponent(id))
+                hideComponent(id)
+            else
+                showComponent(id)
+        }
+
+        function showComponent(id) {
+            if (_uiIsMenu[id]) {
+                window.skyrimPlatform.sendMessage("WebUI", "EnterMenuMode")
+                _activeComponents.push(id)
+            }
+            getIframe(id).style.display = "block"
+        }
+
+        function hideComponent(id) {
+            if (_uiIsMenu[id]) {
+                window.skyrimPlatform.sendMessage("WebUI", "LeaveMenuMode")
+                _activeComponents.pop()
+            }
+            getIframe(id).style.display = "none"
+        }
+
+        function isVisibleComponent(id) {
+            return getIframe(id).style.display != "none"
+        }
+
+        function getIframe(id) {
+            return document.getElementById("webui-" + id.replace(/ /g, "-"))
+        }
+
+        window.addEventListener("keydown", function (e) {
+            if (e.keyCode == 27 && _activeComponents.length) {
+                var activeComponentId = _activeComponents[_activeComponents.length - 1]
+                hideComponent(activeComponentId)
+            }
+        })
+
+        window.addEventListener("message", function (message) {
+            var id = _uiFrames[message.source]
+            if (id) {
+                window.skyrimPlatform.sendMessage("WebUI", "OnMessage", id, message.data)
+            } else {
+                window.skyrimPlatform.sendMessage("WebUI", "OnMessage", "Unknown", message.data)
+            }
+        }, false)
+    </script>
+</head>
+
+<body>
+</body>
+
 </html>
