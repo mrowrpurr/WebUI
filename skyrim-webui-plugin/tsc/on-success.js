@@ -2,12 +2,12 @@ let fs = require('fs-extra');
 let path = require('path');
 
 function writeFileSyncRecursive(filename, content, charset) {
-	filename.split(path.sep).slice(0,-1).reduce( (last, folder)=>{
+	filename.split(path.sep).slice(0, -1).reduce((last, folder) => {
 		let folderPath = last ? (last + path.sep + folder) : folder
 		if (!fs.existsSync(folderPath)) fs.mkdirSync(folderPath)
 		return folderPath
 	})
-	
+
 	fs.writeFileSync(filename, content, charset)
 }
 
@@ -36,8 +36,8 @@ if (!seRoot) {
 
 console.log(`Installing ${pluginName}`);
 if (!outDir) {
-    writeFileSyncRecursive(path.join(seRoot, 'Data\\Platform\\Plugins', pluginName), fs.readFileSync(outFile));
+	writeFileSyncRecursive(path.join(seRoot, 'Data\\Platform\\Plugins', pluginName), fs.readFileSync(outFile));
 }
 else {
-    fs.copySync(`./dist/${pluginName}`, path.join(seRoot, 'Data\\Platform\\Plugins', pluginName));
+	fs.copySync(`./dist/${pluginName}`, path.join(seRoot, 'Data\\Platform\\Plugins', pluginName));
 }

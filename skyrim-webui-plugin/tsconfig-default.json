@@ -9,9 +9,10 @@
         "lib": [
             "ES2015"
         ],
-        "paths": {
-            "chai": ["./node_modules/@types/chai"]
-        }
+        "moduleResolution": "node"
     },
-    "include": ["./*.ts"]   
+    "include": [
+        "./*.ts"
+    ],
+    "moduleResolution": "node"
 }
