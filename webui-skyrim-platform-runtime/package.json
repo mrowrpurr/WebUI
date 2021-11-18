@@ -6,6 +6,8 @@
     "setup": "node ./tsc/before-first-compilation.js",
     "build": "tsc",
     "test": "jest",
+    "deploy": "node ./tsc/on-success.js",
+    "build:deploy": "npm run build && npm run deploy",
     "watch": " tsc-watch --onSuccess \"node ./tsc/on-success.js\""
   },
   "author": "Mrowr Purr",
