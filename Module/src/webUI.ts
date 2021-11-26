@@ -1,9 +1,11 @@
-import { browser, Debug, once } from 'skyrimPlatform'
+import { browser, Debug, once, on } from 'skyrimPlatform'
 
-browser.loadUrl('file:///Data/WebUI/WebUI/index.html')
-browser.setVisible(true)
+// browser.loadUrl('file:///Data/WebUI/WebUI/index.html')
+// browser.setVisible(true)
 
 const components = new Map<string, WebComponent>()
+const jsToInvokeWhenReady = new Array<[string, any]>()
+let browserIsReady = false
 
 export interface WebComponent {
     id: string,
@@ -24,9 +26,50 @@ export function registerComponent(component: WebComponent) {
 
 export function showComponent(id: string) {
     if (components.has(id))
-        invokeJS('show', components.get(id))
+        invokeJS('add', components.get(id))
 }
 
 function invokeJS(functionName: string, parameters: any) {
-    browser.executeJavaScript(`window.webUI.${functionName}(${JSON.stringify(parameters)});`)
+    if (browserIsReady) {
+        browser.executeJavaScript(`window.webUI.${functionName}(${JSON.stringify(parameters)});`)
+    } else {
+        jsToInvokeWhenReady.push([functionName, parameters])
+    }
 }
+
+on('browserMessage', message => {
+    if (message.arguments[0] = 'LOADED') {
+        browserIsReady = true
+        while (jsToInvokeWhenReady.length) {
+            const jsToInvoke = jsToInvokeWhenReady.shift()
+            if (jsToInvoke)
+                invokeJS(jsToInvoke[0], jsToInvoke[1])
+        }
+    }
+})
+
+once('update', () => {
+    browser.loadUrl('file:///Data/WebUI/WebUI/index.html')
+    browser.setVisible(true)
+})
+
+
+
+
+
+
+
+
+
+
+// export function localFilePath(relativeToSkyrimFolder: string, WebUIUiFolder: string = "/Data/WebUI/WebUI"): string {
+//     if (!relativeToSkyrimFolder.startsWith("/"))
+//         relativeToSkyrimFolder = "/" + relativeToSkyrimFolder
+
+//     if (relativeToSkyrimFolder.startsWith(WebUIUiFolder))
+//         return relativeToSkyrimFolder.replace(WebUIUiFolder, ".")
+
+//     const dotDots = WebUIUiFolder.split(/[\\/]/).map(_ => "..").join("/")
+//     return dotDots + "/" + relativeToSkyrimFolder
+// }
+

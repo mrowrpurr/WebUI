@@ -14,5 +14,8 @@
         return true
     }
     window.exports = {}
+    window.onload = () => {
+        skyrimPlatform.sendMessage('LOADED')
+    }
 </script>
 <script src="file:///Data/WebUI/WebUI/dist/webUI.js"></script>
