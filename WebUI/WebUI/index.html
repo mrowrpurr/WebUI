@@ -15,8 +15,14 @@
         return true
     }
     window.exports = {}
+    let isLoaded = false
     window.onload = () => {
         skyrimPlatform.sendMessage('LOADED')
+        isLoaded = true
     }
+    window.addEventListener('message', message => {
+        alert('YO I GOT A MESSAGE YO ' + JSON.stringify(message.data) + " IS LOADED? " + isLoaded)
+        skyrimPlatform.sendMessage('FOO', 'BAR', 'BAZ'); // { type: "Some Message", data: message.data });
+    });
 </script>
 <script src="file:///Data/WebUI/WebUI/dist/webUI.js"></script>

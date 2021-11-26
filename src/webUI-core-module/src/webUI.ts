@@ -37,7 +37,20 @@ function invokeJS(functionName: string, parameters: any) {
     }
 }
 
+export interface WebUIRequest {
+    query: string,
+    parameters?: any,
+    reply: (response: any) => void
+}
+
+export function onRequest(request: WebUIRequest) {
+
+}
+
 on('browserMessage', message => {
+    once('update', () => {
+        Debug.messageBox(`Browser Message: ${JSON.stringify(message.arguments)}`)
+    })
     if (message.arguments[0] = 'LOADED') {
         browserIsReady = true
         while (jsToInvokeWhenReady.length) {
@@ -45,6 +58,13 @@ on('browserMessage', message => {
             if (jsToInvoke)
                 invokeJS(jsToInvoke[0], jsToInvoke[1])
         }
+        once('update', () => {
+            Debug.messageBox("LOADED")
+        })
+    } else {
+        once('update', () => {
+            Debug.messageBox(`RECEIVED MESSAGE: ${JSON.stringify(message.arguments)}`)
+        })
     }
 })
 

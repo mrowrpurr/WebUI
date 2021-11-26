@@ -1,5 +1,18 @@
 import { WebComponent } from 'skyrim-webui'
 
+class WebUIMod {
+    modName: string
+    constructor(modName: string) {
+        this.modName = modName
+    }
+    async request(query: string, parameters: any) {
+        return new Promise(resolve => {
+            window.postMessage({ event: "THIS IS A MESSAGE" })
+            resolve('HMM TODO')
+        })
+    }
+}
+
 class WebUISkyrimAPI {
     public hello() {
         alert('HELLO THERE')
@@ -40,5 +53,7 @@ class WebUIComponentHost {
     }
 }
 
+// TODO: make this __webUI so it's clear that it's a private API
 (window as any).webUI = new WebUIComponentHost();
-(window as any).skyrim = new WebUISkyrimAPI()
+(window as any).skyrim = new WebUISkyrimAPI();
+(window as any).getMod = (modName: string) => new WebUIMod(modName)
