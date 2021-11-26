@@ -4,7 +4,7 @@ import BrowserMessageHandler from './BrowerMessageHandler'
 import ConsoleMessageHandler from './ConsoleMessageHandler'
 
 export default function main() {
-    once("update", StartRuntime)
-    on("browserMessage", BrowserMessageHandler)
-    on("consoleMessage", ConsoleMessageHandler)
+    once("tick", StartRuntime)
+    // on("browserMessage", BrowserMessageHandler)
+    // on("consoleMessage", ConsoleMessageHandler)
 }

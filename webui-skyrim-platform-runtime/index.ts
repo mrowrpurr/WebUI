@@ -1,3 +1,3 @@
-import Runtime from './src/Runtime'
+import Runtime from './src/Entrypoint'
 
 Runtime()
