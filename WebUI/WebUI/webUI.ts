@@ -1,6 +1,8 @@
+import { WebComponent } from 'skyrim-webui'
+
 class WebUIComponentHost {
-    public show(id: string) {
-        alert(`You called show with: ${id}`)
+    public show(component: WebComponent) {
+        alert(`SHOW: ${JSON.stringify(component)}`)
     }
 }
 

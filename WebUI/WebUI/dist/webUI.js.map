@@ -1,1 +1,1 @@
-{"version":3,"file":"webUI.js","sourceRoot":"","sources":["../webUI.ts"],"names":[],"mappings":";AAAA,MAAM,kBAAkB;IACb,IAAI,CAAC,EAAU;QAClB,KAAK,CAAC,yBAAyB,EAAE,EAAE,CAAC,CAAA;IACxC,CAAC;CACJ;AAEA,MAAc,CAAC,KAAK,GAAG,IAAI,kBAAkB,EAAE,CAAA"}
+{"version":3,"file":"webUI.js","sourceRoot":"","sources":["../webUI.ts"],"names":[],"mappings":";;AAEA;IAAA;IAIA,CAAC;IAHU,iCAAI,GAAX,UAAY,SAAuB;QAC/B,KAAK,CAAC,gBAAS,IAAI,CAAC,SAAS,CAAC,SAAS,CAAC,CAAE,CAAC,CAAA;IAC/C,CAAC;IACL,yBAAC;AAAD,CAAC,AAJD,IAIC;AAEA,MAAc,CAAC,KAAK,GAAG,IAAI,kBAAkB,EAAE,CAAA"}

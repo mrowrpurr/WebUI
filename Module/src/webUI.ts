@@ -23,7 +23,8 @@ export function registerComponent(component: WebComponent) {
 }
 
 export function showComponent(id: string) {
-    invokeJS('show', id)
+    if (components.has(id))
+        invokeJS('show', components.get(id))
 }
 
 function invokeJS(functionName: string, parameters: any) {

@@ -4,7 +4,10 @@
     "noImplicitAny": true,
     "noImplicitThis": true,
     "strict": true,
-    "target": "es5",
+    "module": "ES2015",
+    "target": "ES6",
+    "moduleResolution": "node",
+    "declaration": true,
     "outDir": "dist",
     "sourceMap": true
   },
