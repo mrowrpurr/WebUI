@@ -1,10 +1,11 @@
-export interface WebComponent {
+export interface WebView {
     id: string,
     url: string,
-    position: WebComponentPosition
+    position: WebViewPosition,
+    visible: boolean
 }
 
-export interface WebComponentPosition {
+export interface WebViewPosition {
     x: number,
     y: number,
     width: number,

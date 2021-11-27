@@ -1,6 +1,10 @@
-import { WebComponent } from 'skyrim-webui'
+/*
+ * Frontend
+ */
 
-// Consider moving EVERYTHING into a WebUIComponentHost
+import { WebView } from 'skyrim-webui'
+
+// Consider moving EVERYTHING into a WebWebViewHost
 const modInstances = new Map<string, WebUIMod>()
 const iframesByName = new Map<string, HTMLIFrameElement>()
 const modNameForIframe = new Map<Window, string>()
@@ -30,7 +34,6 @@ class WebUIMod {
     }
     async request(query: string, parameters: any) {
         const replyId = getUniqueReplyId()
-        alert(`REQUEST: ${query} ${JSON.stringify(parameters)}`)
         return new Promise<any>(resolve => {
             requestResultPromises.set(replyId, resolve)
             postEvent({
@@ -49,8 +52,8 @@ class WebUISkyrimAPI {
     }
 }
 
-class WebUIComponentHost {
-    components = new Map<string, WebComponent>()
+class WebWebViewHost {
+    components = new Map<string, WebView>()
 
     public remove(id: string) {
         this.components.delete(id)
@@ -59,7 +62,8 @@ class WebUIComponentHost {
         iframesByName.delete(id)
     }
 
-    public add(component: WebComponent) {
+    public add(component: WebView) {
+        alert(`Adding WebView to frontend: ${JSON.stringify(component)}`)
         if (this.components.has(component.id))
             this.remove(component.id)
         else
@@ -84,8 +88,14 @@ class WebUIComponentHost {
     }
 }
 
+window.onload = () => {
+    (window as any).skyrimPlatform.sendMessage("WebUI", {
+        messageType: 'webviewhostloaded', target: '', message: {}
+    })
+}
+
 // TODO: make this __webUI so it's clear that it's a private API
-(window as any).webUI = new WebUIComponentHost();
+(window as any).webUI = new WebWebViewHost();
 (window as any).skyrim = new WebUISkyrimAPI();
 (window as any).getMod = (modName: string) => new WebUIMod(modName)
 

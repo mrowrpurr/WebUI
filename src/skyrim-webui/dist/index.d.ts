@@ -1,5 +1,5 @@
-export declare class WebComponentSkyrimAPI {
-    test(): void;
+export declare class WebViewkyrimAPI {
+    test(): void
 }
-declare const skyrimAPI: WebComponentSkyrimAPI;
-export default skyrimAPI;
+declare const skyrimAPI: WebViewkyrimAPI
+export default skyrimAPI

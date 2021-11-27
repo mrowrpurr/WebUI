@@ -1,4 +1,7 @@
 "use strict";
+/*
+ * Frontend
+ */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -10,7 +13,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getUniqueReplyId = exports.postEvent = void 0;
-// Consider moving EVERYTHING into a WebUIComponentHost
+// Consider moving EVERYTHING into a WebWebViewHost
 const modInstances = new Map();
 const iframesByName = new Map();
 const modNameForIframe = new Map();
@@ -32,7 +35,6 @@ class WebUIMod {
     request(query, parameters) {
         return __awaiter(this, void 0, void 0, function* () {
             const replyId = getUniqueReplyId();
-            alert(`REQUEST: ${query} ${JSON.stringify(parameters)}`);
             return new Promise(resolve => {
                 requestResultPromises.set(replyId, resolve);
                 postEvent({
@@ -50,7 +52,7 @@ class WebUISkyrimAPI {
         alert('HELLO THERE');
     }
 }
-class WebUIComponentHost {
+class WebWebViewHost {
     constructor() {
         this.components = new Map();
     }
@@ -61,6 +63,7 @@ class WebUIComponentHost {
         iframesByName.delete(id);
     }
     add(component) {
+        alert(`Adding WebView to frontend: ${JSON.stringify(component)}`);
         if (this.components.has(component.id))
             this.remove(component.id);
         else
@@ -84,8 +87,13 @@ class WebUIComponentHost {
         }
     }
 }
+window.onload = () => {
+    window.skyrimPlatform.sendMessage("WebUI", {
+        messageType: 'webviewhostloaded', target: '', message: {}
+    });
+};
 // TODO: make this __webUI so it's clear that it's a private API
-window.webUI = new WebUIComponentHost();
+window.webUI = new WebWebViewHost();
 window.skyrim = new WebUISkyrimAPI();
 window.getMod = (modName) => new WebUIMod(modName);
 // window.addEventListener('message', message => {
