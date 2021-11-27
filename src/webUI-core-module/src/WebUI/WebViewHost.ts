@@ -58,9 +58,8 @@ export class WebViewHost {
     public async send(messageType: 'request', viewId: string, message: WebViewMessage): Promise<WebViewResponse>
     public async send(messageType: string, viewId: string, message: any): Promise<any>
     public async send(messageType: string, viewId: string, message: any): Promise<any> {
-        MessageBox(`Backend.send ${messageType} ${viewId}`, message)
         this.invokeViewFunction('invokeMessage', {
-            messageType, message, target: viewId,
+            messageType, message, viewId,
         })
     }
 
@@ -73,7 +72,6 @@ export class WebViewHost {
 
     _handleBrowserMessage(message: BrowserMessageEvent) {
         once('update', () => {
-            // MessageBox('_handleBrowserMessage', message)
             if (message.arguments.length && message.arguments[0] == "WebUI") {
                 const browserMessage = message.arguments[1] as WebViewBrowserMessage
                 if (browserMessage.messageType == 'webviewhostloaded') {

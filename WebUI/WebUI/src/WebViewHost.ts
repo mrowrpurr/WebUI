@@ -68,7 +68,6 @@ export class WebViewHost {
     public on(messageType: 'message', viewId: string, callback: (message: WebViewMessage) => void): void
     public on(messageType: string, viewId: string, callback: (message: any) => void): void
     public on(messageType: string, viewId: string, callback: (message: any) => void): void {
-        (window as any).alert(`frontend ON ${messageType}`)
         if (!this.messageCallbacks.has(messageType))
             this.messageCallbacks.set(messageType, Array<WebViewEventCallback>())
         const callbacks = this.messageCallbacks.get(messageType)
@@ -85,7 +84,6 @@ export class WebViewHost {
         // Invoke JS
         if (!message.source) message.source = viewId
         if (!message.target) message.target = viewId;
-        (window as any).alert(`Sending Message from Frontend to Backend: ${messageType} ${JSON.stringify(message)}`);
         (window as any).skyrimPlatform.sendMessage('WebUI', {
             messageType, message, target: viewId
         })
@@ -94,12 +92,9 @@ export class WebViewHost {
 
     // TODO: refactor the viewId / target inconsistencies
     public invokeMessage(properties: InvokeMessageProps) {
-        (window as any).alert(`frontend INVOKE ${properties.messageType}`)
-        const callbacks = this.messageCallbacks.get(properties.messageType);
-        (window as any).alert(`[Frontend] invokeMessage received from Backend: ${JSON.stringify(properties)} --> ${callbacks!.length}`)
+        const callbacks = this.messageCallbacks.get(properties.messageType)
         if (callbacks)
             callbacks.forEach(callback => {
-                (window as any).alert(`CALLBACK: ${callback}`)
                 if ((!callback.viewId) || callback.viewId == properties.viewId)
                     callback.callback(properties.message)
             })

@@ -61,7 +61,6 @@ class WebViewHost {
         this.iframesByName.delete(id);
     }
     on(messageType, viewId, callback) {
-        window.alert(`frontend ON ${messageType}`);
         if (!this.messageCallbacks.has(messageType))
             this.messageCallbacks.set(messageType, Array());
         const callbacks = this.messageCallbacks.get(messageType);
@@ -75,7 +74,6 @@ class WebViewHost {
                 message.source = viewId;
             if (!message.target)
                 message.target = viewId;
-            window.alert(`Sending Message from Frontend to Backend: ${messageType} ${JSON.stringify(message)}`);
             window.skyrimPlatform.sendMessage('WebUI', {
                 messageType, message, target: viewId
             });
@@ -84,12 +82,9 @@ class WebViewHost {
     }
     // TODO: refactor the viewId / target inconsistencies
     invokeMessage(properties) {
-        window.alert(`frontend INVOKE ${properties.messageType}`);
         const callbacks = this.messageCallbacks.get(properties.messageType);
-        window.alert(`[Frontend] invokeMessage received from Backend: ${JSON.stringify(properties)} --> ${callbacks.length}`);
         if (callbacks)
             callbacks.forEach(callback => {
-                window.alert(`CALLBACK: ${callback}`);
                 if ((!callback.viewId) || callback.viewId == properties.viewId)
                     callback.callback(properties.message);
             });
