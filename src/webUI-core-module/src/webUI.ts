@@ -44,27 +44,31 @@ export interface WebUIRequest {
 }
 
 export function onRequest(request: WebUIRequest) {
-
+    Debug.messageBox('TODO onRequest')
 }
 
 on('browserMessage', message => {
     once('update', () => {
-        Debug.messageBox(`Browser Message: ${JSON.stringify(message.arguments)}`)
+        Debug.messageBox(`Browse Message: ${JSON.stringify(message.arguments)}`)
     })
-    if (message.arguments[0] = 'LOADED') {
-        browserIsReady = true
-        while (jsToInvokeWhenReady.length) {
-            const jsToInvoke = jsToInvokeWhenReady.shift()
-            if (jsToInvoke)
-                invokeJS(jsToInvoke[0], jsToInvoke[1])
+    if (message.arguments[0] == 'WebUI') {
+        const eventName = message.arguments[1]
+        switch (eventName) {
+            case 'OnLoad': {
+                browserIsReady = true
+                while (jsToInvokeWhenReady.length) {
+                    const jsToInvoke = jsToInvokeWhenReady.shift()
+                    if (jsToInvoke)
+                        invokeJS(jsToInvoke[0], jsToInvoke[1])
+                }
+                break
+            }
+            default: {
+                once('update', () => {
+                    Debug.messageBox(`Unknown Event: ${JSON.stringify(message.arguments)}`)
+                })
+            }
         }
-        once('update', () => {
-            Debug.messageBox("LOADED")
-        })
-    } else {
-        once('update', () => {
-            Debug.messageBox(`RECEIVED MESSAGE: ${JSON.stringify(message.arguments)}`)
-        })
     }
 })
 

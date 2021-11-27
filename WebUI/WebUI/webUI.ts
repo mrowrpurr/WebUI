@@ -57,3 +57,7 @@ class WebUIComponentHost {
 (window as any).webUI = new WebUIComponentHost();
 (window as any).skyrim = new WebUISkyrimAPI();
 (window as any).getMod = (modName: string) => new WebUIMod(modName)
+
+// window.addEventListener('message', message => {
+//     alert(`TypeScript caught this message: ${JSON.stringify(message.data)}`)
+// })
