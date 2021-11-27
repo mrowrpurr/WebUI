@@ -2,8 +2,18 @@
 /*
  * HTML Web Frontend
  */
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.WebViewHost = void 0;
+exports.webViewHostInstance = exports.WebViewHost = void 0;
+const WebView_1 = require("./WebView");
 class WebViewHost {
     constructor() {
         this.webViews = new Map();
@@ -12,10 +22,12 @@ class WebViewHost {
     }
     getView(id) {
         alert(`Getting view ${id} from ${this.webViews}`);
+        const theView = this.webViews.get(id);
+        alert(`THE VIEW TO RETURN FROM getView: ${theView}`);
         return this.webViews.get(id);
     }
-    add(webView) {
-        alert('add!');
+    add(webViewProps) {
+        const webView = new WebView_1.default(webViewProps);
         if (this.webViews.has(webView.id))
             this.remove(webView.id);
         else
@@ -43,8 +55,20 @@ class WebViewHost {
         document.documentElement.removeChild(iframe);
         this.iframesByName.delete(id);
     }
+    send(messageType, viewId, message) {
+        return __awaiter(this, void 0, void 0, function* () {
+            // Invoke JS
+            if (!message.source)
+                message.source = viewId;
+            if (!message.target)
+                message.target = viewId;
+            window.skyrimPlatform.sendMessage('WebUI', {
+                messageType, message, target: viewId
+            });
+        });
+    }
 }
 exports.WebViewHost = WebViewHost;
-const defaultInstance = new WebViewHost();
-exports.default = defaultInstance;
+exports.webViewHostInstance = new WebViewHost();
+exports.default = exports.webViewHostInstance;
 //# sourceMappingURL=WebViewHost.js.map

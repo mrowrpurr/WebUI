@@ -2,7 +2,8 @@
  * HTML Web Frontend
  */
 
-import WebView from './WebView'
+import WebView, { WebViewProps } from './WebView'
+import { WebViewMessage, WebViewEvent, WebViewRequest, WebViewResponse } from './WebViewEvents'
 
 export class WebViewHost {
     webViews = new Map<string, WebView>()
@@ -11,11 +12,13 @@ export class WebViewHost {
 
     public getView(id: string) {
         alert(`Getting view ${id} from ${this.webViews}`)
+        const theView = this.webViews.get(id)
+        alert(`THE VIEW TO RETURN FROM getView: ${theView}`)
         return this.webViews.get(id)
     }
 
-    public add(webView: WebView) {
-        alert('add!')
+    public add(webViewProps: WebViewProps) {
+        const webView = new WebView(webViewProps)
         if (this.webViews.has(webView.id))
             this.remove(webView.id)
         else
@@ -44,8 +47,23 @@ export class WebViewHost {
         document.documentElement.removeChild(iframe!)
         this.iframesByName.delete(id)
     }
+
+    public async send(messageType: 'message', viewId: string, message: WebViewMessage): Promise<any>
+    public async send(messageType: 'event', viewId: string, message: WebViewEvent): Promise<any>
+    public async send(messageType: 'request', viewId: string, message: WebViewMessage): Promise<WebViewResponse>
+    public async send(messageType: string, viewId: string, message: any): Promise<any>
+    public async send(messageType: string, viewId: string, message: any): Promise<any> {
+        // Invoke JS
+        if (!message.source)
+            message.source = viewId
+        if (!message.target)
+            message.target = viewId;
+        (window as any).skyrimPlatform.sendMessage('WebUI', {
+            messageType, message, target: viewId
+        })
+    }
 }
 
-const defaultInstance = new WebViewHost()
+export const webViewHostInstance = new WebViewHost()
 
-export default defaultInstance
+export default webViewHostInstance

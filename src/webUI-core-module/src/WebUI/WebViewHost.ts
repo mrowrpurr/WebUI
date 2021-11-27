@@ -16,7 +16,7 @@ export class WebViewHost {
     public rootUrl: string
     initialized = false
     isReady = false
-    eventCallbacks = new Map<string, Array<WebViewEventCallback>>()
+    messageCallbacks = new Map<string, Array<WebViewEventCallback>>()
     jsToInvokeWhenReady = new Array<[string, any]>()
 
     constructor(rootUrl: string = 'file:///Data/WebUI/WebUI/index.html') {
@@ -46,7 +46,9 @@ export class WebViewHost {
     public on(messageType: 'request', viewId: string, callback: (message: WebViewRequest) => void): void
     public on(messageType: string, viewId: string, callback: (message: any) => void): void
     public on(messageType: string, viewId: string, callback: (message: any) => void) {
-        const callbacks = this.eventCallbacks.get(messageType)
+        if (!this.messageCallbacks.has(messageType))
+            this.messageCallbacks.set(messageType, Array<WebViewEventCallback>())
+        const callbacks = this.messageCallbacks.get(messageType)
         if (callbacks)
             callbacks.push({ viewId, callback })
     }
@@ -77,7 +79,7 @@ export class WebViewHost {
                         this.invokeViewFunction(jsToInvoke[0], jsToInvoke[1])
                     })
                 } else {
-                    const callbacks = this.eventCallbacks.get(browserMessage.messageType)
+                    const callbacks = this.messageCallbacks.get(browserMessage.messageType)
                     if (callbacks) {
                         callbacks.forEach(callback => {
                             if ((!callback.viewId) || callback.viewId == browserMessage.target)

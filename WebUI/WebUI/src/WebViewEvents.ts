@@ -2,15 +2,6 @@
  * HTML Web Frontend
  */
 
-export interface WebViewBrowserMessage {
-    target: string,
-    messageType: string,
-    message: any,
-}
-
-export interface WebViewHostLoad {
-}
-
 export interface WebViewEvent {
     target: string,
     source: string,
