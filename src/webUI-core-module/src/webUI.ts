@@ -1,4 +1,4 @@
-import { browser, Debug, once, on } from 'skyrimPlatform'
+import { browser, Debug, once, on, printConsole } from 'skyrimPlatform'
 
 // browser.loadUrl('file:///Data/WebUI/WebUI/index.html')
 // browser.setVisible(true)
@@ -40,20 +40,23 @@ function invokeJS(functionName: string, parameters: any) {
 export interface WebUIRequest {
     query: string,
     parameters?: any,
-    reply: (response: any) => void
+    // reply: (response: any) => void
 }
 
-export function onRequest(request: WebUIRequest) {
-    Debug.messageBox('TODO onRequest')
+const globalCallbacks = new Array<(request: WebUIRequest) => void>()
+
+export function onRequest(callback: (request: WebUIRequest) => void) {
+    globalCallbacks.push(callback)
 }
 
 on('browserMessage', message => {
     once('update', () => {
-        Debug.messageBox(`Browse Message: ${JSON.stringify(message.arguments)}`)
+        printConsole(`Browse Message: ${JSON.stringify(message.arguments)}`)
     })
     if (message.arguments[0] == 'WebUI') {
         const eventName = message.arguments[1]
         switch (eventName) {
+            // TODO move this so it follows the same event structrure
             case 'OnLoad': {
                 browserIsReady = true
                 while (jsToInvokeWhenReady.length) {
@@ -64,9 +67,8 @@ on('browserMessage', message => {
                 break
             }
             default: {
-                once('update', () => {
-                    Debug.messageBox(`Unknown Event: ${JSON.stringify(message.arguments)}`)
-                })
+
+                break
             }
         }
     }

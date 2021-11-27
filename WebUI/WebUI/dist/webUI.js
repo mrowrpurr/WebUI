@@ -9,15 +9,38 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.getUniqueReplyId = exports.postEvent = void 0;
+// Consider moving EVERYTHING into a WebUIComponentHost
+const modInstances = new Map();
+const iframesByName = new Map();
+const modNameForIframe = new Map();
+const requestResultPromises = new Map();
+function postEvent(event) {
+    // window.postMessage(event)
+    window.skyrimPlatform.sendMessage("WebUI", event);
+}
+exports.postEvent = postEvent;
+function getUniqueReplyId() {
+    return `${Math.random()}_${Math.random()}`;
+}
+exports.getUniqueReplyId = getUniqueReplyId;
 class WebUIMod {
     constructor(modName) {
         this.modName = modName;
+        modInstances.set(modName, this);
     }
     request(query, parameters) {
         return __awaiter(this, void 0, void 0, function* () {
+            const replyId = getUniqueReplyId();
+            alert(`REQUEST: ${query} ${JSON.stringify(parameters)}`);
             return new Promise(resolve => {
-                window.postMessage({ event: "THIS IS A MESSAGE" });
-                resolve('HMM TODO');
+                requestResultPromises.set(replyId, resolve);
+                postEvent({
+                    modName: this.modName,
+                    eventName: 'REQUEST',
+                    data: { query, parameters },
+                    replyId
+                });
             });
         });
     }
@@ -30,13 +53,12 @@ class WebUISkyrimAPI {
 class WebUIComponentHost {
     constructor() {
         this.components = new Map();
-        this.iframes = new Map();
     }
     remove(id) {
         this.components.delete(id);
-        const iframe = this.iframes.get(id);
+        const iframe = iframesByName.get(id);
         document.documentElement.removeChild(iframe);
-        this.iframes.delete(id);
+        iframesByName.delete(id);
     }
     add(component) {
         if (this.components.has(component.id))
@@ -44,7 +66,7 @@ class WebUIComponentHost {
         else
             this.components.set(component.id, component);
         const iframe = document.createElement('iframe');
-        this.iframes.set(component.id, iframe);
+        iframesByName.set(component.id, iframe);
         iframe.style.left = (window.innerWidth * (component.position.x / 100)).toFixed() + 'px';
         iframe.style.top = (window.innerHeight * (component.position.y / 100)).toFixed() + 'px';
         iframe.style.height = (window.innerHeight * (component.position.height / 100)).toFixed() + 'px';
@@ -53,11 +75,13 @@ class WebUIComponentHost {
         iframe.scrolling = 'false';
         iframe.src = component.url;
         document.documentElement.appendChild(iframe);
-        if (iframe.contentWindow)
+        if (iframe.contentWindow) {
+            modNameForIframe.set(iframe.contentWindow, component.id);
             iframe.contentWindow.onerror = function (msg, url, linenumber) {
                 alert('Error message: ' + msg + '\nURL: ' + url + '\nLine Number: ' + linenumber);
                 return true;
             };
+        }
     }
 }
 // TODO: make this __webUI so it's clear that it's a private API
@@ -65,6 +89,11 @@ window.webUI = new WebUIComponentHost();
 window.skyrim = new WebUISkyrimAPI();
 window.getMod = (modName) => new WebUIMod(modName);
 // window.addEventListener('message', message => {
-//     alert(`TypeScript caught this message: ${JSON.stringify(message.data)}`)
+//     alert(`onmessage ${JSON.stringify(message)}`)
+//     // for (let [key, value] of modNameForIframe) {
+//     //     if (key == message.source) {
+//     //         alert(`Message: ${JSON.stringify(message.data)} from ${key.location.href} OK`)
+//     //     }
+//     // }
 // })
 //# sourceMappingURL=webUI.js.map

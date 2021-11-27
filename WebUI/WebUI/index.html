@@ -18,11 +18,5 @@
     window.onload = () => {
         skyrimPlatform.sendMessage("WebUI", "OnLoad")
     }
-    window.addEventListener('message', message => {
-        // TODO which iframe?
-        setTimeout(() => {
-            skyrimPlatform.sendMessage("WebUI", message.data); // { type: "Some Message", data: message.data });
-        }, 1000)
-    });
 </script>
 <script src="file:///Data/WebUI/WebUI/dist/webUI.js"></script>

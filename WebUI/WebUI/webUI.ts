@@ -1,14 +1,44 @@
 import { WebComponent } from 'skyrim-webui'
 
+// Consider moving EVERYTHING into a WebUIComponentHost
+const modInstances = new Map<string, WebUIMod>()
+const iframesByName = new Map<string, HTMLIFrameElement>()
+const modNameForIframe = new Map<Window, string>()
+const requestResultPromises = new Map<string, (data: any) => void>()
+
+export interface WebUIEvent {
+    modName: string,
+    eventName: string,
+    data: any,
+    replyId: string
+}
+
+export function postEvent(event: WebUIEvent) {
+    // window.postMessage(event)
+    (window as any).skyrimPlatform.sendMessage("WebUI", event)
+}
+
+export function getUniqueReplyId() {
+    return `${Math.random()}_${Math.random()}`
+}
+
 class WebUIMod {
     modName: string
     constructor(modName: string) {
         this.modName = modName
+        modInstances.set(modName, this)
     }
     async request(query: string, parameters: any) {
-        return new Promise(resolve => {
-            window.postMessage({ event: "THIS IS A MESSAGE" })
-            resolve('HMM TODO')
+        const replyId = getUniqueReplyId()
+        alert(`REQUEST: ${query} ${JSON.stringify(parameters)}`)
+        return new Promise<any>(resolve => {
+            requestResultPromises.set(replyId, resolve)
+            postEvent({
+                modName: this.modName,
+                eventName: 'REQUEST',
+                data: { query, parameters },
+                replyId
+            })
         })
     }
 }
@@ -21,13 +51,12 @@ class WebUISkyrimAPI {
 
 class WebUIComponentHost {
     components = new Map<string, WebComponent>()
-    iframes = new Map<string, HTMLIFrameElement>()
 
     public remove(id: string) {
         this.components.delete(id)
-        const iframe = this.iframes.get(id)
+        const iframe = iframesByName.get(id)
         document.documentElement.removeChild(iframe!)
-        this.iframes.delete(id)
+        iframesByName.delete(id)
     }
 
     public add(component: WebComponent) {
@@ -36,7 +65,7 @@ class WebUIComponentHost {
         else
             this.components.set(component.id, component)
         const iframe = document.createElement('iframe')
-        this.iframes.set(component.id, iframe)
+        iframesByName.set(component.id, iframe)
         iframe.style.left = (window.innerWidth * (component.position.x / 100)).toFixed() + 'px'
         iframe.style.top = (window.innerHeight * (component.position.y / 100)).toFixed() + 'px'
         iframe.style.height = (window.innerHeight * (component.position.height / 100)).toFixed() + 'px'
@@ -45,11 +74,13 @@ class WebUIComponentHost {
         iframe.scrolling = 'false'
         iframe.src = component.url
         document.documentElement.appendChild(iframe)
-        if (iframe.contentWindow)
+        if (iframe.contentWindow) {
+            modNameForIframe.set(iframe.contentWindow, component.id)
             iframe.contentWindow.onerror = function(msg, url, linenumber) {
                 alert('Error message: ' + msg + '\nURL: ' + url + '\nLine Number: ' + linenumber)
                 return true
             }
+        }
     }
 }
 
@@ -59,5 +90,10 @@ class WebUIComponentHost {
 (window as any).getMod = (modName: string) => new WebUIMod(modName)
 
 // window.addEventListener('message', message => {
-//     alert(`TypeScript caught this message: ${JSON.stringify(message.data)}`)
+//     alert(`onmessage ${JSON.stringify(message)}`)
+//     // for (let [key, value] of modNameForIframe) {
+//     //     if (key == message.source) {
+//     //         alert(`Message: ${JSON.stringify(message.data)} from ${key.location.href} OK`)
+//     //     }
+//     // }
 // })
