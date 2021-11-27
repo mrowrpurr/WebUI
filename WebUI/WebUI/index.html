@@ -14,9 +14,5 @@
         alert('Error message: ' + msg + '\nURL: ' + url + '\nLine Number: ' + linenumber)
         return true
     }
-    window.exports = {}
-    window.onload = () => {
-        skyrimPlatform.sendMessage("WebUI", "OnLoad")
-    }
 </script>
-<script src="file:///Data/WebUI/WebUI/dist/webUI.js"></script>
+<script src="file:///Data/WebUI/WebUI/build/WebUI.js"></script>

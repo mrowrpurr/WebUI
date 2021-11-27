@@ -1,3 +1,7 @@
+/*
+ * Skyrim Platform Backend
+ */
+
 import { Debug, on } from 'skyrimPlatform'
 import WebViewHost from './WebViewHost'
 import { WebViewMessage, WebViewEvent, WebViewRequest, WebViewResponse } from './WebViewEvents'
@@ -53,9 +57,13 @@ export default class WebView {
 
     public async send(messageType: 'message', message: WebViewMessage): Promise<any>
     public async send(messageType: 'event', message: WebViewEvent): Promise<any>
-    public async send(messageType: 'request', message: WebViewMessage): Promise<WebViewResponse>
+    public async send(messageType: 'request', message: WebViewRequest): Promise<WebViewResponse>
     public async send(messageType: string, message: any): Promise<any>
     public async send(messageType: string, message: any): Promise<any> {
+        if (!message.target)
+            message.target = this.id
+        if (!message.source)
+            message.source = this.id
         return WebViewHost.send(messageType, this.id, message)
     }
 

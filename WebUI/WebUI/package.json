@@ -3,15 +3,17 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "watch": "tsc --watch"
+    "watch": "tsc-watch --onSuccess \"npm run build\"",
+    "build": "webpack"
   },
   "author": "Mrowr Purr <mrowr.purr@gmail.com>",
   "license": "MIT",
   "devDependencies": {
+    "ts-loader": "^9.2.6",
     "tsc": "^2.0.3",
-    "typescript": "^4.5.2"
-  },
-  "dependencies": {
-    "@types/skyrim-webui": "file:../../src/webUI-core-shared"
+    "tsc-watch": "^4.5.0",
+    "typescript": "^4.5.2",
+    "webpack": "^5.64.4",
+    "webpack-cli": "^4.9.1"
   }
 }

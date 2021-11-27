@@ -1,5 +1,10 @@
-import { browser, on, once, BrowserMessageEvent, Debug } from 'skyrimPlatform'
+/*
+ * Skyrim Platform Backend
+ */
+
+import { browser, on, once, BrowserMessageEvent, Debug, Message } from 'skyrimPlatform'
 import WebView from './WebView'
+import MessageBox from './MessageBox'
 import { WebViewBrowserMessage, WebViewMessage, WebViewEvent, WebViewRequest, WebViewResponse } from './WebViewEvents'
 
 interface WebViewEventCallback {
@@ -19,7 +24,6 @@ export class WebViewHost {
     }
 
     public initialize() {
-        Debug.messageBox('INITIALIZING')
         if (!this.initialized) {
             this.initialized = true
             browser.loadUrl(this.rootUrl)
@@ -30,11 +34,10 @@ export class WebViewHost {
 
     public addToUI(component: WebView) {
         this.invokeViewFunction('add', component)
-        Debug.messageBox(`Added ${component.id} to UI`)
     }
 
     public removeFromUI(component: WebView) {
-        Debug.messageBox("TODO - remove WebView from UI")
+        MessageBox("TODO - remove WebView from UI")
     }
 
     // public on(messageType: 'load', viewId: string, callback: (message: WebViewRequest) => void): void
@@ -54,32 +57,26 @@ export class WebViewHost {
     public async send(messageType: string, viewId: string, message: any): Promise<any>
     public async send(messageType: string, viewId: string, message: any): Promise<any> {
         // Invoke JS
-        Debug.messageBox(`TODO: send(${messageType})`)
+        MessageBox(`TODO: send(${messageType})`)
     }
 
     public invokeViewFunction(functionName: string, parameters: any) {
-        Debug.messageBox(`INVOKE JS: window.webUI.${functionName}(${JSON.stringify(parameters)}); => Ready: ${this.isReady}`)
         if (this.isReady)
-            browser.executeJavaScript(`window.webUI.${functionName}(${JSON.stringify(parameters)});`)
+            browser.executeJavaScript(`window.__webViewHost.${functionName}(${JSON.stringify(parameters)});`)
         else
             this.jsToInvokeWhenReady.push([functionName, parameters])
     }
 
     _handleBrowserMessage(message: BrowserMessageEvent) {
         once('update', () => {
-            Debug.messageBox(`INCOMING BROWSER MESSAGE ${JSON.stringify(message)}`)
             if (message.arguments.length && message.arguments[0] == "WebUI") {
                 const browserMessage = message.arguments[1] as WebViewBrowserMessage
-                Debug.messageBox(`AS BROWSER MESSAGE: ${JSON.stringify(browserMessage)}`)
                 if (browserMessage.messageType == 'webviewhostloaded') {
-                    Debug.messageBox("IF!")
-                    Debug.messageBox(`It loaded! Now to run ${this.jsToInvokeWhenReady.length} JS functions!`)
                     this.isReady = true
                     this.jsToInvokeWhenReady.forEach(jsToInvoke => {
                         this.invokeViewFunction(jsToInvoke[0], jsToInvoke[1])
                     })
                 } else {
-                    Debug.messageBox("ELSE!")
                     const callbacks = this.eventCallbacks.get(browserMessage.messageType)
                     if (callbacks) {
                         callbacks.forEach(callback => {

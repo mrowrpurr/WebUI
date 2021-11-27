@@ -1,5 +1,5 @@
 /*
- * Skyrim Platform Backend
+ * HTML Web Frontend
  */
 
 export interface WebViewBrowserMessage {
