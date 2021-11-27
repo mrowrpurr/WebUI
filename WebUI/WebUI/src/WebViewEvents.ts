@@ -9,6 +9,10 @@ export interface WebViewEvent {
     data: any
 }
 
+export interface WebViewLoadedEvent {
+    viewId: string
+}
+
 export interface WebViewMessage {
     target: string,
     source: string,

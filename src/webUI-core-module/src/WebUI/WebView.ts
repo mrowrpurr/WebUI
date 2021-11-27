@@ -4,7 +4,7 @@
 
 import { Debug, on } from 'skyrimPlatform'
 import WebViewHost from './WebViewHost'
-import { WebViewMessage, WebViewEvent, WebViewRequest, WebViewResponse } from './WebViewEvents'
+import { WebViewMessage, WebViewEvent, WebViewRequest, WebViewResponse, WebViewLoadedEvent } from './WebViewEvents'
 
 export interface WebViewScreenPosition {
     x: number,
@@ -46,7 +46,7 @@ export default class WebView {
         WebViewHost.removeFromUI(this)
     }
 
-    // public on(messageType: 'load', callback: (message: WebViewLoad) => void): void
+    public on(messageType: 'load', callback: (message: WebViewLoadedEvent) => void): void
     public on(messageType: 'message', callback: (message: WebViewMessage) => void): void
     public on(messageType: 'event', callback: (message: WebViewEvent) => void): void
     public on(messageType: 'request', callback: (message: WebViewRequest) => void): void

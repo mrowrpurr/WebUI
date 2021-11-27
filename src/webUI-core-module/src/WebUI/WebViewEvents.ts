@@ -8,7 +8,8 @@ export interface WebViewBrowserMessage {
     message: any,
 }
 
-export interface WebViewHostLoad {
+export interface WebViewLoadedEvent {
+    viewId: string
 }
 
 export interface WebViewEvent {

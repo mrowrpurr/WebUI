@@ -19,15 +19,15 @@ class WebViewHost {
         this.webViews = new Map();
         this.iframesByName = new Map();
         this.requestResultPromises = new Map();
+        this.messageCallbacks = new Map();
     }
-    getView(id) {
-        alert(`Getting view ${id} from ${this.webViews}`);
-        const theView = this.webViews.get(id);
-        alert(`THE VIEW TO RETURN FROM getView: ${theView}`);
+    getWebView(id) {
         return this.webViews.get(id);
     }
-    add(webViewProps) {
-        const webView = new WebView_1.default(webViewProps);
+    addFromProps(webViewProps) {
+        this.add(new WebView_1.default(webViewProps));
+    }
+    add(webView) {
         if (this.webViews.has(webView.id))
             this.remove(webView.id);
         else
@@ -47,6 +47,11 @@ class WebViewHost {
                 alert('Error message: ' + msg + '\nURL: ' + url + '\nLine Number: ' + linenumber);
                 return true;
             };
+            iframe.contentWindow.addEventListener('load', () => {
+                this.send('load', webView.id, {
+                    viewId: webView.id
+                });
+            });
         }
     }
     remove(id) {
@@ -55,6 +60,14 @@ class WebViewHost {
         document.documentElement.removeChild(iframe);
         this.iframesByName.delete(id);
     }
+    on(messageType, viewId, callback) {
+        window.alert(`frontend ON ${messageType}`);
+        if (!this.messageCallbacks.has(messageType))
+            this.messageCallbacks.set(messageType, Array());
+        const callbacks = this.messageCallbacks.get(messageType);
+        if (callbacks)
+            callbacks.push({ viewId, callback });
+    }
     send(messageType, viewId, message) {
         return __awaiter(this, void 0, void 0, function* () {
             // Invoke JS
@@ -62,10 +75,24 @@ class WebViewHost {
                 message.source = viewId;
             if (!message.target)
                 message.target = viewId;
+            window.alert(`Sending Message from Frontend to Backend: ${messageType} ${JSON.stringify(message)}`);
             window.skyrimPlatform.sendMessage('WebUI', {
                 messageType, message, target: viewId
             });
+            // TODO return Promise
         });
+    }
+    // TODO: refactor the viewId / target inconsistencies
+    invokeMessage(properties) {
+        window.alert(`frontend INVOKE ${properties.messageType}`);
+        const callbacks = this.messageCallbacks.get(properties.messageType);
+        window.alert(`[Frontend] invokeMessage received from Backend: ${JSON.stringify(properties)} --> ${callbacks.length}`);
+        if (callbacks)
+            callbacks.forEach(callback => {
+                window.alert(`CALLBACK: ${callback}`);
+                if ((!callback.viewId) || callback.viewId == properties.viewId)
+                    callback.callback(properties.message);
+            });
     }
 }
 exports.WebViewHost = WebViewHost;

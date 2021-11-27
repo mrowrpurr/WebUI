@@ -4,7 +4,7 @@ const SkyrimAPI_1 = require("./SkyrimAPI");
 const WebViewHost_1 = require("./WebViewHost");
 const WebView_1 = require("./WebView");
 window.__webViewHost = WebViewHost_1.default;
-window.getWebView = (id) => WebViewHost_1.default.getView(id);
+window.getWebView = (id) => WebViewHost_1.default.getWebView(id);
 window.skyrim = SkyrimAPI_1.default;
 window.WebView = WebView_1.default;
 window.addEventListener('load', () => {

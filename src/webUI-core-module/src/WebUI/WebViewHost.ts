@@ -5,7 +5,7 @@
 import { browser, on, once, BrowserMessageEvent, Debug, Message } from 'skyrimPlatform'
 import WebView from './WebView'
 import MessageBox from './MessageBox'
-import { WebViewBrowserMessage, WebViewMessage, WebViewEvent, WebViewRequest, WebViewResponse } from './WebViewEvents'
+import { WebViewBrowserMessage, WebViewMessage, WebViewEvent, WebViewRequest, WebViewResponse, WebViewLoadedEvent } from './WebViewEvents'
 
 interface WebViewEventCallback {
     viewId: string,
@@ -33,14 +33,14 @@ export class WebViewHost {
     }
 
     public addToUI(component: WebView) {
-        this.invokeViewFunction('add', component)
+        this.invokeViewFunction('addFromProps', component)
     }
 
     public removeFromUI(component: WebView) {
         MessageBox("TODO - remove WebView from UI")
     }
 
-    // public on(messageType: 'load', viewId: string, callback: (message: WebViewRequest) => void): void
+    public on(messageType: 'load', viewId: string, callback: (message: WebViewLoadedEvent) => void): void
     public on(messageType: 'message', viewId: string, callback: (message: WebViewMessage) => void): void
     public on(messageType: 'event', viewId: string, callback: (message: WebViewEvent) => void): void
     public on(messageType: 'request', viewId: string, callback: (message: WebViewRequest) => void): void
@@ -58,8 +58,10 @@ export class WebViewHost {
     public async send(messageType: 'request', viewId: string, message: WebViewMessage): Promise<WebViewResponse>
     public async send(messageType: string, viewId: string, message: any): Promise<any>
     public async send(messageType: string, viewId: string, message: any): Promise<any> {
-        // Invoke JS
-        MessageBox(`TODO: send(${messageType})`)
+        MessageBox(`Backend.send ${messageType} ${viewId}`, message)
+        this.invokeViewFunction('invokeMessage', {
+            messageType, message, target: viewId,
+        })
     }
 
     public invokeViewFunction(functionName: string, parameters: any) {
@@ -71,6 +73,7 @@ export class WebViewHost {
 
     _handleBrowserMessage(message: BrowserMessageEvent) {
         once('update', () => {
+            // MessageBox('_handleBrowserMessage', message)
             if (message.arguments.length && message.arguments[0] == "WebUI") {
                 const browserMessage = message.arguments[1] as WebViewBrowserMessage
                 if (browserMessage.messageType == 'webviewhostloaded') {

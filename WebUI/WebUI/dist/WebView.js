@@ -15,7 +15,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const WebViewHost_1 = require("./WebViewHost");
 class WebView {
     constructor(properties, webViewHost = undefined) {
-        this.messageCallbacks = new Map();
         this.id = properties.id;
         this.url = properties.url;
         this.position = properties.position;
@@ -24,15 +23,8 @@ class WebView {
             webViewHost = WebViewHost_1.webViewHostInstance;
         this.webViewHost = webViewHost;
     }
-    hello() {
-        alert('You called WebView hello in the frontend');
-    }
     on(messageType, callback) {
-        if (!this.messageCallbacks.has(messageType))
-            this.messageCallbacks.set(messageType, new Array());
-        const callbacks = this.messageCallbacks.get(messageType);
-        if (callbacks)
-            callbacks.push(callback);
+        this.webViewHost.on(messageType, this.id, callback);
     }
     send(messageType, message) {
         return __awaiter(this, void 0, void 0, function* () {
