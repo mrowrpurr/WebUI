@@ -3,10 +3,12 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "watch": "tsc-watch -p tsconfig.build.json --onSuccess \"npm run build\"",
+    "watch": "tsc-watch -p tsconfig.build.json --onSuccess \"npm run build:deploy\"",
     "test:watch": "jest --config jest.config.js --watch",
     "test": "jest --config jest.config.js",
-    "build": "webpack"
+    "build": "webpack",
+    "deploy": "@powershell copy build/WebUI_WebViewHost.js ../../WebUI/WebUI/",
+    "build:deploy": "webpack && npm run deploy"
   },
   "author": "Mrowr Purr <mrowr.purr@gmail.com>",
   "license": "MIT",

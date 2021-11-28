@@ -2,7 +2,7 @@
  * Skyrim Platform Backend
  */
 
-import WebViewHost from './WebViewHost'
+import { WebViewHost } from './WebViewHost'
 import { WebViewMessage, WebViewEvent, WebViewRequest, WebViewResponse, WebViewLoadedEvent } from './WebViewEvents'
 
 export interface WebViewScreenPosition {
@@ -12,38 +12,38 @@ export interface WebViewScreenPosition {
     height: number
 }
 
-export interface WebViewProps {
+export interface WebViewParams {
     id: string,
     url: string,
     position: WebViewScreenPosition,
-    visible: boolean
+    visible: boolean,
+    host: WebViewHost
 }
 
 export default class WebView {
-    static components = new Map<string, WebView>()
     id: string
     url: string
     position: WebViewScreenPosition
     visible: boolean
+    host: WebViewHost
 
     // like client side, allow providing a webhost to the constructor - for unit testing etc
-    constructor(properties: WebViewProps) {
-        this.id = properties.id
-        this.url = properties.url
-        this.position = properties.position
-        this.visible = properties.visible
-        WebViewHost.initialize()
-        WebView.components.set(properties.id, this)
+    constructor(params: WebViewParams) {
+        this.id = params.id
+        this.url = params.url
+        this.position = params.position
+        this.visible = params.visible
+        this.host = params.host
         if (this.visible)
-            WebViewHost.addToUI(this)
+            this.host.addToUI(this)
     }
 
     public addToUI() {
-        WebViewHost.addToUI(this)
+        this.host.addToUI(this)
     }
 
     public removeFromUI() {
-        WebViewHost.removeFromUI(this)
+        this.host.removeFromUI(this)
     }
 
     public on(messageType: 'load', callback: (message: WebViewLoadedEvent) => void): void
@@ -52,7 +52,7 @@ export default class WebView {
     public on(messageType: 'request', callback: (message: WebViewRequest) => void): void
     public on(messageType: string, callback: (message: any) => void): void
     public on(messageType: string, callback: (message: any) => void): void {
-        WebViewHost.on(messageType, this.id, callback)
+        this.host.on(messageType, this.id, callback)
     }
 
     public async send(messageType: 'message', message: WebViewMessage): Promise<any>
@@ -64,10 +64,10 @@ export default class WebView {
             message.target = this.id
         if (!message.source)
             message.source = this.id
-        return WebViewHost.send(messageType, this.id, message)
+        return this.host.send(messageType, this.id, message)
     }
 
     public reply(request: WebViewRequest, response: WebViewResponse) {
-        WebViewHost.reply(request, this.id, response)
+        this.host.reply(request, this.id, response)
     }
 }

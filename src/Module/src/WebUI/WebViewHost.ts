@@ -2,9 +2,16 @@
  * Skyrim Platform Backend
  */
 
-import { browser, on, once, BrowserMessageEvent } from 'skyrimPlatform'
 import WebView from './WebView'
 import { WebViewBrowserMessage, WebViewMessage, WebViewEvent, WebViewRequest, WebViewResponse, WebViewLoadedEvent } from './WebViewEvents'
+import { IOnEvent, IOnceEvent, IBrowser, IBrowserMessageEvent } from './ISkyrimPlatform'
+
+export interface WebViewHostParams {
+    browser: IBrowser,
+    on: IOnEvent,
+    once: IOnceEvent,
+    rootUrl?: string
+}
 
 interface WebViewEventCallback {
     viewId: string,
@@ -13,22 +20,30 @@ interface WebViewEventCallback {
 
 export class WebViewHost {
     public rootUrl: string
+    _browser: IBrowser
+    _on: IOnEvent
+    _once: IOnceEvent
     initialized = false
     isReady = false
     messageCallbacks = new Map<string, Array<WebViewEventCallback>>()
     jsToInvokeWhenReady = new Array<[string, any]>()
     messageResponsePromises = new Map<string, (response: WebViewResponse) => void>()
 
-    constructor(rootUrl: string = 'file:///Data/WebUI/WebUI/index.html') {
-        this.rootUrl = rootUrl
+    constructor(params: WebViewHostParams) {
+        if (!params.rootUrl)
+            params.rootUrl = 'file:///Data/WebUI/WebUI/index.html'
+        this._browser = params.browser
+        this._on = params.on
+        this._once = params.once
+        this.rootUrl = params.rootUrl
     }
 
     public initialize() {
         if (!this.initialized) {
             this.initialized = true
-            browser.loadUrl(this.rootUrl)
-            browser.setVisible(true)
-            on('browserMessage', message => this._handleBrowserMessage(message))
+            this._browser.loadUrl(this.rootUrl)
+            this._browser.setVisible(true)
+            this._on('browserMessage', message => this._handleBrowserMessage(message))
         }
     }
 
@@ -78,7 +93,7 @@ export class WebViewHost {
 
     public invokeViewFunction(functionName: string, parameters: any) {
         if (this.isReady)
-            browser.executeJavaScript(`window.__webViewHost.${functionName}(${JSON.stringify(parameters)});`)
+            this._browser.executeJavaScript(`window.__webViewHost.${functionName}(${JSON.stringify(parameters)});`)
         else
             this.jsToInvokeWhenReady.push([functionName, parameters])
     }
@@ -87,8 +102,8 @@ export class WebViewHost {
         return `${Math.random()}_${Math.random()}`
     }
 
-    _handleBrowserMessage(message: BrowserMessageEvent) {
-        once('update', () => {
+    _handleBrowserMessage(message: IBrowserMessageEvent) {
+        this._once('update', () => {
             if (message.arguments.length && message.arguments[0] == "WebUI") {
                 const browserMessage = message.arguments[1] as WebViewBrowserMessage
                 if (browserMessage.messageType == 'webviewhostloaded') {
@@ -115,7 +130,3 @@ export class WebViewHost {
         })
     }
 }
-
-const defaultInstance = new WebViewHost()
-
-export default defaultInstance

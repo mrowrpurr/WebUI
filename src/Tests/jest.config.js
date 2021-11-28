@@ -7,5 +7,6 @@ module.exports = {
   "moduleDirectories": ['node_modules', 'C:/Steam/steamapps/common/Skyrim Special Edition/Data/Platform/Modules'],
   "moduleNameMapper": {
     "@Modules/(.*)": "C:/Steam/steamapps/common/Skyrim Special Edition/Data/Platform/Modules/$1",
+    "@Helpers/(.*)": "./__tests__/helpers/$1"
   }
 };
