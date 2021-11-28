@@ -2,9 +2,8 @@
  * Skyrim Platform Backend
  */
 
-import { browser, on, once, BrowserMessageEvent, Debug, Message } from 'skyrimPlatform'
+import { browser, on, once, BrowserMessageEvent } from 'skyrimPlatform'
 import WebView from './WebView'
-import MessageBox from './MessageBox'
 import { WebViewBrowserMessage, WebViewMessage, WebViewEvent, WebViewRequest, WebViewResponse, WebViewLoadedEvent } from './WebViewEvents'
 
 interface WebViewEventCallback {

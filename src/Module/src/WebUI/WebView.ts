@@ -2,7 +2,6 @@
  * Skyrim Platform Backend
  */
 
-import { Debug, on } from 'skyrimPlatform'
 import WebViewHost from './WebViewHost'
 import { WebViewMessage, WebViewEvent, WebViewRequest, WebViewResponse, WebViewLoadedEvent } from './WebViewEvents'
 
