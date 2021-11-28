@@ -38,7 +38,7 @@ export class WebViewHost {
     }
 
     public removeFromUI(component: WebView) {
-        MessageBox("TODO - remove WebView from UI")
+        this.invokeViewFunction('remove', component.id)
     }
 
     public on(messageType: 'load', viewId: string, callback: (message: WebViewLoadedEvent) => void): void
