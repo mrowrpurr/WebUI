@@ -10,3 +10,7 @@ import WebView from './WebView'
 window.addEventListener('load', () => {
     (window as any).skyrimPlatform.sendMessage('WebUI', { messageType: 'webviewhostloaded' })
 })
+
+const h1 = document.createElement('h1')
+h1.textContent = 'THIS WORKS'
+document.body.appendChild(h1)
