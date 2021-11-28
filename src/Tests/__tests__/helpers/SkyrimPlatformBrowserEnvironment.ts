@@ -3,12 +3,12 @@ import * as fs from 'fs'
 
 const webViewHostJs = fs.readFileSync('../UI/build/WebUI_WebViewHost.js').toString()
 
-export function getBrowserEnvironment(): SkyrimPlatformBrowserEnvironment {
-    return new SkyrimPlatformBrowserEnvironment()
+export function getBrowserEnvironment(initialized: boolean = true): SkyrimPlatformBrowserEnvironment {
+    return new SkyrimPlatformBrowserEnvironment(initialized)
 }
 
 export interface SkyrimPlatformSendMessage {
-    arguments: unknown[]
+    arguments: any[]
 }
 
 export class SkyrimPlatformBrowserEnvironment {
@@ -16,8 +16,11 @@ export class SkyrimPlatformBrowserEnvironment {
 
     sendMessageCallbacks = new Array<(message: SkyrimPlatformSendMessage) => void>()
 
-    constructor() {
-        this.dom = this.newEnvironment()
+    constructor(initializeEnvironment: boolean = true) {
+        if (initializeEnvironment)
+            this.dom = this.newEnvironment()
+        else
+            this.dom = new JSDOM('')
     }
 
     public reset() {
@@ -25,11 +28,15 @@ export class SkyrimPlatformBrowserEnvironment {
         this.dom = this.newEnvironment()
     }
 
+    public initialize() {
+        this.reset()
+    }
+
     public onSendMessage(callback: (message: SkyrimPlatformSendMessage) => void) {
         this.sendMessageCallbacks.push(callback)
     }
 
-    public sendMessage(...args: unknown[]) {
+    public sendMessage(...args: any[]) {
         this.dom.window.skyrimPlatform.sendMessage(...args) // <--- send using our mocked window.skyrimPlatform
     }
 
@@ -56,7 +63,7 @@ export class SkyrimPlatformBrowserEnvironment {
     newEnvironment() {
         const jsdom = new JSDOM('', { runScripts: 'dangerously', resources: 'usable', url: `file://${__dirname}/index.html` })
         jsdom.window.skyrimPlatform = {
-            sendMessage: (...args: unknown[]) => {
+            sendMessage: (...args: any[]) => {
                 this.sendMessageCallbacks.forEach(callback => {
                     callback({ arguments: args })
                 })

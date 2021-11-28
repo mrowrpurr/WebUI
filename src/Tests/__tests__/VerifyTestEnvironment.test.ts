@@ -8,13 +8,26 @@ import { getBrowserEnvironment } from './helpers/SkyrimPlatformBrowserEnvironmen
 
 describe('Skyrim Platform Browser Environment Mock', () => {
 
-    it('messages can be send via skyrimPlatform.sendMessage', (done) => {
+    it('can get the WebViewHost webviewhostloaded event', (done) => {
         const env = getBrowserEnvironment()
         env.onSendMessage(message => {
             expect(message.arguments).toHaveLength(2)
-            expect(message.arguments[0]).toEqual('Hello')
-            expect((message.arguments[1] as any).data).toEqual('World')
-            done()
+            expect(message.arguments[0]).toEqual('WebUI')
+            expect(message.arguments[1].messageType).toEqual('webviewhostloaded')
+            if (message.arguments[0] == 'WebUI')
+                done()
+        })
+    })
+
+    it('messages can be send via skyrimPlatform.sendMessage', (done) => {
+        const env = getBrowserEnvironment()
+        env.onSendMessage(message => {
+            if (message.arguments[0] == 'Hello') {
+                expect(message.arguments).toHaveLength(2)
+                expect(message.arguments[0]).toEqual('Hello')
+                expect(message.arguments[1].data).toEqual('World')
+                done()
+            }
         })
         env.sendMessage('Hello', { data: 'World' })
     })
