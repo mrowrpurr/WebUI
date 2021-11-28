@@ -20,6 +20,7 @@ class WebViewHost {
         this.iframesByName = new Map();
         this.requestResultPromises = new Map();
         this.messageCallbacks = new Map();
+        this.messageResponsePromises = new Map();
     }
     getWebView(id) {
         return this.webViews.get(id);
@@ -69,16 +70,29 @@ class WebViewHost {
     }
     send(messageType, viewId, message) {
         return __awaiter(this, void 0, void 0, function* () {
-            // Invoke JS
             if (!message.source)
                 message.source = viewId;
             if (!message.target)
                 message.target = viewId;
-            window.skyrimPlatform.sendMessage('WebUI', {
-                messageType, message, target: viewId
-            });
-            // TODO return Promise
+            if (messageType == 'request') {
+                return new Promise(resolve => {
+                    window.skyrimPlatform.sendMessage('WebUI', { messageType, message, target: viewId });
+                    this.messageResponsePromises.set(message.replyId, resolve);
+                });
+            }
+            else {
+                return new Promise(resolve => {
+                    window.skyrimPlatform.sendMessage('WebUI', { messageType, message, target: viewId });
+                    resolve(undefined);
+                });
+            }
         });
+    }
+    onReply(properties) {
+        if (this.messageResponsePromises.has(properties.replyId)) {
+            const response = properties;
+            this.messageResponsePromises.get(properties.replyId)(response);
+        }
     }
     // TODO: refactor the viewId / target inconsistencies
     invokeMessage(properties) {

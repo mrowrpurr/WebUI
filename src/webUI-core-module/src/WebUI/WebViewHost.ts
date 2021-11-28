@@ -63,6 +63,10 @@ export class WebViewHost {
         })
     }
 
+    public reply(request: WebViewRequest, viewId: string, response: WebViewResponse) {
+        this.invokeViewFunction('onReply', { replyId: request.replyId, ...response })
+    }
+
     public invokeViewFunction(functionName: string, parameters: any) {
         if (this.isReady)
             browser.executeJavaScript(`window.__webViewHost.${functionName}(${JSON.stringify(parameters)});`)

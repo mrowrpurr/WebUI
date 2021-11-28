@@ -28,5 +28,5 @@ export interface WebViewRequest {
 }
 
 export interface WebViewResponse {
-
+    data: any
 }

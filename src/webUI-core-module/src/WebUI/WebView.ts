@@ -27,6 +27,7 @@ export default class WebView {
     position: WebViewScreenPosition
     visible: boolean
 
+    // like client side, allow providing a webhost to the constructor - for unit testing etc
     constructor(properties: WebViewProps) {
         this.id = properties.id
         this.url = properties.url
@@ -67,7 +68,7 @@ export default class WebView {
         return WebViewHost.send(messageType, this.id, message)
     }
 
-    public invoke(functionName: string, parameters: any) {
-        WebViewHost.invokeViewFunction(functionName, parameters)
+    public reply(request: WebViewRequest, response: WebViewResponse) {
+        WebViewHost.reply(request, this.id, response)
     }
 }

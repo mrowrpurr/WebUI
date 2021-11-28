@@ -14,11 +14,16 @@ interface InvokeMessageProps {
     messageType: string, viewId: string, message: any
 }
 
+interface OnReplyProps extends WebViewResponse {
+    replyId: string
+}
+
 export class WebViewHost {
     webViews = new Map<string, WebView>()
     iframesByName = new Map<string, HTMLIFrameElement>()
     requestResultPromises = new Map<string, (data: any) => void>()
     messageCallbacks = new Map<string, Array<WebViewEventCallback>>()
+    messageResponsePromises = new Map<string, (response: WebViewResponse) => void>()
 
     public getWebView(id: string) {
         return this.webViews.get(id)
@@ -75,19 +80,32 @@ export class WebViewHost {
             callbacks.push({ viewId, callback })
     }
 
-    public async send(messageType: 'message', viewId: string, message: WebViewMessage): Promise<any>
-    public async send(messageType: 'event', viewId: string, message: WebViewEvent): Promise<any>
+    public async send(messageType: 'message', viewId: string, message: WebViewMessage): Promise<undefined>
+    public async send(messageType: 'event', viewId: string, message: WebViewEvent): Promise<undefined>
     public async send(messageType: 'request', viewId: string, message: WebViewMessage): Promise<WebViewResponse>
-    public async send(messageType: 'load', viewId: string, message: WebViewMessage): Promise<any>
-    public async send(messageType: string, viewId: string, message: any): Promise<any>
+    public async send(messageType: 'load', viewId: string, message: WebViewMessage): Promise<undefined>
+    public async send(messageType: string, viewId: string, message: any): Promise<undefined>
     public async send(messageType: string, viewId: string, message: any): Promise<any> {
-        // Invoke JS
         if (!message.source) message.source = viewId
-        if (!message.target) message.target = viewId;
-        (window as any).skyrimPlatform.sendMessage('WebUI', {
-            messageType, message, target: viewId
-        })
-        // TODO return Promise
+        if (!message.target) message.target = viewId
+        if (messageType == 'request') {
+            return new Promise<WebViewResponse>(resolve => {
+                (window as any).skyrimPlatform.sendMessage('WebUI', { messageType, message, target: viewId })
+                this.messageResponsePromises.set(message.replyId, resolve)
+            })
+        } else {
+            return new Promise<undefined>(resolve => {
+                (window as any).skyrimPlatform.sendMessage('WebUI', { messageType, message, target: viewId })
+                resolve(undefined)
+            })
+        }
+    }
+
+    public onReply(properties: OnReplyProps) {
+        if (this.messageResponsePromises.has(properties.replyId)) {
+            const response = properties as WebViewResponse
+            this.messageResponsePromises.get(properties.replyId)!(response)
+        }
     }
 
     // TODO: refactor the viewId / target inconsistencies
