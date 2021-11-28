@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "alwaysStrict": true,
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "strict": true,
+    "target": "es6",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "outDir": "dist",
+    "sourceMap": true,
+    "baseUrl": "C:/Steam/steamapps/common/Skyrim Special Edition/Data/Platform/Modules",
+    "paths": {
+      "@Modules/*": [
+        "C:/Steam/steamapps/common/Skyrim Special Edition/Data/Platform/Modules/*"
+      ]
+    }
+  },
+  "include": [
+    "./__tests__/**/*.ts"
+  ]
+}
