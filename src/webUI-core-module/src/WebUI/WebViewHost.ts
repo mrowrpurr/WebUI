@@ -18,6 +18,7 @@ export class WebViewHost {
     isReady = false
     messageCallbacks = new Map<string, Array<WebViewEventCallback>>()
     jsToInvokeWhenReady = new Array<[string, any]>()
+    messageResponsePromises = new Map<string, (response: WebViewResponse) => void>()
 
     constructor(rootUrl: string = 'file:///Data/WebUI/WebUI/index.html') {
         this.rootUrl = rootUrl
@@ -53,14 +54,23 @@ export class WebViewHost {
             callbacks.push({ viewId, callback })
     }
 
-    public async send(messageType: 'message', viewId: string, message: WebViewMessage): Promise<any>
-    public async send(messageType: 'event', viewId: string, message: WebViewEvent): Promise<any>
-    public async send(messageType: 'request', viewId: string, message: WebViewMessage): Promise<WebViewResponse>
-    public async send(messageType: string, viewId: string, message: any): Promise<any>
+    public async send(messageType: 'message', viewId: string, message: WebViewMessage): Promise<undefined>
+    public async send(messageType: 'event', viewId: string, message: WebViewEvent): Promise<undefined>
+    public async send(messageType: 'request', viewId: string, message: WebViewRequest): Promise<WebViewResponse>
+    public async send(messageType: string, viewId: string, message: any): Promise<undefined>
     public async send(messageType: string, viewId: string, message: any): Promise<any> {
-        this.invokeViewFunction('invokeMessage', {
-            messageType, message, viewId,
-        })
+        if (messageType == 'request') {
+            if (!message.replyId) message.replyId = this.getUniqueReplyId()
+            return new Promise<WebViewResponse>(resolve => {
+                this.invokeViewFunction('invokeMessage', { messageType, message, viewId, })
+                this.messageResponsePromises.set(message.replyId, resolve)
+            })
+        } else {
+            return new Promise<undefined>(resolve => {
+                this.invokeViewFunction('invokeMessage', { messageType, message, viewId, })
+                resolve(undefined)
+            })
+        }
     }
 
     public reply(request: WebViewRequest, viewId: string, response: WebViewResponse) {
@@ -74,6 +84,10 @@ export class WebViewHost {
             this.jsToInvokeWhenReady.push([functionName, parameters])
     }
 
+    public getUniqueReplyId() {
+        return `${Math.random()}_${Math.random()}`
+    }
+
     _handleBrowserMessage(message: BrowserMessageEvent) {
         once('update', () => {
             if (message.arguments.length && message.arguments[0] == "WebUI") {
@@ -83,6 +97,12 @@ export class WebViewHost {
                     this.jsToInvokeWhenReady.forEach(jsToInvoke => {
                         this.invokeViewFunction(jsToInvoke[0], jsToInvoke[1])
                     })
+                } else if (browserMessage.messageType == 'response') {
+                    const replyId = browserMessage.message.replyId
+                    if (replyId && this.messageResponsePromises.has(replyId)) {
+                        this.messageResponsePromises.get(replyId)!(browserMessage.message.response)
+                        this.messageResponsePromises.delete(replyId)
+                    }
                 } else {
                     const callbacks = this.messageCallbacks.get(browserMessage.messageType)
                     if (callbacks) {

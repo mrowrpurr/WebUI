@@ -82,13 +82,14 @@ export class WebViewHost {
 
     public async send(messageType: 'message', viewId: string, message: WebViewMessage): Promise<undefined>
     public async send(messageType: 'event', viewId: string, message: WebViewEvent): Promise<undefined>
-    public async send(messageType: 'request', viewId: string, message: WebViewMessage): Promise<WebViewResponse>
+    public async send(messageType: 'request', viewId: string, message: WebViewRequest): Promise<WebViewResponse>
     public async send(messageType: 'load', viewId: string, message: WebViewMessage): Promise<undefined>
     public async send(messageType: string, viewId: string, message: any): Promise<undefined>
     public async send(messageType: string, viewId: string, message: any): Promise<any> {
         if (!message.source) message.source = viewId
         if (!message.target) message.target = viewId
         if (messageType == 'request') {
+            if (!message.replyId) message.replyId = this.getUniqueReplyId()
             return new Promise<WebViewResponse>(resolve => {
                 (window as any).skyrimPlatform.sendMessage('WebUI', { messageType, message, target: viewId })
                 this.messageResponsePromises.set(message.replyId, resolve)
@@ -101,10 +102,21 @@ export class WebViewHost {
         }
     }
 
+    // TODO: abstract window.skyrimPlatform with an object we can provide to the webviewhost
+
+    public reply(request: WebViewRequest, viewId: string, response: WebViewResponse) {
+        (window as any).skyrimPlatform.sendMessage('WebUI', {
+            target: viewId,
+            messageType: 'response',
+            message: { replyId: request.replyId, response: response }
+        })
+    }
+
     public onReply(properties: OnReplyProps) {
         if (this.messageResponsePromises.has(properties.replyId)) {
             const response = properties as WebViewResponse
             this.messageResponsePromises.get(properties.replyId)!(response)
+            this.messageResponsePromises.delete(properties.replyId)
         }
     }
 
@@ -116,6 +128,10 @@ export class WebViewHost {
                 if ((!callback.viewId) || callback.viewId == properties.viewId)
                     callback.callback(properties.message)
             })
+    }
+
+    public getUniqueReplyId() {
+        return `${Math.random()}_${Math.random()}`
     }
 }
 

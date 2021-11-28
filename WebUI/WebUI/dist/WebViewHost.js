@@ -75,6 +75,8 @@ class WebViewHost {
             if (!message.target)
                 message.target = viewId;
             if (messageType == 'request') {
+                if (!message.replyId)
+                    message.replyId = this.getUniqueReplyId();
                 return new Promise(resolve => {
                     window.skyrimPlatform.sendMessage('WebUI', { messageType, message, target: viewId });
                     this.messageResponsePromises.set(message.replyId, resolve);
@@ -88,10 +90,19 @@ class WebViewHost {
             }
         });
     }
+    // TODO: abstract window.skyrimPlatform with an object we can provide to the webviewhost
+    reply(request, viewId, response) {
+        window.skyrimPlatform.sendMessage('WebUI', {
+            target: viewId,
+            messageType: 'response',
+            message: { replyId: request.replyId, response: response }
+        });
+    }
     onReply(properties) {
         if (this.messageResponsePromises.has(properties.replyId)) {
             const response = properties;
             this.messageResponsePromises.get(properties.replyId)(response);
+            this.messageResponsePromises.delete(properties.replyId);
         }
     }
     // TODO: refactor the viewId / target inconsistencies
@@ -102,6 +113,9 @@ class WebViewHost {
                 if ((!callback.viewId) || callback.viewId == properties.viewId)
                     callback.callback(properties.message);
             });
+    }
+    getUniqueReplyId() {
+        return `${Math.random()}_${Math.random()}`;
     }
 }
 exports.WebViewHost = WebViewHost;

@@ -52,4 +52,8 @@ export default class WebView {
     public async send(messageType: string, message: any): Promise<any> {
         return this.webViewHost.send(messageType, this.id, message)
     }
+
+    public reply(request: WebViewRequest, response: WebViewResponse) {
+        this.webViewHost.reply(request, this.id, response)
+    }
 }

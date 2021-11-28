@@ -31,6 +31,9 @@ class WebView {
             return this.webViewHost.send(messageType, this.id, message);
         });
     }
+    reply(request, response) {
+        this.webViewHost.reply(request, this.id, response);
+    }
 }
 exports.default = WebView;
 //# sourceMappingURL=WebView.js.map
