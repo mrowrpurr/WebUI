@@ -30,6 +30,7 @@ export class WebViewHost {
     }
 
     public addFromProps(webViewProps: WebViewProps) {
+        alert(`UI: addFromProps ${JSON.stringify(webViewProps)}`)
         this.add(new WebView(webViewProps))
     }
 

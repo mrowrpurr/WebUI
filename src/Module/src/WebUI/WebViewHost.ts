@@ -4,12 +4,11 @@
 
 import WebView from './WebView'
 import { WebViewBrowserMessage, WebViewMessage, WebViewEvent, WebViewRequest, WebViewResponse, WebViewLoadedEvent } from './WebViewEvents'
-import { IOnEvent, IOnceEvent, IBrowser, IBrowserMessageEvent } from './ISkyrimPlatform'
+import { ISkyrimPlatform, IBrowser, IBrowserMessageEvent, OnBrowserMessage, OnceUpdate } from './ISkyrimPlatform'
+import { Debug, once } from 'skyrimPlatform'
 
 export interface WebViewHostParams {
-    browser: IBrowser,
-    on: IOnEvent,
-    once: IOnceEvent,
+    skyrimPlatform: ISkyrimPlatform,
     rootUrl?: string
 }
 
@@ -18,41 +17,60 @@ interface WebViewEventCallback {
     callback: (message: any) => any
 }
 
-export class WebViewHost {
+export default class WebViewHost {
     public rootUrl: string
-    _browser: IBrowser
-    _on: IOnEvent
-    _once: IOnceEvent
+    browser: IBrowser
+    onBrowserMessage: OnBrowserMessage
+    onceUpdate: OnceUpdate
     initialized = false
     isReady = false
     messageCallbacks = new Map<string, Array<WebViewEventCallback>>()
     jsToInvokeWhenReady = new Array<[string, any]>()
     messageResponsePromises = new Map<string, (response: WebViewResponse) => void>()
+    webViews = new Map<string, WebView>()
 
     constructor(params: WebViewHostParams) {
         if (!params.rootUrl)
             params.rootUrl = 'file:///Data/WebUI/WebUI/index.html'
-        this._browser = params.browser
-        this._on = params.on
-        this._once = params.once
+        this.browser = params.skyrimPlatform.browser
+        this.onBrowserMessage = params.skyrimPlatform.onBrowserMessage
+        this.onceUpdate = params.skyrimPlatform.onceUpdate
         this.rootUrl = params.rootUrl
+        this.onceUpdate('update', () => {
+            Debug.messageBox("CONSTRUCT NEW WebViewHost")
+        })
+        this.initialize()
     }
 
     public initialize() {
         if (!this.initialized) {
             this.initialized = true
-            this._browser.loadUrl(this.rootUrl)
-            this._browser.setVisible(true)
-            this._on('browserMessage', message => this._handleBrowserMessage(message))
+            this.browser.loadUrl(this.rootUrl)
+            this.browser.setVisible(true)
+            this.onBrowserMessage('browserMessage', message => this._handleBrowserMessage(message))
         }
     }
 
-    public addToUI(component: WebView) {
-        this.invokeViewFunction('addFromProps', component)
+    public addToUI(webView: WebView) {
+        this.webViews.set(webView.id, webView)
+        this.invokeViewFunction('addFromProps', {
+            id: webView.id,
+            url: webView.url,
+            position: webView.position
+        })
     }
 
-    public removeFromUI(component: WebView) {
-        this.invokeViewFunction('remove', component.id)
+    public removeFromUI(id: string) {
+        this.invokeViewFunction('remove', id)
+        this.webViews.delete(id)
+    }
+
+    public getWebView(id: string) {
+        return this.webViews.get(id)
+    }
+
+    public getWebViews() {
+        return Array.from(this.webViews.values())
     }
 
     public on(messageType: 'load', viewId: string, callback: (message: WebViewLoadedEvent) => void): void
@@ -92,8 +110,11 @@ export class WebViewHost {
     }
 
     public invokeViewFunction(functionName: string, parameters: any) {
+        once('update', () => {
+            Debug.messageBox(`INVOKE JS (ISREADY:${this.isReady}) -> ${functionName}(${JSON.stringify(parameters)})`)
+        })
         if (this.isReady)
-            this._browser.executeJavaScript(`window.__webViewHost.${functionName}(${JSON.stringify(parameters)});`)
+            this.browser.executeJavaScript(`window.__webViewHost.${functionName}(${JSON.stringify(parameters)});`)
         else
             this.jsToInvokeWhenReady.push([functionName, parameters])
     }
@@ -103,7 +124,8 @@ export class WebViewHost {
     }
 
     _handleBrowserMessage(message: IBrowserMessageEvent) {
-        this._once('update', () => {
+        this.onceUpdate('update', () => {
+            Debug.messageBox(`GOT BROWSER MESSAGE ${JSON.stringify(message)}`)
             if (message.arguments.length && message.arguments[0] == "WebUI") {
                 const browserMessage = message.arguments[1] as WebViewBrowserMessage
                 if (browserMessage.messageType == 'webviewhostloaded') {

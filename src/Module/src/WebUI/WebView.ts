@@ -2,7 +2,7 @@
  * Skyrim Platform Backend
  */
 
-import { WebViewHost } from './WebViewHost'
+import WebViewHost from './WebViewHost'
 import { WebViewMessage, WebViewEvent, WebViewRequest, WebViewResponse, WebViewLoadedEvent } from './WebViewEvents'
 
 export interface WebViewScreenPosition {
@@ -15,8 +15,7 @@ export interface WebViewScreenPosition {
 export interface WebViewParams {
     id: string,
     url: string,
-    position: WebViewScreenPosition,
-    visible: boolean,
+    position?: WebViewScreenPosition,
     host: WebViewHost
 }
 
@@ -24,18 +23,17 @@ export default class WebView {
     id: string
     url: string
     position: WebViewScreenPosition
-    visible: boolean
     host: WebViewHost
 
     // like client side, allow providing a webhost to the constructor - for unit testing etc
     constructor(params: WebViewParams) {
         this.id = params.id
         this.url = params.url
-        this.position = params.position
-        this.visible = params.visible
         this.host = params.host
-        if (this.visible)
-            this.host.addToUI(this)
+        if (params.position)
+            this.position = params.position
+        else
+            this.position = { x: 0, y: 0, width: 100, height: 100 } // full screen
     }
 
     public addToUI() {
@@ -43,7 +41,7 @@ export default class WebView {
     }
 
     public removeFromUI() {
-        this.host.removeFromUI(this)
+        this.host.removeFromUI(this.id)
     }
 
     public on(messageType: 'load', callback: (message: WebViewLoadedEvent) => void): void

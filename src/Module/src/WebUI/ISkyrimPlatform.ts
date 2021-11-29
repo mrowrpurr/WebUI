@@ -1,9 +1,9 @@
-export interface IOnEvent {
-    (eventType: string, callback: (event: any) => void): void
+export interface OnBrowserMessage {
+    (eventType: 'browserMessage', callback: (event: any) => void): void
 }
 
-export interface IOnceEvent {
-    (eventType: string, callback: (event: any) => void): void
+export interface OnceUpdate{
+    (eventType: 'update', callback: () => void): void
 }
 
 export interface IBrowser {
@@ -15,4 +15,10 @@ export interface IBrowser {
 
 export interface IBrowserMessageEvent {
     arguments: unknown[]
+}
+
+export interface ISkyrimPlatform {
+    onBrowserMessage: OnBrowserMessage,
+    onceUpdate: OnceUpdate,
+    browser: IBrowser
 }

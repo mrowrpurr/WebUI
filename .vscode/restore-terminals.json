@@ -1,0 +1,39 @@
+{
+  "artificialDelayMilliseconds": 300,
+  "keepExistingTerminalsOpen": false,
+  "runOnStartup": true,
+  "terminals": [
+    {
+      "splitTerminals": [
+        {
+          "name": "WebUI Modules",
+          "commands": ["cd src/Module", "npm i", "npm run watch"]
+        }
+      ]
+    },
+    {
+      "splitTerminals": [
+        {
+          "name": "WebViewHost",
+          "commands": ["cd src/UI", "npm i", "npm run watch"]
+        }
+      ]
+    },
+    {
+      "splitTerminals": [
+        {
+          "name": "Tests (Module+WebViewHost)",
+          "commands": ["cd src/Tests", "npm i", "npm run watch"]
+        }
+      ]
+    },
+    {
+      "splitTerminals": [
+        {
+          "name": "WebUI Plugin (runtime)",
+          "commands": ["cd src/Module", "npm i", "npm run watch"]
+        }
+      ]
+    }
+  ]
+}
