@@ -11,6 +11,7 @@ export function getWebViewHost(): WebViewHost {
 
 export function setWebViewHost(host: WebViewHost) {
     _currentWebViewHost = host
+    return host
 }
 
 export function defaultWebViewHost(): WebViewHost {
@@ -43,8 +44,5 @@ export interface RegisterWebViewParams {
 }
 
 export function registerWebView(params: RegisterWebViewParams): WebView {
-    once('update', () => {
-        Debug.messageBox(`REGISTERING WEB VIEW`)
-    })
     return new WebView({ host: getWebViewHost(), ...params })
 }

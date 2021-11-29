@@ -11,8 +11,9 @@ describe('WebViewHost', () => {
         env = getBrowserEnvironment()
     })
 
-    it('add component to UI', () => {
+    it('add component to UI', async () => {
         const callbacks = new Array<(event: BrowserMessageEvent) => void>()
+        console.log('HELLO')
         const webViewHost = setWebViewHost(new WebViewHost({
             skyrimPlatform: new MockSkyrimPlatform({
                 on: (eventName: 'browserMessage', callback: (event: BrowserMessageEvent) => void) => {
@@ -27,12 +28,13 @@ describe('WebViewHost', () => {
                 browser: new MockBrowser(env.dom)
             })
         }))
+        console.log(`WEB VIEW HOST ${webViewHost}`)
         env.onSendMessage(message => {
-            console.log("GOT MESSAGE!!!!", message)
+            console.log(`GOT MESSAGE!!!! callbacks: ${callbacks.length}`, message)
             callbacks.forEach(callback => callback(message))
         })
         const webView = registerWebView({
-            id: 'Hello', url: 'file:///index.html'
+            id: 'Hello', url: `file://${__dirname.replace('C:', 'XXX')}/FOO.html` // Dunno why this avoids getting an ENOENT error, but it does
         })
 
         expect(webViewHost.getWebViews()).toHaveLength(0)
@@ -40,8 +42,11 @@ describe('WebViewHost', () => {
 
         webViewHost.addToUI(webView)
 
+        await webViewHost.waitForLoad()
+
         expect(webViewHost.getWebViews()).toHaveLength(1)
         expect(env.querySelectorAll('iframe')).toHaveLength(1)
+        expect(env.querySelector('iframe')?.getAttribute('src')).toEqual("????")
     })
 
     test.todo('remove component from UI')

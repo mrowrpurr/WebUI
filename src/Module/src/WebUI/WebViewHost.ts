@@ -28,6 +28,7 @@ export default class WebViewHost {
     jsToInvokeWhenReady = new Array<[string, any]>()
     messageResponsePromises = new Map<string, (response: WebViewResponse) => void>()
     webViews = new Map<string, WebView>()
+    onloadCallbacks = new Array<(arg: undefined) => void>()
 
     constructor(params: WebViewHostParams) {
         if (!params.rootUrl)
@@ -36,9 +37,6 @@ export default class WebViewHost {
         this.onBrowserMessage = params.skyrimPlatform.onBrowserMessage
         this.onceUpdate = params.skyrimPlatform.onceUpdate
         this.rootUrl = params.rootUrl
-        this.onceUpdate('update', () => {
-            Debug.messageBox("CONSTRUCT NEW WebViewHost")
-        })
         this.initialize()
     }
 
@@ -110,9 +108,6 @@ export default class WebViewHost {
     }
 
     public invokeViewFunction(functionName: string, parameters: any) {
-        once('update', () => {
-            Debug.messageBox(`INVOKE JS (ISREADY:${this.isReady}) -> ${functionName}(${JSON.stringify(parameters)})`)
-        })
         if (this.isReady)
             this.browser.executeJavaScript(`window.__webViewHost.${functionName}(${JSON.stringify(parameters)});`)
         else
@@ -123,9 +118,17 @@ export default class WebViewHost {
         return `${Math.random()}_${Math.random()}`
     }
 
+    public async waitForLoad() {
+        return new Promise<undefined>(resolve => {
+            if (this.isReady)
+                resolve(undefined)
+            else
+                this.onloadCallbacks.push(resolve)
+        })
+    }
+
     _handleBrowserMessage(message: IBrowserMessageEvent) {
         this.onceUpdate('update', () => {
-            Debug.messageBox(`GOT BROWSER MESSAGE ${JSON.stringify(message)}`)
             if (message.arguments.length && message.arguments[0] == "WebUI") {
                 const browserMessage = message.arguments[1] as WebViewBrowserMessage
                 if (browserMessage.messageType == 'webviewhostloaded') {
@@ -133,6 +136,7 @@ export default class WebViewHost {
                     this.jsToInvokeWhenReady.forEach(jsToInvoke => {
                         this.invokeViewFunction(jsToInvoke[0], jsToInvoke[1])
                     })
+                    this.onloadCallbacks.forEach(callback => callback(undefined))
                 } else if (browserMessage.messageType == 'response') {
                     const replyId = browserMessage.message.replyId
                     if (replyId && this.messageResponsePromises.has(replyId)) {
