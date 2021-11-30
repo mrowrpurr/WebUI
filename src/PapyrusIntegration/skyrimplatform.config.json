@@ -1,0 +1,19 @@
+{
+    "name": "WebUI.Papyrus",
+    "type": "plugin",
+    "imports": "C:/Steam/steamapps/common/Skyrim Special Edition/Data/Platform/Modules",
+    "plugin": {
+        "deployFolder": "C:/Steam/steamapps/common/Skyrim Special Edition/Data/Platform/PluginsDev",
+        "sourceFiles": [
+            "dist/**/*.js"
+        ],
+        "ignorePrefix": "dist/"
+    },
+    "module": {
+        "deployFolder": "C:/Steam/steamapps/common/Skyrim Special Edition/Data/Platform/Modules",
+        "sourceFiles": [
+            "src/**/*.ts"
+        ],
+        "ignorePrefix": "src/"
+    }
+}
