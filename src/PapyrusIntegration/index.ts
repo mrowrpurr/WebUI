@@ -1,11 +1,10 @@
-import papyrusBridge from 'papyrusBridge'
-import { Debug, once } from 'skyrimPlatform'
+import { getConnection } from 'papyrusBridge'
 import { registerWebView } from 'WebUI'
 
-const webUI = papyrusBridge.getMod('WebUI')
+const webUI = getConnection('WebUI')
 
-webUI.on('event', event => {
-    if (event.eventName == 'RegisterWebView') {
+webUI.onEvent(event => {
+    if (event.eventName == 'registerwebview') {
         const [id, url, x, y, width, height] = (event.data as string).split('|')
         registerWebView({
             id: id,

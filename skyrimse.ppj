@@ -20,7 +20,7 @@
     <Imports>
         <!-- To require SKSE dynamically, extract its Scripts/ directory into a new mod folder -->
         <Import>@ModsFolder\SKSE64\Scripts\Source</Import>
-        <Import>@ModsFolder\Bridge\Scripts\Source</Import>
+        <Import>@ModsFolder\Skyrim Platform Papyrus Bridge\Scripts\Source</Import>
 
         <!-- These mods come with source directories by default with required .psc files -->
         <!-- <Import>@ModsFolder\PapyrusUtil\Scripts\Source</Import> -->

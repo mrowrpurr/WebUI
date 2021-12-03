@@ -1,4 +1,4 @@
-scriptName WebView extends ConnectedToSkyrimPlatform
+scriptName WebView extends SkyrimPlatformConnection
 
 string property WebViewID auto
 string property URL auto
@@ -14,7 +14,7 @@ event OnSetup()
     Width = 100
     Height = 100
     ; TODO - default WebViewID based on the Script Name or .esp
-    ModName = "WebUI"
+    ConnectionName = "WebUI"
     OnSetupWebView()
 endEvent
 
