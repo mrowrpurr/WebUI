@@ -18,9 +18,13 @@ event OnSetup()
     OnSetupWebView()
 endEvent
 
+event OnWebViewConnected()
+endEvent
+
 event OnConnected()
     string webViewInfo = WebViewID + "|" + URL + "|" + X + "|" + Y + "|" + Width + "|" + Height
-    Send("RegisterWebView", webViewInfo)
+    SendEvent("RegisterWebView", webViewInfo)
+    OnWebViewConnected()
 endEvent
 
 function SetupWebView(string id, string url, int x = 0, int y = 0, int width = 100, int height = 100)
@@ -30,4 +34,12 @@ function SetupWebView(string id, string url, int x = 0, int y = 0, int width = 1
     self.Y = y
     self.Width = width
     self.Height = height
+endFunction
+
+event OnEvent(string eventName, string data)
+    Debug.MessageBox("Sweet, got an event!")
+endEvent
+
+function SendEvent(string eventName, string data = "", string target = "", string source = "")
+    Send((WebViewID + "::" + eventName), data, target, source)
 endFunction

@@ -7,7 +7,7 @@
     "module": "System",
     "target": "ES6",
     "moduleResolution": "node",
-    "baseUrl": "C:/Steam/steamapps/common/Skyrim Special Edition/Data/Platform/Modules",
+    "baseUrl": "C:/Steam/steamapps/common/Skyrim Special Edition - Modding/Data/Platform/Modules",
     "outFile": "dist\\WebUI.Papyrus.js"
   },
   "include": [

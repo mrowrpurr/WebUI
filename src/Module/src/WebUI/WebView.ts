@@ -27,7 +27,7 @@ export default class WebView {
 
     // like client side, allow providing a webhost to the constructor - for unit testing etc
     constructor(params: WebViewParams) {
-        this.id = params.id
+        this.id = params.id.toLowerCase()
         this.url = params.url
         this.host = params.host
         if (params.position)

@@ -26,7 +26,7 @@ export class WebViewHost {
     messageResponsePromises = new Map<string, (response: WebViewResponse) => void>()
 
     public getWebView(id: string) {
-        return this.webViews.get(id)
+        return this.webViews.get(id.toLowerCase())
     }
 
     public addFromProps(webViewProps: WebViewProps) {

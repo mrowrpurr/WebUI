@@ -6,8 +6,12 @@
     {
       "splitTerminals": [
         {
-          "name": "WebUI Modules",
+          "name": "WebUI Module",
           "commands": ["cd src/Module", "npm i", "npm run watch"]
+        },
+        {
+          "name": "Tests",
+          "commands": ["cd src/Module", "npm i", "npm run test:watch"]
         }
       ]
     },
