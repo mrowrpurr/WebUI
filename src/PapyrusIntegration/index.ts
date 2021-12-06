@@ -16,12 +16,7 @@ webUI.onEvent(event => {
             position: { width: Number(width), height: Number(height), y: Number(y), x: Number(x) }
         }).addToUI()
     } else {
-        once('update', () => {
-            Utility.wait(2).then(() => {
-                const webView = getWebView(webViewID)
-                Debug.messageBox(`Sending ${JSON.stringify(event)} ----> *******to ${webView} ->>> ${webView?.id}`)
-                if (webView) webView.send('event', { eventName, data: event.data })
-            })
-        })
+        const webView = getWebView(webViewID)
+        if (webView) webView.send('event', { eventName, data: event.data })
     }
 })

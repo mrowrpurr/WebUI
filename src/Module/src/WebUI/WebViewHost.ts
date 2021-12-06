@@ -64,9 +64,6 @@ export default class WebViewHost {
     }
 
     public getWebView(id: string) {
-        once('update', () => {
-            Debug.messageBox(JSON.stringify(Array.from(this.webViews.keys())))
-        })
         return this.webViews.get(id)
     }
 
