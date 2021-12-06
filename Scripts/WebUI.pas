@@ -1,7 +1,7 @@
 .info
   .source "WebUI.psc"
-  .modifyTime 1638754916
-  .compileTime 1638754917
+  .modifyTime 1638756810
+  .compileTime 1638756811
   .user "mrowr"
   .computer "MROWR-PURR"
 .endInfo
@@ -266,7 +266,16 @@
             .local ::temp15 string
             .local folderNameParts string[]
             .local folderName string
+            .local webviewDefinition int
             .local ::nonevar none
+            .local webviewID string
+            .local webviewFile string
+            .local webviewPosition int
+            .local width int
+            .local height int
+            .local x int
+            .local y int
+            .local webViewInfo string
             .local foldersInFolder string[]
             .local i int
           .endLocalTable
@@ -287,30 +296,70 @@
             PROPGET WEBUI_DEFINITION_FILENAME self ::temp15 ;@line 59
             STRCAT ::temp13 ::temp13 ::temp15 ;@line 59
             CALLSTATIC miscutil FileExists ::temp14 ::temp13 ;@line 59
-            JUMPF ::temp14 label11 ;@line 59
-            STRCAT ::temp15 "OMG WE FOUND A WEBVIEW.JSON FILE! " fullFolderPath ;@line 60
-            STRCAT ::temp13 ::temp15 "/" ;@line 60
-            PROPGET WEBUI_DEFINITION_FILENAME self ::temp15 ;@line 60
-            STRCAT ::temp13 ::temp13 ::temp15 ;@line 60
-            CALLSTATIC debug MessageBox ::nonevar ::temp13 ;@line 60
-            JUMP label10
-            label11:
-            label10:
-            CALLSTATIC miscutil FoldersInFolder ::temp11 fullFolderPath ;@line 64
-            ASSIGN foldersInFolder ::temp11 ;@line 64
-            ASSIGN i 0 ;@line 65
+            JUMPF ::temp14 label13 ;@line 59
+            STRCAT ::temp15 fullFolderPath "/" ;@line 60
+            PROPGET WEBUI_DEFINITION_FILENAME self ::temp13 ;@line 60
+            STRCAT ::temp15 ::temp15 ::temp13 ;@line 60
+            CALLSTATIC jvalue readFromFile ::temp12 ::temp15 ;@line 60
+            ASSIGN webviewDefinition ::temp12 ;@line 60
+            JUMPF webviewDefinition label12 ;@line 61
+            CALLSTATIC jmap getStr ::temp13 webviewDefinition "id" "" ;@line 62
+            ASSIGN webviewID ::temp13 ;@line 62
+            CALLSTATIC jmap getStr ::temp15 webviewDefinition "file" "" ;@line 63
+            ASSIGN webviewFile ::temp15 ;@line 63
+            CALLSTATIC jmap getObj ::temp12 webviewDefinition "position" 0 ;@line 64
+            ASSIGN webviewPosition ::temp12 ;@line 64
+            CALLSTATIC jmap getInt ::temp12 webviewPosition "width" 0 ;@line 65
+            ASSIGN width ::temp12 ;@line 65
+            CALLSTATIC jmap getInt ::temp12 webviewPosition "height" 0 ;@line 66
+            ASSIGN height ::temp12 ;@line 66
+            CALLSTATIC jmap getInt ::temp12 webviewPosition "x" 0 ;@line 67
+            ASSIGN x ::temp12 ;@line 67
+            CALLSTATIC jmap getInt ::temp12 webviewPosition "y" 0 ;@line 68
+            ASSIGN y ::temp12 ;@line 68
+            STRCAT ::temp13 webviewID "|" ;@line 69
+            STRCAT ::temp15 ::temp13 webviewFile ;@line 69
+            STRCAT ::temp13 ::temp15 "|" ;@line 69
+            CAST ::temp15 x ;@line 69
+            STRCAT ::temp15 ::temp13 ::temp15 ;@line 69
+            STRCAT ::temp13 ::temp15 "|" ;@line 69
+            CAST ::temp15 y ;@line 69
+            STRCAT ::temp15 ::temp13 ::temp15 ;@line 69
+            STRCAT ::temp13 ::temp15 "|" ;@line 69
+            CAST ::temp15 width ;@line 69
+            STRCAT ::temp15 ::temp13 ::temp15 ;@line 69
+            STRCAT ::temp13 ::temp15 "|" ;@line 69
+            CAST ::temp15 height ;@line 69
+            STRCAT ::temp15 ::temp13 ::temp15 ;@line 69
+            ASSIGN webViewInfo ::temp15 ;@line 69
+            STRCAT ::temp13 "Sending " webviewID ;@line 70
+            STRCAT ::temp15 ::temp13 "::registerwebview" ;@line 70
+            STRCAT ::temp13 ::temp15 webViewInfo ;@line 70
+            CALLSTATIC debug MessageBox ::nonevar ::temp13 ;@line 70
+            STRCAT ::temp15 webviewID "::" ;@line 72
+            STRCAT ::temp13 ::temp15 "registerwebview" ;@line 72
+            CALLSTATIC skyrimplatformbridge SendEvent ::nonevar ::temp13 "WebUI" webViewInfo "WebUI" ;@line 71
+            JUMP label11
             label12:
-            ARRAYLENGTH ::temp12 foldersInFolder ;@line 66
-            COMPARELT ::temp14 i ::temp12 ;@line 66
-            JUMPF ::temp14 label13 ;@line 66
-            STRCAT ::temp15 fullFolderPath "/" ;@line 67
-            ARRAYGETELEMENT ::temp13 foldersInFolder i ;@line 67
-            STRCAT ::temp15 ::temp15 ::temp13 ;@line 67
-            CALLMETHOD SearchForAndRegisterWebViewsFromFileSystem self ::nonevar ::temp15 ;@line 67
-            IADD ::temp12 i 1 ;@line 68
-            ASSIGN i ::temp12 ;@line 68
-            JUMP label12
+            label11:
+            JUMP label10
             label13:
+            label10:
+            CALLSTATIC miscutil FoldersInFolder ::temp11 fullFolderPath ;@line 80
+            ASSIGN foldersInFolder ::temp11 ;@line 80
+            ASSIGN i 0 ;@line 81
+            label14:
+            ARRAYLENGTH ::temp12 foldersInFolder ;@line 82
+            COMPARELT ::temp14 i ::temp12 ;@line 82
+            JUMPF ::temp14 label15 ;@line 82
+            STRCAT ::temp15 fullFolderPath "/" ;@line 83
+            ARRAYGETELEMENT ::temp13 foldersInFolder i ;@line 83
+            STRCAT ::temp15 ::temp15 ::temp13 ;@line 83
+            CALLMETHOD SearchForAndRegisterWebViewsFromFileSystem self ::nonevar ::temp15 ;@line 83
+            IADD ::temp12 i 1 ;@line 84
+            ASSIGN i ::temp12 ;@line 84
+            JUMP label14
+            label15:
           .endCode
         .endFunction
       .endState

@@ -5,6 +5,10 @@ import { registerWebView, getWebView } from 'WebUI'
 const papyrus = getConnection('WebUI')
 
 papyrus.onEvent(event => {
+    // once('update', () => {
+    //     Debug.messageBox(`Papyrus Integration Event: ${JSON.stringify(event)}`)
+    // })
+
     const [webViewID, ...eventNameParts] = event.eventName.split('::')
     const eventName = eventNameParts.join('::')
 

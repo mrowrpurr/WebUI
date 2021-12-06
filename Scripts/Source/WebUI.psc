@@ -57,7 +57,23 @@ function SearchForAndRegisterWebViewsFromFileSystem(string fullFolderPath)
 
     ; Does this folder have a webview.json?
     if MiscUtil.FileExists(fullFolderPath + "/" + WEBUI_DEFINITION_FILENAME)
-        Debug.MessageBox("OMG WE FOUND A WEBVIEW.JSON FILE! " + fullFolderPath + "/" + WEBUI_DEFINITION_FILENAME)
+        int webviewDefinition = JValue.readFromFile(fullFolderPath + "/" + WEBUI_DEFINITION_FILENAME)
+        if webviewDefinition
+            string webviewID = JMap.getStr(webviewDefinition, "id")
+            string webviewFile = JMap.getStr(webviewDefinition, "file")
+            int webviewPosition = JMap.getObj(webviewDefinition, "position")
+            int width = JMap.getInt(webviewPosition, "width")
+            int height = JMap.getInt(webviewPosition, "height")
+            int x = JMap.getInt(webviewPosition, "x")
+            int y = JMap.getInt(webviewPosition, "y")
+            string webViewInfo = webviewID + "|" + webviewFile + "|" + x + "|" + y + "|" + width + "|" +height
+            Debug.MessageBox("Sending " + webviewID + "::registerwebview" + webViewInfo)
+            SkyrimPlatformBridge.SendEvent( \
+                eventName = webviewID + "::" + "registerwebview", \
+                target = "WebUI", \
+                data = webViewInfo, \
+                source = "WebUI")
+        endIf
     endIf
 
     ; Does this folder have subfolders?
