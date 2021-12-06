@@ -8,17 +8,27 @@ papyrus.onEvent(event => {
     const [webViewID, ...eventNameParts] = event.eventName.split('::')
     const eventName = eventNameParts.join('::')
 
-    // once('update', () => {
-    //     Debug.messageBox(`papyrus.onEvent '${eventName}' ... looking for 'registerwebview' ${JSON.stringify(event)}`)
-    // })
-
     switch (eventName) {
         case 'registerwebview': {
-            const [id, url, x, y, width, height] = (event.data as string).split('|')
+            const [id, url, x, y, width, height, isMenu] = (event.data as string).split('|')
+            once('update', () => {
+                Debug.messageBox(`${id} is menu? ${isMenu}`)
+            })
             registerWebView({
                 id: id,
                 url: url,
-                position: { width: Number(width), height: Number(height), y: Number(y), x: Number(x) }
+                position: { width: Number(width), height: Number(height), y: Number(y), x: Number(x) },
+                isMenu: isMenu.toLowerCase() == 'true'
+            })
+            break
+        }
+        case 'registerandshowwebview': {
+            const [id, url, x, y, width, height, isMenu] = (event.data as string).split('|')
+            registerWebView({
+                id: id,
+                url: url,
+                position: { width: Number(width), height: Number(height), y: Number(y), x: Number(x) },
+                isMenu: isMenu == 'true'
             }).addToUI()
             break
         }

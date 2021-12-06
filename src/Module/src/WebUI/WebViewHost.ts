@@ -5,7 +5,8 @@
 import WebView from './WebView'
 import { WebViewBrowserMessage, WebViewMessage, WebViewEvent, WebViewRequest, WebViewResponse, WebViewLoadedEvent } from './WebViewEvents'
 import { ISkyrimPlatform, IBrowser, IBrowserMessageEvent, OnBrowserMessage, OnceUpdate } from './ISkyrimPlatform'
-import { Debug, once } from 'skyrimPlatform'
+import { Debug, once, Ui } from 'skyrimPlatform'
+import { getWebViewHost } from '.'
 
 export interface WebViewHostParams {
     skyrimPlatform: ISkyrimPlatform,
@@ -68,9 +69,14 @@ export default class WebViewHost {
             url: webView.url,
             position: webView.position
         })
+        if (webView.isMenu)
+            this.activateMenuMode()
     }
 
     public removeFromUI(id: string) {
+        const webView = this.getWebView(id)
+        if (webView && webView.isMenu)
+            this.deactivateMenuMode()
         this.invokeViewFunction('remove', id)
         this.webViewsCurrentlyInUI.set(id, false)
     }
@@ -80,6 +86,14 @@ export default class WebViewHost {
             this.removeFromUI(webView.id)
         else
             this.addToUI(webView)
+    }
+
+    public activateMenuMode() {
+        Ui.openCustomMenu('', 0)
+    }
+
+    public deactivateMenuMode() {
+        Ui.closeCustomMenu()
     }
 
     public getWebView(id: string) {

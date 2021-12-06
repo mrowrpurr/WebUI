@@ -6,6 +6,7 @@ int property X auto
 int property Y auto
 int property Width auto
 int property Height auto
+bool property IsMenu auto
 bool property UseJsonFile auto
 
 event OnSetupWebView()
@@ -24,19 +25,24 @@ endEvent
 
 event OnConnected()
     if ! UseJsonFile
-        string webViewInfo = WebViewID + "|" + URL + "|" + X + "|" + Y + "|" + Width + "|" + Height
+        string isMenuText = "false"
+        if IsMenu
+            isMenuText = "true"
+        endIf
+        string webViewInfo = WebViewID + "|" + URL + "|" + X + "|" + Y + "|" + Width + "|" + Height + "|" + isMenuText
         SendEvent("RegisterWebView", webViewInfo)
     endIf
     OnWebViewConnected()
 endEvent
 
-function SetupWebView(string id, string url, int x = 0, int y = 0, int width = 100, int height = 100)
+function SetupWebView(string id, string url, int x = 0, int y = 0, int width = 100, int height = 100, bool isMenu = false)
     WebViewID = id
     self.URL = url
     self.X = x
     self.Y = y
     self.Width = width
     self.Height = height
+    self.IsMenu = isMenu
 endFunction
 
 event OnEvent(string eventName, string data)
@@ -65,11 +71,11 @@ endFunction
 
 ;;;;;;;;;;;;;;;
 
-function Show()
-endFunction
+; function Show()
+; endFunction
 
-function Hide()
-endFunction
+; function Hide()
+; endFunction
 
-function Toggle()
-endFunction
+; function Toggle()
+; endFunction

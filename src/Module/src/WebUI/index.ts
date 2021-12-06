@@ -41,8 +41,12 @@ export interface RegisterWebViewParams {
     id: string,
     url: string,
     position?: WebViewScreenPosition,
+    isMenu: boolean
 }
 
 export function registerWebView(params: RegisterWebViewParams): WebView {
-    return new WebView({ host: getWebViewHost(), ...params })
+    const host = getWebViewHost()
+    const webView = new WebView({ host, ...params })
+    host.addWebView(webView)
+    return webView
 }

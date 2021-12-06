@@ -16,7 +16,8 @@ export interface WebViewParams {
     id: string,
     url: string,
     position?: WebViewScreenPosition,
-    host: WebViewHost
+    host: WebViewHost,
+    isMenu: boolean
 }
 
 export default class WebView {
@@ -24,12 +25,14 @@ export default class WebView {
     url: string
     position: WebViewScreenPosition
     host: WebViewHost
+    isMenu: boolean
 
     // like client side, allow providing a webhost to the constructor - for unit testing etc
     constructor(params: WebViewParams) {
         this.id = params.id.toLowerCase()
         this.url = params.url
         this.host = params.host
+        this.isMenu = params.isMenu
         if (params.position)
             this.position = params.position
         else

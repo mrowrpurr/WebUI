@@ -61,12 +61,18 @@ function SearchForAndRegisterWebViewsFromFileSystem(string fullFolderPath)
         if webviewDefinition
             string webviewID = JMap.getStr(webviewDefinition, "id")
             string webviewFile = JMap.getStr(webviewDefinition, "file")
+            bool isMenu = JMap.getInt(webviewDefinition, "menu") != 0
             int webviewPosition = JMap.getObj(webviewDefinition, "position")
             int width = JMap.getInt(webviewPosition, "width")
             int height = JMap.getInt(webviewPosition, "height")
             int x = JMap.getInt(webviewPosition, "x")
             int y = JMap.getInt(webviewPosition, "y")
-            string webViewInfo = webviewID + "|" + webviewFile + "|" + x + "|" + y + "|" + width + "|" +height
+            string isMenuText = "false"
+            if isMenu
+                isMenuText = "true"
+            endIf
+            string webViewInfo = webviewID + "|" + webviewFile + "|" + x + "|" + y + "|" + width + "|" + height + "|" + isMenuText
+            Debug.MessageBox(webViewInfo)
             SkyrimPlatformBridge.SendEvent( \
                 eventName = webviewID + "::" + "registerwebview", \
                 target = "WebUI", \
