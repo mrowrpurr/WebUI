@@ -11,9 +11,6 @@ papyrus.onEvent(event => {
     switch (eventName) {
         case 'registerwebview': {
             const [id, url, x, y, width, height, isMenu] = (event.data as string).split('|')
-            once('update', () => {
-                Debug.messageBox(`${id} is menu? ${isMenu}`)
-            })
             registerWebView({
                 id: id,
                 url: url,
@@ -48,9 +45,8 @@ papyrus.onEvent(event => {
             break
         }
         default: {
-            // TODO make this so it cannot have event name collisions with our own event names
             const webView = getWebView(webViewID)
-            if (webView) webView.send('event', { eventName, data: event.data })
+            if (webView) webView.send('event', { eventName, data: event.data, target: webViewID })
             break
         }
     }
