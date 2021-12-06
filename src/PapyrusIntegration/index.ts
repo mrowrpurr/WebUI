@@ -5,23 +5,47 @@ import { registerWebView, getWebView } from 'WebUI'
 const papyrus = getConnection('WebUI')
 
 papyrus.onEvent(event => {
-    // once('update', () => {
-    //     Debug.messageBox(`Papyrus Integration Event: ${JSON.stringify(event)}`)
-    // })
-
     const [webViewID, ...eventNameParts] = event.eventName.split('::')
     const eventName = eventNameParts.join('::')
 
-    if (eventName == 'registerwebview') {
-        const [id, url, x, y, width, height] = (event.data as string).split('|')
-        registerWebView({
-            id: id,
-            url: url,
-            position: { width: Number(width), height: Number(height), y: Number(y), x: Number(x) }
-        }).addToUI()
-    } else {
-        const webView = getWebView(webViewID)
-        if (webView) webView.send('event', { eventName, data: event.data })
+    // once('update', () => {
+    //     Debug.messageBox(`papyrus.onEvent '${eventName}' ... looking for 'registerwebview' ${JSON.stringify(event)}`)
+    // })
+
+    switch (eventName) {
+        case 'registerwebview': {
+            const [id, url, x, y, width, height] = (event.data as string).split('|')
+            once('update', () => {
+                Debug.messageBox(`REGISTERING WEB VIEW ${id}`)
+            })
+            registerWebView({
+                id: id,
+                url: url,
+                position: { width: Number(width), height: Number(height), y: Number(y), x: Number(x) }
+            }).addToUI()
+            break
+        }
+        case 'addtoui': {
+            const webView = getWebView(webViewID)
+            if (webView) webView.addToUI()
+            break
+        }
+        case 'removefromui': {
+            const webView = getWebView(webViewID)
+            if (webView) webView.removeFromUI()
+            break
+        }
+        case 'toggleui': {
+            const webView = getWebView(webViewID)
+            if (webView) webView.toggleUI()
+            break
+        }
+        default: {
+            // TODO make this so it cannot have event name collisions with our own event names
+            const webView = getWebView(webViewID)
+            if (webView) webView.send('event', { eventName, data: event.data })
+            break
+        }
     }
 })
 

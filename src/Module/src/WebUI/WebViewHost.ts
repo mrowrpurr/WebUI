@@ -28,6 +28,7 @@ export default class WebViewHost {
     jsToInvokeWhenReady = new Array<[string, any]>()
     messageResponsePromises = new Map<string, (response: WebViewResponse) => void>()
     webViews = new Map<string, WebView>()
+    webViewsCurrentlyInUI = new Map<string, boolean>()
     onloadCallbacks = new Array<(arg: undefined) => void>()
 
     constructor(params: WebViewHostParams) {
@@ -49,8 +50,20 @@ export default class WebViewHost {
         }
     }
 
-    public addToUI(webView: WebView) {
+    public addWebView(webView: WebView) {
         this.webViews.set(webView.id, webView)
+        this.webViewsCurrentlyInUI.set(webView.id, false)
+    }
+
+    public removeWebView(id: string) {
+        this.webViews.delete(id)
+        this.webViewsCurrentlyInUI.delete(id)
+    }
+
+    public addToUI(webView: WebView) {
+        once('update', () => { Debug.messageBox(`addToUI(${webView.id})`) })
+        this.webViewsCurrentlyInUI.set(webView.id, true)
+        this.addWebView(webView)
         this.invokeViewFunction('addFromProps', {
             id: webView.id,
             url: webView.url,
@@ -59,8 +72,16 @@ export default class WebViewHost {
     }
 
     public removeFromUI(id: string) {
+        once('update', () => { Debug.messageBox(`REMOVE FROM UI(${id})`) })
         this.invokeViewFunction('remove', id)
-        this.webViews.delete(id)
+        this.webViewsCurrentlyInUI.set(id, false)
+    }
+
+    public toggleUI(webView: WebView) {
+        if (this.webViewsCurrentlyInUI.has(webView.id) && this.webViewsCurrentlyInUI.get(webView.id))
+            this.removeFromUI(webView.id)
+        else
+            this.addToUI(webView)
     }
 
     public getWebView(id: string) {

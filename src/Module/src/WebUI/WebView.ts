@@ -44,6 +44,10 @@ export default class WebView {
         this.host.removeFromUI(this.id)
     }
 
+    public toggleUI() {
+        this.host.toggleUI(this)
+    }
+
     public on(messageType: 'load', callback: (message: WebViewLoadedEvent) => void): void
     public on(messageType: 'message', callback: (message: WebViewMessage) => void): void
     public on(messageType: 'event', callback: (message: WebViewEvent) => void): void

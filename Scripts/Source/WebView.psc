@@ -47,3 +47,26 @@ endFunction
 string function FetchData(string query, string data = "", string target = "", string source = "", float waitInterval = 0.5, float timeout = 10.0)
     return Request(WebViewID + "::" + query, data, target, source, waitInterval, timeout)
 endFunction
+
+function AddToUI()
+    SendEvent("AddToUI")
+endFunction
+
+function RemoveFromUI()
+    SendEvent("RemoveFromUI")
+endFunction
+
+function ToggleUI()
+    SendEvent("ToggleUI")
+endFunction
+
+;;;;;;;;;;;;;;;
+
+function Show()
+endFunction
+
+function Hide()
+endFunction
+
+function Toggle()
+endFunction
