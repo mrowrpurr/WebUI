@@ -23,7 +23,8 @@
         <Import>@ModsFolder\Skyrim Platform Papyrus Bridge\Scripts\Source</Import>
 
         <!-- These mods come with source directories by default with required .psc files -->
-        <!-- <Import>@ModsFolder\PapyrusUtil\Scripts\Source</Import> -->
+        <Import>@ModsFolder\PapyrusUtil\Scripts\Source</Import>
+        <Import>@ModsFolder\JContainers\Scripts\Source</Import>
         <!-- <Import>@ModsFolder\PapyrusExtender\source\scripts</Import> -->
         <!-- <Import>@ModsFolder\LibFire\Scripts\Source</Import> -->
         <!-- <Import>@ModsFolder\iWantWidgets\Source\Scripts</Import> -->
