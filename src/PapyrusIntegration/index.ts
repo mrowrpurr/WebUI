@@ -15,9 +15,6 @@ papyrus.onEvent(event => {
     switch (eventName) {
         case 'registerwebview': {
             const [id, url, x, y, width, height] = (event.data as string).split('|')
-            once('update', () => {
-                Debug.messageBox(`REGISTERING WEB VIEW ${id}`)
-            })
             registerWebView({
                 id: id,
                 url: url,

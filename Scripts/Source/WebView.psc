@@ -6,6 +6,7 @@ int property X auto
 int property Y auto
 int property Width auto
 int property Height auto
+bool property UseJsonFile auto
 
 event OnSetupWebView()
 endEvent
@@ -22,8 +23,10 @@ event OnWebViewConnected()
 endEvent
 
 event OnConnected()
-    string webViewInfo = WebViewID + "|" + URL + "|" + X + "|" + Y + "|" + Width + "|" + Height
-    SendEvent("RegisterWebView", webViewInfo)
+    if ! UseJsonFile
+        string webViewInfo = WebViewID + "|" + URL + "|" + X + "|" + Y + "|" + Width + "|" + Height
+        SendEvent("RegisterWebView", webViewInfo)
+    endIf
     OnWebViewConnected()
 endEvent
 

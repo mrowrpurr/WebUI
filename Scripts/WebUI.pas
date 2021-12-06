@@ -1,7 +1,7 @@
 .info
   .source "WebUI.psc"
-  .modifyTime 1638756810
-  .compileTime 1638756811
+  .modifyTime 1638762022
+  .compileTime 1638762024
   .user "mrowr"
   .computer "MROWR-PURR"
 .endInfo
@@ -332,32 +332,28 @@
             CAST ::temp15 height ;@line 69
             STRCAT ::temp15 ::temp13 ::temp15 ;@line 69
             ASSIGN webViewInfo ::temp15 ;@line 69
-            STRCAT ::temp13 "Sending " webviewID ;@line 70
-            STRCAT ::temp15 ::temp13 "::registerwebview" ;@line 70
-            STRCAT ::temp13 ::temp15 webViewInfo ;@line 70
-            CALLSTATIC debug MessageBox ::nonevar ::temp13 ;@line 70
-            STRCAT ::temp15 webviewID "::" ;@line 72
-            STRCAT ::temp13 ::temp15 "registerwebview" ;@line 72
-            CALLSTATIC skyrimplatformbridge SendEvent ::nonevar ::temp13 "WebUI" webViewInfo "WebUI" ;@line 71
+            STRCAT ::temp13 webviewID "::" ;@line 71
+            STRCAT ::temp15 ::temp13 "registerwebview" ;@line 71
+            CALLSTATIC skyrimplatformbridge SendEvent ::nonevar ::temp15 "WebUI" webViewInfo "WebUI" ;@line 70
             JUMP label11
             label12:
             label11:
             JUMP label10
             label13:
             label10:
-            CALLSTATIC miscutil FoldersInFolder ::temp11 fullFolderPath ;@line 80
-            ASSIGN foldersInFolder ::temp11 ;@line 80
-            ASSIGN i 0 ;@line 81
+            CALLSTATIC miscutil FoldersInFolder ::temp11 fullFolderPath ;@line 79
+            ASSIGN foldersInFolder ::temp11 ;@line 79
+            ASSIGN i 0 ;@line 80
             label14:
-            ARRAYLENGTH ::temp12 foldersInFolder ;@line 82
-            COMPARELT ::temp14 i ::temp12 ;@line 82
-            JUMPF ::temp14 label15 ;@line 82
-            STRCAT ::temp15 fullFolderPath "/" ;@line 83
-            ARRAYGETELEMENT ::temp13 foldersInFolder i ;@line 83
-            STRCAT ::temp15 ::temp15 ::temp13 ;@line 83
-            CALLMETHOD SearchForAndRegisterWebViewsFromFileSystem self ::nonevar ::temp15 ;@line 83
-            IADD ::temp12 i 1 ;@line 84
-            ASSIGN i ::temp12 ;@line 84
+            ARRAYLENGTH ::temp12 foldersInFolder ;@line 81
+            COMPARELT ::temp14 i ::temp12 ;@line 81
+            JUMPF ::temp14 label15 ;@line 81
+            STRCAT ::temp13 fullFolderPath "/" ;@line 82
+            ARRAYGETELEMENT ::temp15 foldersInFolder i ;@line 82
+            STRCAT ::temp13 ::temp13 ::temp15 ;@line 82
+            CALLMETHOD SearchForAndRegisterWebViewsFromFileSystem self ::nonevar ::temp13 ;@line 82
+            IADD ::temp12 i 1 ;@line 83
+            ASSIGN i ::temp12 ;@line 83
             JUMP label14
             label15:
           .endCode

@@ -61,9 +61,8 @@ export default class WebViewHost {
     }
 
     public addToUI(webView: WebView) {
-        once('update', () => { Debug.messageBox(`addToUI(${webView.id})`) })
-        this.webViewsCurrentlyInUI.set(webView.id, true)
         this.addWebView(webView)
+        this.webViewsCurrentlyInUI.set(webView.id, true)
         this.invokeViewFunction('addFromProps', {
             id: webView.id,
             url: webView.url,
@@ -72,7 +71,6 @@ export default class WebViewHost {
     }
 
     public removeFromUI(id: string) {
-        once('update', () => { Debug.messageBox(`REMOVE FROM UI(${id})`) })
         this.invokeViewFunction('remove', id)
         this.webViewsCurrentlyInUI.set(id, false)
     }
