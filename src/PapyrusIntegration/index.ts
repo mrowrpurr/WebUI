@@ -2,9 +2,9 @@ import { getConnection } from 'papyrusBridge'
 import { Debug, once, Utility } from 'skyrimPlatform'
 import { registerWebView, getWebView } from 'WebUI'
 
-const webUI = getConnection('WebUI')
+const papyrus = getConnection('WebUI')
 
-webUI.onEvent(event => {
+papyrus.onEvent(event => {
     const [webViewID, ...eventNameParts] = event.eventName.split('::')
     const eventName = eventNameParts.join('::')
 
@@ -18,5 +18,17 @@ webUI.onEvent(event => {
     } else {
         const webView = getWebView(webViewID)
         if (webView) webView.send('event', { eventName, data: event.data })
+    }
+})
+
+papyrus.onRequest(async (request, reply) => {
+    const [webViewID, ...queryParts] = request.query.split('::')
+    const query = queryParts.join('::')
+    const webView = getWebView(webViewID)
+    if (webView) {
+        const response = await webView.send('request', { query, data: request.query })
+        reply(response)
+    } else {
+        reply(undefined)
     }
 })

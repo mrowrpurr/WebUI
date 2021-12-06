@@ -41,5 +41,9 @@ event OnEvent(string eventName, string data)
 endEvent
 
 function SendEvent(string eventName, string data = "", string target = "", string source = "")
-    Send((WebViewID + "::" + eventName), data, target, source)
+    Send(WebViewID + "::" + eventName, data, target, source)
+endFunction
+
+string function FetchData(string query, string data = "", string target = "", string source = "", float waitInterval = 0.5, float timeout = 10.0)
+    return Request(WebViewID + "::" + query, data, target, source, waitInterval, timeout)
 endFunction
