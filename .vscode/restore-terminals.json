@@ -46,6 +46,14 @@
           "commands": ["cd src/PapyrusIntegration", "npm i", "npm run watch"]
         }
       ]
+    },
+    {
+      "splitTerminals": [
+        {
+          "name": "WebUI Frontend",
+          "commands": ["cd src/FrontendLibrary", "npm i", "npm run watch"]
+        }
+      ]
     }
   ]
 }

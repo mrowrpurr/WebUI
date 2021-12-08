@@ -1,5 +1,6 @@
 scriptName WebUI extends ReferenceAlias
 
+string property WEBUI_RELOAD_SKSE_MOD_EVENT = "WEBUI_RELOAD_JSON" autoReadonly
 string property WEBUI_ROOT_FOLDER = "Data/WebUI" autoReadonly
 string property WEBUI_CONFIG_FILENAME = "webui.json" autoReadonly
 string property WEBUI_DEFINITION_FILENAME = "webview.json" autoReadonly
@@ -31,6 +32,7 @@ endProperty
 event OnInit()
     SearchForAndRegisterWebViewsFromFileSystem(WEBUI_ROOT_FOLDER)
     RegisterForKey(KEY_REFRESH_ALL)
+    RegisterForModEvent(WEBUI_RELOAD_SKSE_MOD_EVENT, "ReloadWebViewsFromFileSystem")
 endEvent
 
 ;
@@ -40,6 +42,10 @@ event OnPlayerLoadGame()
     _webUI_Config_Map_ID = 0
     SearchForAndRegisterWebViewsFromFileSystem(WEBUI_ROOT_FOLDER)
     RegisterForKey(KEY_REFRESH_ALL)
+endEvent
+
+event ReloadWebViewsFromFileSystem()
+    SearchForAndRegisterWebViewsFromFileSystem(WEBUI_ROOT_FOLDER)
 endEvent
 
 event OnKeyDown(int keyCode) 

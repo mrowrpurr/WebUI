@@ -129,12 +129,19 @@ export class WebViewHost {
 
     // TODO: refactor the viewId / target inconsistencies
     public invokeMessage(properties: InvokeMessageProps) {
-        const callbacks = this.messageCallbacks.get(properties.messageType)
-        if (callbacks)
-            callbacks.forEach(callback => {
-                if ((!callback.viewId) || callback.viewId == properties.viewId)
-                    callback.callback(properties.message)
+        if (this.iframesByName.has(properties.viewId)) {
+            const iframe = this.iframesByName.get(properties.viewId)
+            iframe?.contentWindow?.postMessage({
+                messageType: properties.messageType,
+                data: properties.message
             })
+        }
+        // const callbacks = this.messageCallbacks.get(properties.messageType)
+        // if (callbacks)
+        //     callbacks.forEach(callback => {
+        //         if ((!callback.viewId) || callback.viewId == properties.viewId)
+        //             callback.callback(properties.message)
+        //     })
     }
 
     public getUniqueReplyId() {

@@ -1,4 +1,5 @@
 import { browser, BrowserMessageEvent, Debug, on, once } from 'skyrimPlatform'
+import * as sp from 'skyrimPlatform'
 import WebView, { WebViewScreenPosition } from './WebView'
 import WebViewHost from './WebViewHost'
 
@@ -49,4 +50,12 @@ export function registerWebView(params: RegisterWebViewParams): WebView {
     const webView = new WebView({ host, ...params })
     host.addWebView(webView)
     return webView
+}
+
+export function reloadAllJsonDefinitions() {
+    once('update', () => {
+        const modEvent = (sp as any).ModEvent
+        const handle = modEvent.Create("WEBUI_RELOAD_JSON")
+        modEvent.send(handle)
+    })
 }
