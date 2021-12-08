@@ -33,6 +33,13 @@ export class WebViewHost {
         this.add(new WebView(webViewProps))
     }
 
+    public reloadWebView(id: string) {
+        if (this.webViews.has(id)) {
+            const iframe = this.iframesByName.get(id)
+            if (iframe) iframe.contentWindow?.location.reload()
+        }
+    }
+
     public add(webView: WebView) {
         if (this.webViews.has(webView.id))
             this.remove(webView.id)

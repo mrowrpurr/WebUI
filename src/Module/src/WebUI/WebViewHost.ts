@@ -7,6 +7,7 @@ import { WebViewBrowserMessage, WebViewMessage, WebViewEvent, WebViewRequest, We
 import { ISkyrimPlatform, IBrowser, IBrowserMessageEvent, OnBrowserMessage, OnceUpdate } from './ISkyrimPlatform'
 import { Debug, once, Ui } from 'skyrimPlatform'
 import { getWebViewHost } from '.'
+import MessageBox from './MessageBox'
 
 export interface WebViewHostParams {
     skyrimPlatform: ISkyrimPlatform,
@@ -64,7 +65,7 @@ export default class WebViewHost {
     public addToUI(webView: WebView) {
         this.addWebView(webView)
         this.webViewsCurrentlyInUI.set(webView.id, true)
-        this.invokeViewFunction('addFromProps', {
+        this.invokeViewHostFunction('addFromProps', {
             id: webView.id,
             url: webView.url,
             position: webView.position
@@ -77,7 +78,7 @@ export default class WebViewHost {
         const webView = this.getWebView(id)
         if (webView && webView.isMenu)
             this.deactivateMenuMode()
-        this.invokeViewFunction('remove', id)
+        this.invokeViewHostFunction('remove', id)
         this.webViewsCurrentlyInUI.set(id, false)
     }
 
@@ -88,12 +89,19 @@ export default class WebViewHost {
             this.addToUI(webView)
     }
 
+    public refreshAll() {
+        for (let [webViewId, isInUI] of this.webViewsCurrentlyInUI)
+            if (isInUI) this.invokeViewHostFunction('reloadWebView', webViewId)
+    }
+
     public activateMenuMode() {
         Ui.openCustomMenu('', 0)
+        // this.browser.setFocused(true)
     }
 
     public deactivateMenuMode() {
         Ui.closeCustomMenu()
+        this.browser.setFocused(false)
     }
 
     public getWebView(id: string) {
@@ -125,22 +133,22 @@ export default class WebViewHost {
         if (messageType == 'request') {
             if (!message.replyId) message.replyId = this.getUniqueReplyId()
             return new Promise<WebViewResponse>(resolve => {
-                this.invokeViewFunction('invokeMessage', { messageType, message, viewId, })
+                this.invokeViewHostFunction('invokeMessage', { messageType, message, viewId, })
                 this.messageResponsePromises.set(message.replyId, resolve)
             })
         } else {
             return new Promise<undefined>(resolve => {
-                this.invokeViewFunction('invokeMessage', { messageType, message, viewId, })
+                this.invokeViewHostFunction('invokeMessage', { messageType, message, viewId, })
                 resolve(undefined)
             })
         }
     }
 
     public reply(request: WebViewRequest, viewId: string, response: WebViewResponse) {
-        this.invokeViewFunction('onReply', { replyId: request.replyId, ...response })
+        this.invokeViewHostFunction('onReply', { replyId: request.replyId, ...response })
     }
 
-    public invokeViewFunction(functionName: string, parameters: any) {
+    public invokeViewHostFunction(functionName: string, parameters: any) {
         if (this.isReady)
             this.browser.executeJavaScript(`window.__webViewHost.${functionName}(${JSON.stringify(parameters)});`)
         else
@@ -167,7 +175,7 @@ export default class WebViewHost {
                 if (browserMessage.messageType == 'webviewhostloaded') {
                     this.isReady = true
                     this.jsToInvokeWhenReady.forEach(jsToInvoke => {
-                        this.invokeViewFunction(jsToInvoke[0], jsToInvoke[1])
+                        this.invokeViewHostFunction(jsToInvoke[0], jsToInvoke[1])
                     })
                     this.onloadCallbacks.forEach(callback => callback(undefined))
                 } else if (browserMessage.messageType == 'response') {
