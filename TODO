@@ -1,0 +1,6 @@
+Have an option to load Chrome/Firefox/* DevTools in one of the WebViews
+and - in particular - provide a helper function which will log to its console.
+
+import { debug } from 'WebUI'
+
+debug() --> DevTools

@@ -34,6 +34,9 @@ export default class WebViewHost {
     onloadCallbacks = new Array<(arg: undefined) => void>()
 
     constructor(params: WebViewHostParams) {
+        once('update', () => {
+            Debug.messageBox(`CREATE NEW WEB VIEW HOST`)
+        })
         if (!params.rootUrl)
             params.rootUrl = 'file:///Data/WebUI/WebUI/index.html'
         this.browser = params.skyrimPlatform.browser
@@ -54,6 +57,9 @@ export default class WebViewHost {
 
     public addWebView(webView: WebView) {
         this.webViews.set(webView.id, webView)
+        once('update', () => {
+            Debug.messageBox(`Registered/Added Web View: ${webView.id} - ${this.getWebViews().length}`)
+        })
         this.webViewsCurrentlyInUI.set(webView.id, false)
     }
 
