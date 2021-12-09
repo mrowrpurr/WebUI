@@ -27,7 +27,8 @@
         - `webViewHost.html`
     - `Examples`
         - `Widgets`
-            - `NumberOfItems`
-            - `CarryingCapacity`
+            - `NumberOfItems` (_no framework_)
+            - `CarryingCapacity` (_React_)
         - `Menus`
-            - `CustomMessageBox`
+            - `CustomMessageBox`  (_no framework_)
+            - `SimpleInventory` (_React/Redux_)
