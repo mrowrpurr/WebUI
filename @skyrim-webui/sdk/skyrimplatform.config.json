@@ -1,0 +1,19 @@
+{
+    "name": "WebUI",
+    "type": "module",
+    "imports": "C:/Steam/steamapps/common/Skyrim Special Edition - Modding/Data/Platform/Modules",
+    "plugin": {
+        "deployFolder": "C:/Steam/steamapps/common/Skyrim Special Edition - Modding/Data/Platform/PluginsDev",
+        "sourceFiles": [
+            "dist/**/*.js"
+        ],
+        "ignorePrefix": "dist/"
+    },
+    "module": {
+        "deployFolder": "C:/Steam/steamapps/common/Skyrim Special Edition - Modding/Data/Platform/Modules",
+        "sourceFiles": [
+            "src/**/*.ts"
+        ],
+        "ignorePrefix": "src/"
+    }
+}

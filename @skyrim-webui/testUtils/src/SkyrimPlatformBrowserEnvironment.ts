@@ -23,20 +23,20 @@ export class SkyrimPlatformBrowserEnvironment {
         return this.document?.getElementById(id)
     }
 
-    public async runJavaScript(js: string): Promise<undefined> {
+    public async runJavaScript(js: string): Promise<void> {
         if (this.document) {
             const script = this.document.createElement('script')
             script.textContent = js
             return new Promise(resolve => {
-                script.onload = () => { resolve(undefined) }
+                script.onload = () => { resolve() }
                 this.document!.body.appendChild(script)
             })
         } else {
-            return new Promise(resolve => { resolve(undefined) })
+            return new Promise(resolve => { resolve() })
         }
     }
-}
 
-export function getBrowserEnvironment() {
-    return new SkyrimPlatformBrowserEnvironment()
+    public runFunction(functionName: string, ...args: any[]) {
+        return this.runJavaScript(`${functionName}(${args.map(arg => JSON.stringify(arg)).join(', ')})`)
+    }
 }

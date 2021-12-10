@@ -7,6 +7,6 @@ export declare class SkyrimPlatformBrowserEnvironment {
     querySelector(selector: string): Element | null | undefined;
     querySelectorAll(selector: string): NodeListOf<Element> | undefined;
     getElementById(id: string): HTMLElement | null | undefined;
-    runJavaScript(js: string): Promise<undefined>;
+    runJavaScript(js: string): Promise<void>;
+    runFunction(functionName: string, ...args: any[]): Promise<void>;
 }
-export declare function getBrowserEnvironment(): SkyrimPlatformBrowserEnvironment;

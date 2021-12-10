@@ -9,17 +9,26 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getWebViewsHostBrowserEnvironment = void 0;
+exports.getWebViewsHostBrowserEnvironment = exports.WebViewsHostBrowserEnvironment = void 0;
 const fs = require("fs");
 const skyrimPlatformBrowserEnvironment_1 = require("./skyrimPlatformBrowserEnvironment");
+class WebViewsHostBrowserEnvironment extends skyrimPlatformBrowserEnvironment_1.SkyrimPlatformBrowserEnvironment {
+    load(webViewsHostJsPath) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const webViewsHostJs = fs.readFileSync(webViewsHostJsPath).toString();
+            return this.runJavaScript(webViewsHostJs);
+        });
+    }
+    runWebViewsBrowserFunction(functionName, ...args) {
+        return this.runFunction(`__webViewsHost__.${functionName}`, ...args);
+    }
+}
+exports.WebViewsHostBrowserEnvironment = WebViewsHostBrowserEnvironment;
 function getWebViewsHostBrowserEnvironment(webViewsHostJsPath) {
     return __awaiter(this, void 0, void 0, function* () {
-        const webViewsHostJs = fs.readFileSync(webViewsHostJsPath).toString();
-        const env = (0, skyrimPlatformBrowserEnvironment_1.getBrowserEnvironment)();
-        yield env.runJavaScript(webViewsHostJs);
-        return new Promise(resolve => {
-            resolve(env);
-        });
+        const env = new WebViewsHostBrowserEnvironment();
+        yield env.load(webViewsHostJsPath);
+        return env;
     });
 }
 exports.getWebViewsHostBrowserEnvironment = getWebViewsHostBrowserEnvironment;

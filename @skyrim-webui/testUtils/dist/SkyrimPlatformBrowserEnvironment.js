@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getBrowserEnvironment = exports.SkyrimPlatformBrowserEnvironment = void 0;
+exports.SkyrimPlatformBrowserEnvironment = void 0;
 const jsdom_1 = require("jsdom");
 class SkyrimPlatformBrowserEnvironment {
     constructor() {
@@ -35,19 +35,18 @@ class SkyrimPlatformBrowserEnvironment {
                 const script = this.document.createElement('script');
                 script.textContent = js;
                 return new Promise(resolve => {
-                    script.onload = () => { resolve(undefined); };
+                    script.onload = () => { resolve(); };
                     this.document.body.appendChild(script);
                 });
             }
             else {
-                return new Promise(resolve => { resolve(undefined); });
+                return new Promise(resolve => { resolve(); });
             }
         });
     }
+    runFunction(functionName, ...args) {
+        return this.runJavaScript(`${functionName}(${args.map(arg => JSON.stringify(arg)).join(', ')})`);
+    }
 }
 exports.SkyrimPlatformBrowserEnvironment = SkyrimPlatformBrowserEnvironment;
-function getBrowserEnvironment() {
-    return new SkyrimPlatformBrowserEnvironment();
-}
-exports.getBrowserEnvironment = getBrowserEnvironment;
 //# sourceMappingURL=SkyrimPlatformBrowserEnvironment.js.map
