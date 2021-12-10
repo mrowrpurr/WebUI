@@ -13,7 +13,7 @@ exports.getBrowserEnvironment = exports.SkyrimPlatformBrowserEnvironment = void 
 const jsdom_1 = require("jsdom");
 class SkyrimPlatformBrowserEnvironment {
     constructor() {
-        this.dom = new jsdom_1.JSDOM('', { runScripts: 'dangerously', resources: 'usable' });
+        this.dom = new jsdom_1.JSDOM('', { runScripts: 'dangerously', resources: 'usable', url: 'file:///index.html' });
         this.window = this.dom.window;
         this.document = this.dom.window.document;
     }
@@ -36,7 +36,7 @@ class SkyrimPlatformBrowserEnvironment {
                 script.textContent = js;
                 return new Promise(resolve => {
                     script.onload = () => { resolve(undefined); };
-                    this.document.documentElement.appendChild(script);
+                    this.document.body.appendChild(script);
                 });
             }
             else {

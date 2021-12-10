@@ -1,12 +1,14 @@
 /******/ (() => { // webpackBootstrap
+/******/ 	"use strict";
 var __webpack_exports__ = {};
 /*!**********************!*\
   !*** ./src/index.ts ***!
   \**********************/
-var h1 = document.createElement('h1');
+
+const h1 = document.createElement('h1');
 h1.textContent = 'Hello from TypeScript!';
 document.body.appendChild(h1);
 
 /******/ })()
 ;
-//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoid2ViVmlld3NIb3N0LmpzIiwibWFwcGluZ3MiOiI7Ozs7O0FBQUE7QUFDQTtBQUNBIiwic291cmNlcyI6WyJ3ZWJwYWNrOi8vQHNreXJpbS13ZWJ1aS93ZWJWaWV3c0hvc3QvLi9zcmMvaW5kZXgudHMiXSwic291cmNlc0NvbnRlbnQiOlsidmFyIGgxID0gZG9jdW1lbnQuY3JlYXRlRWxlbWVudCgnaDEnKTtcclxuaDEudGV4dENvbnRlbnQgPSAnSGVsbG8gZnJvbSBUeXBlU2NyaXB0ISc7XHJcbmRvY3VtZW50LmJvZHkuYXBwZW5kQ2hpbGQoaDEpO1xyXG4iXSwibmFtZXMiOltdLCJzb3VyY2VSb290IjoiIn0=
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoid2ViVmlld3NIb3N0LmpzIiwibWFwcGluZ3MiOiI7Ozs7Ozs7QUFBQSxNQUFNLEVBQUUsR0FBRyxRQUFRLENBQUMsYUFBYSxDQUFDLElBQUksQ0FBQztBQUN2QyxFQUFFLENBQUMsV0FBVyxHQUFHLHdCQUF3QjtBQUN6QyxRQUFRLENBQUMsSUFBSSxDQUFDLFdBQVcsQ0FBQyxFQUFFLENBQUMiLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly9Ac2t5cmltLXdlYnVpL3dlYlZpZXdzSG9zdC8uL3NyYy9pbmRleC50cyJdLCJzb3VyY2VzQ29udGVudCI6WyJjb25zdCBoMSA9IGRvY3VtZW50LmNyZWF0ZUVsZW1lbnQoJ2gxJylcclxuaDEudGV4dENvbnRlbnQgPSAnSGVsbG8gZnJvbSBUeXBlU2NyaXB0ISdcclxuZG9jdW1lbnQuYm9keS5hcHBlbmRDaGlsZChoMSkiXSwibmFtZXMiOltdLCJzb3VyY2VSb290IjoiIn0=

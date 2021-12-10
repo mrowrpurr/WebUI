@@ -6,7 +6,7 @@ export class SkyrimPlatformBrowserEnvironment {
     public window: DOMWindow | undefined
 
     constructor() {
-        this.dom = new JSDOM('', { runScripts: 'dangerously', resources: 'usable' })
+        this.dom = new JSDOM('', { runScripts: 'dangerously', resources: 'usable', url: 'file:///index.html' })
         this.window = this.dom.window
         this.document = this.dom.window.document
     }
@@ -29,7 +29,7 @@ export class SkyrimPlatformBrowserEnvironment {
             script.textContent = js
             return new Promise(resolve => {
                 script.onload = () => { resolve(undefined) }
-                this.document!.documentElement.appendChild(script)
+                this.document!.body.appendChild(script)
             })
         } else {
             return new Promise(resolve => { resolve(undefined) })

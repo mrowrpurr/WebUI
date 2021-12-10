@@ -1,0 +1,35 @@
+{
+  "artificialDelayMilliseconds": 300,
+  "keepExistingTerminalsOpen": false,
+  "runOnStartup": false,
+  "terminals": [
+    {
+      "splitTerminals": [
+        {
+          "name": "Examples HTTP Server",
+          "commands": ["npm i -g http-server", "http-server"]
+        }
+      ]
+    },
+    {
+      "splitTerminals": [
+        {
+          "name": "webViewsHost : TEST",
+          "commands": ["cd @skyrim-webui/webViewsHost", "npm i", "npm run test:watch"]
+        },
+        {
+          "name": "webViewsHost : HTML",
+          "commands": ["cd @skyrim-webui/webViewsHost", "npm i", "npm run build:watch"]
+        }
+      ]
+    },
+    {
+      "splitTerminals": [
+        {
+          "name": "@skyrim-webui/testUtils",
+          "commands": ["cd @skyrim-webui/testUtils", "npm i", "npm run watch"]
+        }
+      ]
+    }
+  ]
+}
