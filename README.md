@@ -24,7 +24,7 @@
     - `integration`
 - `WebUI\`
     - `__WebUI__`
-        - `webViewHost.html`
+        - `webViewsHost.html`
     - `Examples`
         - `Widgets`
             - `NumberOfItems` (_no framework_)
