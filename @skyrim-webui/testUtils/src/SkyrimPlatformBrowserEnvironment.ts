@@ -23,11 +23,16 @@ export class SkyrimPlatformBrowserEnvironment {
         return this.document?.getElementById(id)
     }
 
-    public runJavaScript(js: string) {
+    public async runJavaScript(js: string): Promise<undefined> {
         if (this.document) {
             const script = this.document.createElement('script')
             script.textContent = js
-            this.document.documentElement.appendChild(script)
+            return new Promise(resolve => {
+                script.onload = () => { resolve(undefined) }
+                this.document!.documentElement.appendChild(script)
+            })
+        } else {
+            return new Promise(resolve => { resolve(undefined) })
         }
     }
 }

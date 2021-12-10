@@ -19,7 +19,7 @@
             - `skyrim-webui`
             - `skyrim-webui-react`
         - `runtime`
-            - `webViewHost`
+            - `webViewsHost`
 - `tests\`
     - `integration`
 - `WebUI\`

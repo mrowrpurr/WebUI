@@ -8,17 +8,10 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "outDir": "dist",
-    "sourceMap": true,
-    "paths": {
-      "@SkyrimPlatform/*": [
-        "C:/Steam/steamapps/common/Skyrim Special Edition - Modding/Data/Platform/Modules/*"
-      ],
-      "@Helpers/*": [
-        "./__tests__/helpers/*"
-      ]
-    }
+    "sourceMap": true
   },
   "include": [
+    "./src/**/*.ts",
     "./__tests__/**/*.ts"
   ]
 }
