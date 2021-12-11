@@ -1,5 +1,5 @@
 const h1 = document.createElement('h1')
-h1.textContent = 'Hello from TypeScript!'
+h1.textContent = 'Hi Kirglow this is TS'
 document.body.appendChild(h1)
 
 const iframe = document.createElement('iframe')

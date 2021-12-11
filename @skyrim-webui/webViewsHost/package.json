@@ -15,11 +15,10 @@
   "author": "Mrowr Purr <mrowr.purr@gmail.com>",
   "license": "MIT",
   "devDependencies": {
-    "@skyrim-webui/testUtils": "file:../testUtils",
     "@types/jest": "^27.0.3",
-    "@types/jsdom": "^16.2.13",
+    "@types/puppeteer": "^5.4.4",
     "jest": "^27.4.4",
-    "jsdom": "^19.0.0",
+    "puppeteer": "^13.0.0",
     "ts-jest": "^27.1.1",
     "ts-loader": "^9.2.6",
     "tsc": "^2.0.3",

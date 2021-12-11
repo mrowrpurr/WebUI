@@ -1,6 +1,6 @@
 "use strict";
 const h1 = document.createElement('h1');
-h1.textContent = 'Hello from TypeScript!';
+h1.textContent = 'Hi Kirglow this is TS';
 document.body.appendChild(h1);
 const iframe = document.createElement('iframe');
 iframe.src = 'http://localhost:8080/examples/SkyrimPlatform/NumberOfItems/NumberOfItems.html';
