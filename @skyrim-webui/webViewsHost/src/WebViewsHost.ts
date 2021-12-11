@@ -10,4 +10,8 @@ export default class WebViewsHost {
     public getWebViewIds(replyId: string) {
         this.reply(replyId, Array.from(this.webViews.keys()))
     }
+
+    public registerWebView(webView: WebView) {
+        this.webViews.set(webView.id, webView)
+    }
 }

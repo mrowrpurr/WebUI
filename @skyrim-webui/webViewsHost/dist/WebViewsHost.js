@@ -10,6 +10,9 @@ class WebViewsHost {
     getWebViewIds(replyId) {
         this.reply(replyId, Array.from(this.webViews.keys()));
     }
+    registerWebView(webView) {
+        this.webViews.set(webView.id, webView);
+    }
 }
 exports.default = WebViewsHost;
 //# sourceMappingURL=WebViewsHost.js.map

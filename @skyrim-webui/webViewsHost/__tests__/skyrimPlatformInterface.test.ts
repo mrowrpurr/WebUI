@@ -30,12 +30,23 @@ describe('WebViewsHost interface for Skyrim Platform', () => {
      * WebViewsHost    ---> window.skyrimPlatform.sendMessage
      */
 
-    it('can getWebViewIds', async () => {
+    it('getWebViewIds is empty by default', async () => {
         const replyId = getReplyId()
         await page.evaluate((replyId) => { (window as any).__webViewsHost__.getWebViewIds(replyId) }, replyId)
         expect(browserMessages).toHaveLength(1)
         expect(browserMessages[0]).toEqual(
             ['WebUI', 'Reply', replyId, []]
+        )
+    })
+
+    it('can registerWebView', async () => {
+        await page.evaluate(() => { (window as any).__webViewsHost__.registerWebView({ id: 'MyCoolWebView' }) })
+
+        const replyId = getReplyId()
+        await page.evaluate((replyId) => { (window as any).__webViewsHost__.getWebViewIds(replyId) }, replyId)
+        expect(browserMessages).toHaveLength(1)
+        expect(browserMessages[0]).toEqual(
+            ['WebUI', 'Reply', replyId, ['MyCoolWebView']]
         )
     })
 
