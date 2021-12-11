@@ -5,5 +5,4 @@ document.body.appendChild(h1);
 const iframe = document.createElement('iframe');
 iframe.src = 'http://localhost:8080/examples/SkyrimPlatform/NumberOfItems/NumberOfItems.html';
 document.body.appendChild(iframe);
-window.onSkyrimPlatformMessage({ sup: "HI THERE I AM HTML YO" });
 //# sourceMappingURL=index.js.map

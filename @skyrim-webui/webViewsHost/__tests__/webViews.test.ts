@@ -12,15 +12,46 @@ describe('Web Views', () => {
     it('has no webviews by default', async () => {
         const browser = await puppeteer.launch()
         const page = await browser.newPage()
+
+        let ready = false
+        await page.exposeFunction('onSkyrimPlatformMessageReady', () => {
+            ready = true
+            console.log('CALLED ON SKYRIM PLATFORM MESSAGE READY')
+        })
         await page.exposeFunction('onSkyrimPlatformMessage', (args: any) => {
             console.log('CALLED onSkyrimPlatformMessage in HTML', JSON.stringify(args))
         })
+
+        ///////
         await page.goto(`file://${__dirname}/../../../WebUI/__WebUI__/webViewsHost.html`)
 
-        const iframe = await page.waitForSelector('iframe');
-        const frame = await iframe!.contentFrame();
+        await page.addScriptTag({ url: `file://${__dirname}/../../testFixtures/delegateSkyrimPlatformMessagesToPuppeteer.js` })
+        await page.addScriptTag({ url: `file://${__dirname}/../../testFixtures/test.js` })
+        
+        ///////
+        // await page.evaluate(() => document.write(`<script src="http://localhost:8080/%40skyrim-webui/testFixtures/delegateSkyrimPlatformMessagesToPuppeteer.js"></script>`))
+        // await page.evaluate(() => {
+        //     // document.write(`<script src="http://localhost:8080/%40skyrim-webui/testFixtures/delegateSkyrimPlatformMessagesToPuppeteer.js"></script>`)
+        //     const script = document.createElement('script')
+        //     script.src = 'http://localhost:8080/%40skyrim-webui/testFixtures/delegateSkyrimPlatformMessagesToPuppeteer.js'
+        //     document.body.appendChild(script)
+        // })
 
-        console.log('THE IFRAME TEXT', await frame?.evaluate(() => document.querySelector('*')?.outerHTML))
+        // await PROMISE
+
+        // await page.evaluate(() => {
+        //     // document.write(`<script src="http://localhost:8080/%40skyrim-webui/testFixtures/delegateSkyrimPlatformMessagesToPuppeteer.js"></script>`)
+        //     const script = document.createElement('script')
+        //     script.src = 'http://localhost:8080/%40skyrim-webui/testFixtures/test.js'
+        //     document.body.appendChild(script)
+        // })
+
+        // await page.evaluate(() => (window as any).skyrimPlatform.sendMessage('I sent this via puppeteer delegate'))
+
+        // IFRAME
+        // const iframe = await page.waitForSelector('iframe');
+        // const frame = await iframe!.contentFrame();
+        // console.log('THE IFRAME TEXT', await frame?.evaluate(() => document.querySelector('*')?.outerHTML))
 
         browser.close()
     })
