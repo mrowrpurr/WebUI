@@ -30,17 +30,28 @@ describe('WebViewsHost interface for Skyrim Platform', () => {
      * WebViewsHost    ---> window.skyrimPlatform.sendMessage
      */
 
-    it('getWebViewIds is empty by default', async () => {
-        const replyId = getReplyId()
+    it('can getWebViewIds', async () => {
+        // Is Empty By Default
+        let replyId = getReplyId()
         await page.evaluate((replyId) => { (window as any).__webViewsHost__.getWebViewIds(replyId) }, replyId)
-        expect(browserMessages).toHaveLength(1)
         expect(browserMessages[0]).toEqual(
             ['WebUI', 'Reply', replyId, []]
+        )
+
+        // Register WebViews
+        await page.evaluate(() => { (window as any).__webViewsHost__.registerWebView({ id: 'MyFirstWebView', url: 'file:///index.html' }) })
+        await page.evaluate(() => { (window as any).__webViewsHost__.registerWebView({ id: 'MySecondWebView', url: 'file:///index.html' }) })
+
+        // Returns Ids of Registered WebViews
+        replyId = getReplyId()
+        await page.evaluate((replyId) => { (window as any).__webViewsHost__.getWebViewIds(replyId) }, replyId)
+        expect(browserMessages[1]).toEqual(
+            ['WebUI', 'Reply', replyId, ['MyFirstWebView', 'MySecondWebView']]
         )
     })
 
     it('can registerWebView', async () => {
-        await page.evaluate(() => { (window as any).__webViewsHost__.registerWebView({ id: 'MyCoolWebView' }) })
+        await page.evaluate(() => { (window as any).__webViewsHost__.registerWebView({ id: 'MyCoolWebView', url: 'file:///index.html' }) })
 
         const replyId = getReplyId()
         await page.evaluate((replyId) => { (window as any).__webViewsHost__.getWebViewIds(replyId) }, replyId)
@@ -50,6 +61,44 @@ describe('WebViewsHost interface for Skyrim Platform', () => {
         )
     })
 
-    test.todo('can getWebViewInfo')
-    test.todo('can registerWebView')
+    it('can getWebView', async () => {
+        const webViewInfo = {
+            id: 'MyCoolWebView',
+            url: 'file:///index.html',
+            x: 69,
+            y: 420
+        }
+
+        await page.evaluate((webViewInfo) => { (window as any).__webViewsHost__.registerWebView(webViewInfo)}, webViewInfo)
+
+        const replyId = getReplyId()
+        await page.evaluate((replyId) => { (window as any).__webViewsHost__.getWebView(replyId, 'MyCoolWebView') }, replyId)
+        expect(browserMessages).toHaveLength(1)
+        expect(browserMessages[0]).toEqual(
+            ['WebUI', 'Reply', replyId, webViewInfo]
+        )
+    })
+
+    it('can unregisterWebView', async () => {
+        // Register
+        await page.evaluate(() => { (window as any).__webViewsHost__.registerWebView({ id: 'MyCoolWebView', url: 'file:///index.html' }) })
+
+        // ID returned
+        let replyId = getReplyId()
+        await page.evaluate((replyId) => { (window as any).__webViewsHost__.getWebViewIds(replyId) }, replyId)
+        expect(browserMessages).toHaveLength(1)
+        expect(browserMessages[0]).toEqual(
+            ['WebUI', 'Reply', replyId, ['MyCoolWebView']]
+        )
+
+        // Unregister
+        await page.evaluate(() => { (window as any).__webViewsHost__.unregisterWebView('MyCoolWebView') })
+
+        // ID no longer returned
+        replyId = getReplyId()
+        await page.evaluate((replyId) => { (window as any).__webViewsHost__.getWebViewIds(replyId) }, replyId)
+        expect(browserMessages[1]).toEqual(
+            ['WebUI', 'Reply', replyId, []]
+        )
+    })
 })

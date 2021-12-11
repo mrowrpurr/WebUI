@@ -13,6 +13,13 @@ class WebViewsHost {
     registerWebView(webView) {
         this.webViews.set(webView.id, webView);
     }
+    unregisterWebView(id) {
+        // TODO remove from the UI if present
+        this.webViews.delete(id);
+    }
+    getWebView(replyId, id) {
+        this.reply(replyId, this.webViews.get(id));
+    }
 }
 exports.default = WebViewsHost;
 //# sourceMappingURL=WebViewsHost.js.map

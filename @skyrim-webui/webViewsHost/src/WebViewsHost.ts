@@ -14,4 +14,13 @@ export default class WebViewsHost {
     public registerWebView(webView: WebView) {
         this.webViews.set(webView.id, webView)
     }
+    
+    public unregisterWebView(id: string) {
+        // TODO remove from the UI if present
+        this.webViews.delete(id)
+    }
+
+    public getWebView(replyId: string, id: string) {
+        this.reply(replyId, this.webViews.get(id))
+    }
 }

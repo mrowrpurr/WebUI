@@ -14,11 +14,15 @@
     {
       "splitTerminals": [
         {
-          "name": "webViewsHost : TEST",
+          "name": "webViewsHost : Tests",
           "commands": ["cd @skyrim-webui/webViewsHost", "npm i", "npm run test:watch"]
-        },
+        }
+      ]
+    },
+    {
+      "splitTerminals": [
         {
-          "name": "webViewsHost : HTML",
+          "name": "webViewsHost : Webpack",
           "commands": ["cd @skyrim-webui/webViewsHost", "npm i", "npm run build:watch"]
         }
       ]
