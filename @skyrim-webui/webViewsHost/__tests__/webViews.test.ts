@@ -12,28 +12,15 @@ describe('Web Views', () => {
     it('has no webviews by default', async () => {
         const browser = await puppeteer.launch()
         const page = await browser.newPage()
+        await page.exposeFunction('onSkyrimPlatformMessage', (args: any) => {
+            console.log('CALLED onSkyrimPlatformMessage in HTML', JSON.stringify(args))
+        })
         await page.goto(`file://${__dirname}/../../../WebUI/__WebUI__/webViewsHost.html`)
 
         const iframe = await page.waitForSelector('iframe');
         const frame = await iframe!.contentFrame();
 
-        console.log('THE IFRAME TEXT MOTHERFUCKERS!', await frame?.evaluate(() => document.querySelector('*')?.outerHTML))
-
-        // await frame.waitForSelector('[ng-model="vm.username"]');
-        // const username = await frame.$('[ng-model="vm.username"]');
-
-        // console.log("DOC CONTENT", await page.evaluate(() => document!.querySelector('iframe')!.contentWindow?.document.body.outerHTML))
-
-        // puppeteer./
-
-        // env.runWebViewsHostFunction()
-        // env.runWebViewsBrowserFunction('registerWebView', {
-        //     id: 'foo',
-        //     url: 'http://localhost:8080/@skyrim-webui/testFixtures/html/widget1.html' // use a utility to get the path
-        // })
-        // const iframes = env.querySelectorAll('iframe')
-        // expect(iframes).toHaveLength(1)
-        // expect(iframes![0].getAttribute('src')).toEqual('?? http something ??')
+        console.log('THE IFRAME TEXT', await frame?.evaluate(() => document.querySelector('*')?.outerHTML))
 
         browser.close()
     })
