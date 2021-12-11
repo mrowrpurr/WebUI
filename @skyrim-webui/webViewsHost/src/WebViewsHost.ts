@@ -3,10 +3,6 @@ import WebView from './WebView'
 export default class WebViewsHost {
     webViews = new Map<string, WebView>()
 
-    reply(replyId: string, data: any) {
-        (window as any).skyrimPlatform.sendMessage(['WebUI', 'Reply', replyId, data])
-    }
-
     public getWebViewIds(replyId: string) {
         this.reply(replyId, Array.from(this.webViews.keys()))
     }
@@ -22,5 +18,18 @@ export default class WebViewsHost {
 
     public getWebView(replyId: string, id: string) {
         this.reply(replyId, this.webViews.get(id))
+    }
+
+    public addToUI(id: string) {
+        const webView = this.webViews.get(id)
+        if (webView) {
+            const iframe = document.createElement('iframe')
+            iframe.src = webView.url
+            document.body.appendChild(iframe)
+        }
+    }
+
+    reply(replyId: string, data: any) {
+        (window as any).skyrimPlatform.sendMessage(['WebUI', 'Reply', replyId, data])
     }
 }

@@ -3,6 +3,9 @@ import * as puppeteer from 'puppeteer'
 
 describe('WebViewsHost interface for Skyrim Platform', () => {
 
+    const widget1URL = `file://${__dirname}/../../testFixtures/html/widget1.html`
+    const widget2URL = `file://${__dirname}/../../testFixtures/html/widget1.html`
+
     let browser: Browser
     let page: Page
     let browserMessages: Array<any>
@@ -51,7 +54,7 @@ describe('WebViewsHost interface for Skyrim Platform', () => {
     })
 
     it('can registerWebView', async () => {
-        await page.evaluate(() => { (window as any).__webViewsHost__.registerWebView({ id: 'MyCoolWebView', url: 'file:///index.html' }) })
+        await page.evaluate((widget1URL) => { (window as any).__webViewsHost__.registerWebView({ id: 'MyCoolWebView', url: widget1URL }) }, widget1URL)
 
         const replyId = getReplyId()
         await page.evaluate((replyId) => { (window as any).__webViewsHost__.getWebViewIds(replyId) }, replyId)
@@ -64,7 +67,7 @@ describe('WebViewsHost interface for Skyrim Platform', () => {
     it('can getWebView', async () => {
         const webViewInfo = {
             id: 'MyCoolWebView',
-            url: 'file:///index.html',
+            url: widget1URL,
             x: 69,
             y: 420
         }
@@ -81,7 +84,7 @@ describe('WebViewsHost interface for Skyrim Platform', () => {
 
     it('can unregisterWebView', async () => {
         // Register
-        await page.evaluate(() => { (window as any).__webViewsHost__.registerWebView({ id: 'MyCoolWebView', url: 'file:///index.html' }) })
+        await page.evaluate((widget1URL) => { (window as any).__webViewsHost__.registerWebView({ id: 'MyCoolWebView', url: widget1URL }) }, widget1URL)
 
         // ID returned
         let replyId = getReplyId()
@@ -101,4 +104,31 @@ describe('WebViewsHost interface for Skyrim Platform', () => {
             ['WebUI', 'Reply', replyId, []]
         )
     })
+
+    it('can add web view to the UI - addToUI', async () => {
+        await page.evaluate((widget1URL) => { (window as any).__webViewsHost__.registerWebView({ id: 'MyCoolWebView', url: widget1URL }) }, widget1URL)
+
+        expect(await page.evaluate(() => document.querySelectorAll('iframe').length)).toEqual(0)
+
+        await page.evaluate(() => { (window as any).__webViewsHost__.addToUI('MyCoolWebView') })
+
+        expect(await page.evaluate(() => document.querySelectorAll('iframe').length)).toEqual(1)
+        expect(await page.evaluate(() => document.querySelector('iframe')?.getAttribute('src'))).toEqual(widget1URL)
+        const iframe = await page.waitForSelector('iframe')
+        const frame = await iframe!.contentFrame();
+        const iframeHtml = await frame?.evaluate(() => document.querySelector('*')?.outerHTML)
+        expect(iframeHtml).toContain('I am widget 1')
+    })
+
+    test.todo('cannot add multiple web views with the same identifier')
+    test.todo('web views added to UI are put into the properly style positions')
+    test.todo('can reposition web view currently added to UI')
+
+    test.todo('can remove web view from the UI - removeFromUI')
+
+    test.todo('can hide web view in the UI - hide')
+
+    test.todo('can unhide web view in the UI - show')
+    
+    test.todo('can toggle web view in the UI - toggle')
 })

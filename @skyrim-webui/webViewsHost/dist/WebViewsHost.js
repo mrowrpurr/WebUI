@@ -4,9 +4,6 @@ class WebViewsHost {
     constructor() {
         this.webViews = new Map();
     }
-    reply(replyId, data) {
-        window.skyrimPlatform.sendMessage(['WebUI', 'Reply', replyId, data]);
-    }
     getWebViewIds(replyId) {
         this.reply(replyId, Array.from(this.webViews.keys()));
     }
@@ -19,6 +16,17 @@ class WebViewsHost {
     }
     getWebView(replyId, id) {
         this.reply(replyId, this.webViews.get(id));
+    }
+    addToUI(id) {
+        const webView = this.webViews.get(id);
+        if (webView) {
+            const iframe = document.createElement('iframe');
+            iframe.src = webView.url;
+            document.body.appendChild(iframe);
+        }
+    }
+    reply(replyId, data) {
+        window.skyrimPlatform.sendMessage(['WebUI', 'Reply', replyId, data]);
     }
 }
 exports.default = WebViewsHost;
