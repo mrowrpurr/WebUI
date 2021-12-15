@@ -7,28 +7,90 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-System.register("Users/mrowr/Dropbox/Skyrim/Mods/WebUI/@skyrim-webui/sdk/src/@skyrim-webui/sdk/WebViewsHostClient", [], function (exports_1, context_1) {
+/* eslint-disable @typescript-eslint/adjacent-overload-signatures */
+/* eslint-disable @typescript-eslint/no-namespace */
+// Generated automatically. Do not edit.
+System.register("Steam/steamapps/common/Skyrim Special Edition - Modding/Data/Platform/Modules/skyrimPlatform", [], function (exports_1, context_1) {
     "use strict";
-    var WebViewsHostClient;
     var __moduleName = context_1 && context_1.id;
     return {
         setters: [],
         execute: function () {
-            WebViewsHostClient = class WebViewsHostClient {
-                constructor(javascriptExecutor) {
-                    this.executeJS = javascriptExecutor;
-                }
-                onBrowserMessage(messsage) {
-                }
-            };
-            exports_1("default", WebViewsHostClient);
         }
     };
 });
-System.register("Users/mrowr/Dropbox/Skyrim/Mods/WebUI/@skyrim-webui/sdk/__tests__/WebViewsHostClient.test", ["puppeteer", "Users/mrowr/Dropbox/Skyrim/Mods/WebUI/@skyrim-webui/sdk/src/@skyrim-webui/sdk/WebViewsHostClient"], function (exports_2, context_2) {
+System.register("Users/mrowr/Dropbox/Skyrim/Mods/WebUI/@skyrim-webui/sdk/src/@skyrim-webui/sdk/WebView", [], function (exports_2, context_2) {
+    "use strict";
+    var __moduleName = context_2 && context_2.id;
+    return {
+        setters: [],
+        execute: function () {
+        }
+    };
+});
+System.register("Users/mrowr/Dropbox/Skyrim/Mods/WebUI/@skyrim-webui/sdk/src/@skyrim-webui/sdk/WebViewsHostClient", ["Steam/steamapps/common/Skyrim Special Edition - Modding/Data/Platform/Modules/skyrimPlatform"], function (exports_3, context_3) {
+    "use strict";
+    var skyrimPlatform_1, WebViewsHostClient;
+    var __moduleName = context_3 && context_3.id;
+    return {
+        setters: [
+            function (skyrimPlatform_1_1) {
+                skyrimPlatform_1 = skyrimPlatform_1_1;
+            }
+        ],
+        execute: function () {
+            WebViewsHostClient = class WebViewsHostClient {
+                constructor(javascriptExecutor) {
+                    this.replyCallbacks = new Map();
+                    this.executeJS = javascriptExecutor;
+                }
+                onBrowserMessage(messageArguments) {
+                    // ['WebUI', 'Reply', replyId, ['MyCoolWebView']]
+                    if (messageArguments && messageArguments.length == 4 && messageArguments[0] == 'WebUI' && messageArguments[1] == 'Reply') {
+                        const replyId = messageArguments[2];
+                        const response = messageArguments[3];
+                        if (this.replyCallbacks.has(replyId)) {
+                            this.replyCallbacks.get(replyId)(response);
+                            this.replyCallbacks.delete(replyId);
+                        }
+                    }
+                }
+                getWebViewIds() {
+                    return __awaiter(this, void 0, void 0, function* () {
+                        return this.getResponse('getWebViewIds');
+                    });
+                }
+                registerWebView(webView) {
+                    this.sendRequest('registerWebView', webView);
+                }
+                addToUI(id) {
+                    this.sendRequest('addToUI', id);
+                }
+                getResponse(functionName, ...args) {
+                    return __awaiter(this, void 0, void 0, function* () {
+                        return new Promise(resolve => {
+                            const replyId = this.getReplyId();
+                            this.replyCallbacks.set(replyId, resolve);
+                            this.sendRequest(functionName, replyId, ...args);
+                        });
+                    });
+                }
+                sendRequest(functionName, ...args) {
+                    skyrimPlatform_1.Debug.messageBox(`SEND REQUEST ${functionName} ${JSON.stringify(args)}`);
+                    this.executeJS(`__webViewsHost__.${functionName}(${args.map(arg => JSON.stringify(arg)).join(', ')})`);
+                }
+                getReplyId() {
+                    return `${Math.random()}_${Math.random()}`;
+                }
+            };
+            exports_3("default", WebViewsHostClient);
+        }
+    };
+});
+System.register("Users/mrowr/Dropbox/Skyrim/Mods/WebUI/@skyrim-webui/sdk/__tests__/WebViewsHostClient.test", ["puppeteer", "Users/mrowr/Dropbox/Skyrim/Mods/WebUI/@skyrim-webui/sdk/src/@skyrim-webui/sdk/WebViewsHostClient"], function (exports_4, context_4) {
     "use strict";
     var puppeteer, WebViewsHostClient_1;
-    var __moduleName = context_2 && context_2.id;
+    var __moduleName = context_4 && context_4.id;
     return {
         setters: [
             function (puppeteer_1) {
@@ -62,9 +124,11 @@ System.register("Users/mrowr/Dropbox/Skyrim/Mods/WebUI/@skyrim-webui/sdk/__tests
                  * Skyrim Platform ---> executeJavascript window.__webViewsHost__.[API FUNCTION]
                  * WebViewsHost    ---> window.skyrimPlatform.sendMessage
                  */
-                it('can registerWebView', () => {
+                it('can registerWebView', () => __awaiter(void 0, void 0, void 0, function* () {
+                    expect(yield client.getWebViewIds()).toHaveLength(0);
                     client.registerWebView({ id: "widget1", url: widget1URL });
-                });
+                    expect(yield client.getWebViewIds()).toEqual(["widget1"]);
+                }));
                 // it('can getWebViewIds', async () => {
                 //     // Is Empty By Default
                 //     let replyId = getReplyId()
@@ -147,47 +211,40 @@ System.register("Users/mrowr/Dropbox/Skyrim/Mods/WebUI/@skyrim-webui/sdk/__tests
         }
     };
 });
-System.register("Users/mrowr/Dropbox/Skyrim/Mods/WebUI/@skyrim-webui/sdk/src/@skyrim-webui/sdk/WebView", [], function (exports_3, context_3) {
-    "use strict";
-    var __moduleName = context_3 && context_3.id;
-    return {
-        setters: [],
-        execute: function () {
-        }
-    };
-});
-/* eslint-disable @typescript-eslint/adjacent-overload-signatures */
-/* eslint-disable @typescript-eslint/no-namespace */
-// Generated automatically. Do not edit.
-System.register("Steam/steamapps/common/Skyrim Special Edition - Modding/Data/Platform/Modules/skyrimPlatform", [], function (exports_4, context_4) {
-    "use strict";
-    var __moduleName = context_4 && context_4.id;
-    return {
-        setters: [],
-        execute: function () {
-        }
-    };
-});
 System.register("Users/mrowr/Dropbox/Skyrim/Mods/WebUI/@skyrim-webui/sdk/src/@skyrim-webui/sdk/index", ["Users/mrowr/Dropbox/Skyrim/Mods/WebUI/@skyrim-webui/sdk/src/@skyrim-webui/sdk/WebViewsHostClient", "Steam/steamapps/common/Skyrim Special Edition - Modding/Data/Platform/Modules/skyrimPlatform"], function (exports_5, context_5) {
     "use strict";
-    var WebViewsHostClient_2, skyrimPlatform_1, webViewsHostClient;
+    var WebViewsHostClient_2, skyrimPlatform_2, webViewsHostClient;
     var __moduleName = context_5 && context_5.id;
     function getWebViewsHostClient() {
         return webViewsHostClient;
     }
     exports_5("getWebViewsHostClient", getWebViewsHostClient);
+    function registerWebView(webView) {
+        getWebViewsHostClient().registerWebView(webView);
+    }
+    exports_5("registerWebView", registerWebView);
+    function getWebViewIds() {
+        return __awaiter(this, void 0, void 0, function* () {
+            return getWebViewsHostClient().getWebViewIds();
+        });
+    }
+    exports_5("getWebViewIds", getWebViewIds);
+    function addToUI(id) {
+        getWebViewsHostClient().addToUI(id);
+    }
+    exports_5("addToUI", addToUI);
     return {
         setters: [
             function (WebViewsHostClient_2_1) {
                 WebViewsHostClient_2 = WebViewsHostClient_2_1;
             },
-            function (skyrimPlatform_1_1) {
-                skyrimPlatform_1 = skyrimPlatform_1_1;
+            function (skyrimPlatform_2_1) {
+                skyrimPlatform_2 = skyrimPlatform_2_1;
             }
         ],
         execute: function () {
-            webViewsHostClient = new WebViewsHostClient_2.default((script) => { skyrimPlatform_1.browser.executeJavaScript(script); });
-            skyrimPlatform_1.on('browserMessage', message => {
+            webViewsHostClient = new WebViewsHostClient_2.default((script) => { skyrimPlatform_2.browser.executeJavaScript(script); });
+            skyrimPlatform_2.on('browserMessage', message => {
                 webViewsHostClient.onBrowserMessage(message.arguments);
             });
         }

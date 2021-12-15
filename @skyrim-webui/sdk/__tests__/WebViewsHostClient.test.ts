@@ -33,8 +33,12 @@ describe('WebViewsHostClient SDK for Skyrim Platform', () => {
      * WebViewsHost    ---> window.skyrimPlatform.sendMessage
      */
 
-    it('can registerWebView', () => {
+    it('can registerWebView', async () => {
+        expect(await client.getWebViewIds()).toHaveLength(0)
+
         client.registerWebView({ id: "widget1", url: widget1URL })
+
+        expect(await client.getWebViewIds()).toEqual(["widget1"])
     })
 
     // it('can getWebViewIds', async () => {

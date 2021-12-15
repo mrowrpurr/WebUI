@@ -1,4 +1,4 @@
-export interface WebView {
+export default interface WebView {
     id: string
     url: string
     x?: number
