@@ -1,6 +1,12 @@
-import { printConsole, browser } from 'skyrimPlatform'
+import WebViewsHostClient from './WebViewsHostClient'
+import { browser, on } from 'skyrimPlatform'
 
-export function addTestIframe(url: string) {
-    browser.executeJavaScript(`__webViewsHost__.registerWebView({"id":"wassup","url":${JSON.stringify(url)}})`)
-    browser.executeJavaScript(`__webViewsHost__.addToUI("wassup")`)
+const webViewsHostClient = new WebViewsHostClient((script: string) => { browser.executeJavaScript(script) })
+
+on('browserMessage', message => {
+    webViewsHostClient.onBrowserMessage(message.arguments)
+})
+
+export function getWebViewsHostClient() {
+    return webViewsHostClient
 }
