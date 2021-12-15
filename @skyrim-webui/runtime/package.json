@@ -11,9 +11,10 @@
     "setup": "node ./scripts/setup.js",
     "build": "tsc",
     "test": "jest",
+    "test:watch": "jest --watch",
     "deploy": "node ./scripts/deploy.js",
     "build:deploy": "npm run build && npm run deploy",
-    "watch": " tsc-watch --onSuccess \"node ./scripts/deploy.js\""
+    "build:watch": " tsc-watch --onSuccess \"node ./scripts/deploy.js\""
   },
   "devDependencies": {
     "@types/jest": "^27.0.2",

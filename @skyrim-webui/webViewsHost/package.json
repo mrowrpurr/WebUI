@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "build:watch": "tsc-watch -p tsconfig.build.json --onSuccess \"npm run build:deploy\"",
-    "test:watch": "jest --config jest.config.js --watch",
-    "test": "jest --config jest.config.js",
+    "test:watch": "jest --watch",
+    "test": "jest",
     "build": "tsc -p tsconfig.build.json",
     "pack": "webpack",
     "deploy": "@powershell copy build/webViewsHost.js ../../WebUI/__WebUI__/",

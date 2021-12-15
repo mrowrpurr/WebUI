@@ -30,6 +30,38 @@
     {
       "splitTerminals": [
         {
+          "name": "SDK : Tests",
+          "commands": ["cd @skyrim-webui/sdk", "npm i", "npm run test:watch"]
+        }
+      ]
+    },
+    {
+      "splitTerminals": [
+        {
+          "name": "SDK : Deploy",
+          "commands": ["cd @skyrim-webui/sdk", "npm i", "npm run build:watch"]
+        }
+      ]
+    },
+        {
+      "splitTerminals": [
+        {
+          "name": "Runtime : Tests",
+          "commands": ["cd @skyrim-webui/runtime", "npm i", "npm run test:watch"]
+        }
+      ]
+    },
+    {
+      "splitTerminals": [
+        {
+          "name": "Runtime : Deploy",
+          "commands": ["cd @skyrim-webui/runtime", "npm i", "npm run build:watch"]
+        }
+      ]
+    },
+    {
+      "splitTerminals": [
+        {
           "name": "@skyrim-webui/testUtils",
           "commands": ["cd @skyrim-webui/testUtils", "npm i", "npm run watch"]
         }
