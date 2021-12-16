@@ -1,4 +1,3 @@
-import { Debug } from 'skyrimPlatform'
 import WebView from './WebView'
 
 export interface WebViewsHostJavaScriptExecutor {
@@ -25,17 +24,21 @@ export default class WebViewsHostClient {
         }
     }
 
-    async getWebViewIds() {
-        return this.getResponse('getWebViewIds')
-    }
-
     registerWebView(webView: WebView) {
         this.sendRequest('registerWebView', webView)
     }
 
-    addToUI(id: string) {
-        this.sendRequest('addToUI', id)
+    async getWebViewIds(): Promise<Array<number>> {
+        return this.getResponse('getWebViewIds')
     }
+
+    async getWebView(id: string): Promise<WebView | null> {
+        return this.getResponse('getWebView', id)
+    }
+
+    // addToUI(id: string) {
+    //     this.sendRequest('addToUI', id)
+    // }
 
     async getResponse(functionName: string, ...args: any[]) {
         return new Promise<any>(resolve => {
@@ -46,7 +49,6 @@ export default class WebViewsHostClient {
     }
 
     sendRequest(functionName: string, ...args: any[]) {
-        Debug.messageBox(`SEND REQUEST ${functionName} ${JSON.stringify(args)}`)
         this.executeJS(`__webViewsHost__.${functionName}(${args.map(arg => JSON.stringify(arg)).join(', ')})`)
     }
 

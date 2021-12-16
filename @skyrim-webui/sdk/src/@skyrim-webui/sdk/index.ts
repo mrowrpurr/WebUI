@@ -20,6 +20,6 @@ export async function getWebViewIds() {
     return getWebViewsHostClient().getWebViewIds()
 }
 
-export function addToUI(id: string) {
-    getWebViewsHostClient().addToUI(id)
-}
+// export function addToUI(id: string) {
+//     getWebViewsHostClient().addToUI(id)
+// }

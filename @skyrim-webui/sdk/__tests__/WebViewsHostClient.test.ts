@@ -18,8 +18,10 @@ describe('WebViewsHostClient SDK for Skyrim Platform', () => {
         page = await browser.newPage()
         client = new WebViewsHostClient((script: string) => { page.evaluate(script) })
         await page.exposeFunction('onSkyrimPlatformMessage', (args: any) => { client.onBrowserMessage(args) })
+        await page.exposeFunction('consoleLogToTests', (...args: any[]) => { console.log(args) })
         await page.goto(`file://${__dirname}/../../../WebUI/__WebUI__/webViewsHost.html`)
         await page.addScriptTag({ url: `file://${__dirname}/../../testFixtures/delegateSkyrimPlatformMessagesToPuppeteer.js` })
+        await page.addScriptTag({ url: `file://${__dirname}/../../testFixtures/delegateConsoleLogToTest.js` })
     })
 
     // const getReplyId = () => `${Math.random()}_${Math.random()}`
@@ -36,9 +38,31 @@ describe('WebViewsHostClient SDK for Skyrim Platform', () => {
     it('can registerWebView', async () => {
         expect(await client.getWebViewIds()).toHaveLength(0)
 
-        client.registerWebView({ id: "widget1", url: widget1URL })
+        client.registerWebView({ id: 'widget1', url: widget1URL })
 
-        expect(await client.getWebViewIds()).toEqual(["widget1"])
+        expect(await client.getWebViewIds()).toEqual(['widget1'])
+    })
+
+    it('can getWebView', async () => {
+        expect(await client.getWebView('widget1')).toEqual(null)
+        expect(await client.getWebView('widget2')).toEqual(null)
+
+        expect(await client.getWebViewIds()).toEqual([])
+        client.registerWebView({ id: 'widget1', url: widget1URL })
+        expect(await client.getWebViewIds()).toEqual(['widget1'])
+
+        expect(await client.getWebView('widget1')).not.toEqual(null)
+        let webView = await client.getWebView('widget1')
+        expect(webView!.id).toEqual('widget1')
+        expect(webView!.url).toEqual(widget1URL)
+        expect(await client.getWebView('widget2')).toEqual(null)
+
+        client.registerWebView({ id: 'widget2', url: widget2URL })
+
+        expect(await client.getWebView('widget2')).not.toEqual(null)
+        webView = await client.getWebView('widget2')
+        expect(webView!.id).toEqual('widget2')
+        expect(webView!.url).toEqual(widget2URL)
     })
 
     // it('can getWebViewIds', async () => {
