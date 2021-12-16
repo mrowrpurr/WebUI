@@ -24,6 +24,10 @@ describe('WebViewsHost interface for Skyrim Platform', () => {
         await page.addScriptTag({ url: `file://${__dirname}/../../testFixtures/delegateConsoleLogToTest.js` })
     })
 
+    async function invokeAPI(functionName: string, ...args: any[]) {
+        await page.evaluate((functionName, args) => { (window as any).__webViewsHost__[functionName](...args) }, functionName, args)
+    }
+
     const getReplyId = () => `${Math.random()}_${Math.random()}`
 
     /*
@@ -44,12 +48,12 @@ describe('WebViewsHost interface for Skyrim Platform', () => {
         )
 
         // Register WebViews
-        await page.evaluate(() => { (window as any).__webViewsHost__.registerWebView({ id: 'MyFirstWebView', url: 'file:///index.html' }) })
-        await page.evaluate(() => { (window as any).__webViewsHost__.registerWebView({ id: 'MySecondWebView', url: 'file:///index.html' }) })
+        await invokeAPI('registerWebView', { id: 'MyFirstWebView', url: 'file:///index.html' })
+        await invokeAPI('registerWebView', { id: 'MySecondWebView', url: 'file:///index.html' })
 
         // Returns Ids of Registered WebViews
         replyId = getReplyId()
-        await page.evaluate((replyId) => { (window as any).__webViewsHost__.getWebViewIds(replyId) }, replyId)
+        await invokeAPI('getWebViewIds', replyId)
         expect(browserMessages[1]).toEqual(
             ['WebUI', 'Reply', replyId, ['MyFirstWebView', 'MySecondWebView']]
         )
@@ -74,10 +78,10 @@ describe('WebViewsHost interface for Skyrim Platform', () => {
             y: 420
         }
 
-        await page.evaluate((webViewInfo) => { (window as any).__webViewsHost__.registerWebView(webViewInfo)}, webViewInfo)
+        await invokeAPI('registerWebView', webViewInfo)
 
         const replyId = getReplyId()
-        await page.evaluate((replyId) => { (window as any).__webViewsHost__.getWebView(replyId, 'MyCoolWebView') }, replyId)
+        await invokeAPI('getWebView', replyId, 'MyCoolWebView')
         expect(browserMessages).toHaveLength(1)
         expect(browserMessages[0]).toEqual(
             ['WebUI', 'Reply', replyId, webViewInfo]
@@ -86,33 +90,34 @@ describe('WebViewsHost interface for Skyrim Platform', () => {
 
     it('can unregisterWebView', async () => {
         // Register
-        await page.evaluate((widget1URL) => { (window as any).__webViewsHost__.registerWebView({ id: 'MyCoolWebView', url: widget1URL }) }, widget1URL)
+        await invokeAPI('registerWebView', { id: 'MyCoolWebView', url: widget1URL })
 
         // ID returned
         let replyId = getReplyId()
-        await page.evaluate((replyId) => { (window as any).__webViewsHost__.getWebViewIds(replyId) }, replyId)
+        await invokeAPI('getWebViewIds', replyId)
         expect(browserMessages).toHaveLength(1)
         expect(browserMessages[0]).toEqual(
             ['WebUI', 'Reply', replyId, ['MyCoolWebView']]
         )
 
         // Unregister
-        await page.evaluate(() => { (window as any).__webViewsHost__.unregisterWebView('MyCoolWebView') })
+        await invokeAPI('unregisterWebView', 'MyCoolWebView')
 
         // ID no longer returned
         replyId = getReplyId()
-        await page.evaluate((replyId) => { (window as any).__webViewsHost__.getWebViewIds(replyId) }, replyId)
+        await invokeAPI('getWebViewIds', replyId)
         expect(browserMessages[1]).toEqual(
             ['WebUI', 'Reply', replyId, []]
         )
     })
 
+    // TODO use a 'isAddedToUI' call in here
     it('can add web view to the UI - addToUI', async () => {
-        await page.evaluate((widget1URL) => { (window as any).__webViewsHost__.registerWebView({ id: 'MyCoolWebView', url: widget1URL }) }, widget1URL)
+        await invokeAPI('registerWebView', { id: 'MyCoolWebView', url: widget1URL })
 
         expect(await page.evaluate(() => document.querySelectorAll('iframe').length)).toEqual(0)
 
-        await page.evaluate(() => { (window as any).__webViewsHost__.addToUI('MyCoolWebView') })
+        await invokeAPI('addToUI', 'MyCoolWebView')
 
         expect(await page.evaluate(() => document.querySelectorAll('iframe').length)).toEqual(1)
         expect(await page.evaluate(() => document.querySelector('iframe')?.getAttribute('src'))).toEqual(widget1URL)
@@ -122,7 +127,35 @@ describe('WebViewsHost interface for Skyrim Platform', () => {
         expect(iframeHtml).toContain('I am widget 1')
     })
 
-    test.todo('cannot add multiple web views with the same identifier')
+    it('can remove web view from the UI - removeFromUI', async () => {
+        await invokeAPI('registerWebView', { id: 'MyCoolWebView', url: widget1URL })
+        await invokeAPI('addToUI', 'MyCoolWebView')
+
+        expect(await page.evaluate(() => document.querySelectorAll('iframe').length)).toEqual(1)
+
+        await invokeAPI('removeFromUI', 'MyCoolWebView')
+
+        expect(await page.evaluate(() => document.querySelectorAll('iframe').length)).toEqual(0)
+    })
+
+    test.todo('web view is removed from UI when unregistered')
+
+    // it('cannot add multiple web views with the same identifier', async () => {
+    //     await page.evaluate((widget1URL) => { (window as any).__webViewsHost__.registerWebView({ id: 'MyCoolWebView', url: widget1URL }) }, widget1URL)
+    //     await page.evaluate(() => { (window as any).__webViewsHost__.addToUI('MyCoolWebView') })
+
+    //     expect(await page.evaluate(() => document.querySelectorAll('iframe').length)).toEqual(1)
+
+    //     await page.evaluate(() => { (window as any).__webViewsHost__.addToUI('MyCoolWebView') })
+
+    //     // There should still be only 1 iframe!
+    //     expect(await page.evaluate(() => document.querySelectorAll('iframe').length)).toEqual(1)
+    // })
+
+    test.todo('can check if a web view is currently added to the UI')
+
+    test.todo('gives iframes a custom attribute containing the WebView ID')
+
     test.todo('web views added to UI are put into the properly style positions')
     test.todo('can reposition web view currently added to UI')
 
