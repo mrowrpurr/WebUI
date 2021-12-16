@@ -25,6 +25,10 @@ class WebViewsHost {
             this.iframes.set(id, iframe);
             iframe.src = webView.url;
             iframe.dataset.webviewId = id;
+            iframe.style.width = `${window.innerWidth * (webView.width / 100)}px`;
+            iframe.style.height = `${window.innerHeight * (webView.height / 100)}px`;
+            iframe.style.left = `${window.innerWidth * (webView.x / 100)}px`;
+            iframe.style.top = `${window.innerHeight * (webView.y / 100)}px`;
             document.body.appendChild(iframe);
         }
     }
@@ -36,6 +40,9 @@ class WebViewsHost {
     }
     isInUI(replyId, id) {
         this.reply(replyId, this.iframes.has(id));
+    }
+    getScreenDimensions(replyId) {
+        this.reply(replyId, [window.innerHeight, window.innerWidth]);
     }
     reply(replyId, data) {
         window.skyrimPlatform.sendMessage(['WebUI', 'Reply', replyId, data]);

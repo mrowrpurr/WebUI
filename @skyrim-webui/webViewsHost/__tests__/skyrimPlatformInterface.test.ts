@@ -185,6 +185,44 @@ describe('WebViewsHost interface for Skyrim Platform', () => {
         expect((await page.$$('iframe[data-webview-id=MyCoolWebView2]')).length).toEqual(1)
     })
 
+    it('can get browser/screen dimensions', async () => {
+        const actualHeight = await page.evaluate(() => window.innerHeight)
+        const actualWidth = await page.evaluate(() => window.innerWidth)
+
+        const [height, width] = await getFromAPI('getScreenDimensions')
+
+        expect(height).toEqual(actualHeight)
+        expect(width).toEqual(actualWidth)
+    })
+
+    test.todo('can specify absolute positioning')
+
+    it('can specify percentage positioning', async () => {
+        await invokeAPI('registerWebView', {
+            id: 'MyCoolWebView',
+            url: widget1URL,
+            width: 80,
+            height: 25,
+            x: 10,
+            y: 37.5 // (100-25)/2
+        })
+        await invokeAPI('addToUI', 'MyCoolWebView')
+
+        const windowHeight = await page.evaluate(() => window.innerHeight)
+        const windowWidth = await page.evaluate(() => window.innerWidth)
+        const width = await page.evaluate(() => document.querySelector('iframe')?.style.width)
+        const height = await page.evaluate(() => document.querySelector('iframe')?.style.height)
+        const x = await page.evaluate(() => document.querySelector('iframe')?.style.left)
+        const y = await page.evaluate(() => document.querySelector('iframe')?.style.top)
+
+        expect(width).toEqual(`${windowWidth * (80/100)}px`)
+        expect(height).toEqual(`${windowHeight * (25/100)}px`)
+        expect(x).toEqual(`${windowWidth * (10 / 100)}px`)
+        expect(y).toEqual(`${windowHeight * (37.5 / 100)}px`) // (100-25)/2
+    })
+
+    test.todo('can set the z-index of web views')
+
     test.todo('web views added to UI are put into the properly style positions')
 
     test.todo('can reposition web view currently added to UI')
