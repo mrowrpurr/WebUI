@@ -4,22 +4,30 @@ export default class WebViewsHost {
     private webViews = new Map<string, WebView>()
     private iframes = new Map<string, HTMLIFrameElement>()
 
+    // TODO --> getIds
     getWebViewIds(replyId: string) {
         this.reply(replyId, Array.from(this.webViews.keys()))
     }
 
+    // TODO --> register
     registerWebView(webView: WebView) {
         this.webViews.set(webView.id, webView)
     }
-    
+
+    // TODO --> unregister
     unregisterWebView(id: string) {
         this.removeFromUI(id)
         this.webViews.delete(id)
     }
 
+    // TODO --> get()
     getWebView(replyId: string, id: string) {
         this.reply(replyId, this.webViews.get(id))
     }
+
+    // update() {
+
+    // }
 
     addToUI(id: string) {
         const webView = this.webViews.get(id)
@@ -42,6 +50,22 @@ export default class WebViewsHost {
 
     isInUI(replyId: string, id: string) {
         this.reply(replyId, this.iframes.has(id))
+    }
+
+    move(id: string, { positionType, x, y, width, height } : { positionType?: string, x?: number, y?: number, width?: number, height?: number }) {
+        const iframe = this.iframes.get(id)
+        if (iframe) {
+            const webView = this.webViews.get(id)
+            if (webView) {
+                // TODO --> use update
+                if (positionType) webView.positionType = positionType
+                if (x) webView.x = x
+                if (y) webView.y = y
+                if (width) webView.width = width
+                if (height) webView.height = height
+                this.setIframePosition(iframe, webView)
+            }
+        }
     }
 
     getScreenDimensions(replyId: string) {

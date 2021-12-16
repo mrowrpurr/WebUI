@@ -51,6 +51,14 @@ describe('WebViewsHost interface for Skyrim Platform', () => {
         })
     }
 
+    async function getElementPosition(selector: string): Promise<[number, number, number, number]> {
+        const [width, height, x, y] = await page.evaluate((selector) => {
+            const element = document.querySelector(selector)
+            return [element.style.width, element.style.height, element.style.left, element.style.top]
+        }, selector)
+        return [width, height, x, y]
+    }
+
     const getReplyId = () => `${Math.random()}_${Math.random()}`
 
     test.todo('returns responses via a browser message: WebUI, Reply, [ReplyID], Response')
@@ -109,8 +117,10 @@ describe('WebViewsHost interface for Skyrim Platform', () => {
         )
     })
 
+    test.todo('can update web view values')
+
     // TODO use a 'isAddedToUI' call in here
-    it('can add web view to the UI - addToUI', async () => {
+    it('can add web view to the UI (addToUI)', async () => {
         await invokeAPI('registerWebView', { id: 'MyCoolWebView', url: widget1URL })
 
         expect(await page.evaluate(() => document.querySelectorAll('iframe').length)).toEqual(0)
@@ -125,7 +135,7 @@ describe('WebViewsHost interface for Skyrim Platform', () => {
         expect(iframeHtml).toContain('I am widget 1')
     })
 
-    it('can check if a web view has been added to the UI', async () => {
+    it('can check if a web view has been added to the UI (isInUI)', async () => {
         await invokeAPI('registerWebView', { id: 'MyCoolWebView', url: widget1URL })
         expect(await getFromAPI('isInUI', 'MyCoolWebView')).toEqual(false)
 
@@ -134,7 +144,7 @@ describe('WebViewsHost interface for Skyrim Platform', () => {
         expect(await getFromAPI('isInUI', 'MyCoolWebView')).toEqual(true)
     })
 
-    it('can remove web view from the UI - removeFromUI', async () => {
+    it('can remove web view from the UI (removeFromUI)', async () => {
         await invokeAPI('registerWebView', { id: 'MyCoolWebView', url: widget1URL })
         await invokeAPI('addToUI', 'MyCoolWebView')
 
@@ -207,10 +217,7 @@ describe('WebViewsHost interface for Skyrim Platform', () => {
         })
         await invokeAPI('addToUI', 'MyCoolWebView')
 
-        const width = await page.evaluate(() => document.querySelector('iframe')?.style.width)
-        const height = await page.evaluate(() => document.querySelector('iframe')?.style.height)
-        const x = await page.evaluate(() => document.querySelector('iframe')?.style.left)
-        const y = await page.evaluate(() => document.querySelector('iframe')?.style.top)
+        const [width, height, x, y] = await getElementPosition('iframe')
 
         expect(width).toEqual('11px')
         expect(height).toEqual('22px')
@@ -232,10 +239,7 @@ describe('WebViewsHost interface for Skyrim Platform', () => {
 
         const windowHeight = await page.evaluate(() => window.innerHeight)
         const windowWidth = await page.evaluate(() => window.innerWidth)
-        const width = await page.evaluate(() => document.querySelector('iframe')?.style.width)
-        const height = await page.evaluate(() => document.querySelector('iframe')?.style.height)
-        const x = await page.evaluate(() => document.querySelector('iframe')?.style.left)
-        const y = await page.evaluate(() => document.querySelector('iframe')?.style.top)
+        const [width, height, x, y] = await getElementPosition('iframe')
 
         expect(width).toEqual(`${windowWidth * (80/100)}px`)
         expect(height).toEqual(`${windowHeight * (25/100)}px`)
@@ -257,10 +261,7 @@ describe('WebViewsHost interface for Skyrim Platform', () => {
 
         const windowHeight = await page.evaluate(() => window.innerHeight)
         const windowWidth = await page.evaluate(() => window.innerWidth)
-        const width = await page.evaluate(() => document.querySelector('iframe')?.style.width)
-        const height = await page.evaluate(() => document.querySelector('iframe')?.style.height)
-        const x = await page.evaluate(() => document.querySelector('iframe')?.style.left)
-        const y = await page.evaluate(() => document.querySelector('iframe')?.style.top)
+        const [width, height, x, y] = await getElementPosition('iframe')
 
         expect(width).toEqual(`${windowWidth * (80/100)}px`)
         expect(height).toEqual(`${windowHeight * (25/100)}px`)
@@ -270,11 +271,34 @@ describe('WebViewsHost interface for Skyrim Platform', () => {
 
     test.todo('can set the z-index of web views')
 
-    test.todo('web views added to UI are put into the properly style positions')
+    it('can reposition web view currently added to UI (move)', async () => {
+        await invokeAPI('registerWebView', {
+            id: 'MyCoolWebView',
+            url: widget1URL,
+            positionType: 'absolute',
+            width: 11,
+            height: 22,
+            x: 33,
+            y: 44
+        })
+        await invokeAPI('addToUI', 'MyCoolWebView')
 
-    test.todo('can reposition web view currently added to UI')
+        let [width, height, x, y] = await getElementPosition('iframe')
 
-    test.todo('can remove web view from the UI - removeFromUI')
+        expect(width).toEqual('11px')
+        expect(height).toEqual('22px')
+        expect(x).toEqual('33px')
+        expect(y).toEqual('44px')
+
+        await invokeAPI('move', 'MyCoolWebView', { x: 123, width: 420 });
+
+        ([width, height, x, y] = await getElementPosition('iframe'))
+
+        expect(width).toEqual('420px') // <--- updated
+        expect(height).toEqual('22px')
+        expect(x).toEqual('123px') // <--- updated
+        expect(y).toEqual('44px')
+    })
 
     test.todo('can hide web view in the UI - hide')
 

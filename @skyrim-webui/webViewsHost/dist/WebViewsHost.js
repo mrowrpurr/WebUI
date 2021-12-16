@@ -5,19 +5,25 @@ class WebViewsHost {
         this.webViews = new Map();
         this.iframes = new Map();
     }
+    // TODO --> getIds
     getWebViewIds(replyId) {
         this.reply(replyId, Array.from(this.webViews.keys()));
     }
+    // TODO --> register
     registerWebView(webView) {
         this.webViews.set(webView.id, webView);
     }
+    // TODO --> unregister
     unregisterWebView(id) {
         this.removeFromUI(id);
         this.webViews.delete(id);
     }
+    // TODO --> get()
     getWebView(replyId, id) {
         this.reply(replyId, this.webViews.get(id));
     }
+    // update() {
+    // }
     addToUI(id) {
         const webView = this.webViews.get(id);
         if (webView && !this.iframes.has(webView.id)) {
@@ -37,6 +43,26 @@ class WebViewsHost {
     }
     isInUI(replyId, id) {
         this.reply(replyId, this.iframes.has(id));
+    }
+    move(id, { positionType, x, y, width, height }) {
+        const iframe = this.iframes.get(id);
+        if (iframe) {
+            const webView = this.webViews.get(id);
+            if (webView) {
+                // TODO --> use update
+                if (positionType)
+                    webView.positionType = positionType;
+                if (x)
+                    webView.x = x;
+                if (y)
+                    webView.y = y;
+                if (width)
+                    webView.width = width;
+                if (height)
+                    webView.height = height;
+                this.setIframePosition(iframe, webView);
+            }
+        }
     }
     getScreenDimensions(replyId) {
         this.reply(replyId, [window.innerHeight, window.innerWidth]);
