@@ -25,9 +25,17 @@ export default class WebViewsHost {
         this.reply(replyId, this.webViews.get(id))
     }
 
-    // update() {
-
-    // }
+    update(id: string, { url, positionType, x, y, width, height } : { url?: string, positionType?: string, x?: number, y?: number, width?: number, height?: number }) {
+        const webView = this.webViews.get(id)
+        if (webView) {
+            if (url) webView.url = url
+            if (positionType) webView.positionType = positionType
+            if (x) webView.x = x
+            if (y) webView.y = y
+            if (width) webView.width = width
+            if (height) webView.height = height
+        }
+    }
 
     addToUI(id: string) {
         const webView = this.webViews.get(id)

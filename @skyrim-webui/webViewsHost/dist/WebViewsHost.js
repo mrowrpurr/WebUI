@@ -22,8 +22,23 @@ class WebViewsHost {
     getWebView(replyId, id) {
         this.reply(replyId, this.webViews.get(id));
     }
-    // update() {
-    // }
+    update(id, { url, positionType, x, y, width, height }) {
+        const webView = this.webViews.get(id);
+        if (webView) {
+            if (url)
+                webView.url = url;
+            if (positionType)
+                webView.positionType = positionType;
+            if (x)
+                webView.x = x;
+            if (y)
+                webView.y = y;
+            if (width)
+                webView.width = width;
+            if (height)
+                webView.height = height;
+        }
+    }
     addToUI(id) {
         const webView = this.webViews.get(id);
         if (webView && !this.iframes.has(webView.id)) {

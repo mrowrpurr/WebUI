@@ -95,29 +95,46 @@ describe('WebViewsHost interface for Skyrim Platform', () => {
     })
 
     it('can unregisterWebView', async () => {
-        // Register
-        await invokeAPI('registerWebView', { id: 'MyCoolWebView', url: widget1URL })
+        await invokeAPI('registerWebView', { id: 'MyCoolWebView1', url: widget1URL })
+        await invokeAPI('registerWebView', { id: 'MyCoolWebView2', url: widget2URL })
+        expect(await getFromAPI('getWebViewIds')).toEqual(['MyCoolWebView1', 'MyCoolWebView2'])
 
-        // ID returned
-        let replyId = getReplyId()
-        await invokeAPI('getWebViewIds', replyId)
-        expect(browserMessages).toHaveLength(1)
-        expect(browserMessages[0]).toEqual(
-            ['WebUI', 'Reply', replyId, ['MyCoolWebView']]
-        )
+        await invokeAPI('unregisterWebView', 'MyCoolWebView1')
 
-        // Unregister
-        await invokeAPI('unregisterWebView', 'MyCoolWebView')
+        expect(await getFromAPI('getWebViewIds')).toEqual(['MyCoolWebView2'])
 
-        // ID no longer returned
-        replyId = getReplyId()
-        await invokeAPI('getWebViewIds', replyId)
-        expect(browserMessages[1]).toEqual(
-            ['WebUI', 'Reply', replyId, []]
-        )
+        await invokeAPI('unregisterWebView', 'MyCoolWebView2')
+
+        expect(await getFromAPI('getWebViewIds')).toEqual([])
     })
 
-    test.todo('can update web view values')
+    it('can update web view values', async () => {
+        await invokeAPI('registerWebView', { id: 'HelloWidget', x: 420, y: 69, url: widget1URL })
+        await invokeAPI('addToUI', 'HelloWidget')
+
+        let webView = await getFromAPI('getWebView', 'HelloWidget')
+
+        expect(webView.id).toEqual('HelloWidget')
+        expect(webView.x).toEqual(420)
+        expect(webView.y).toEqual(69)
+        expect(webView.url).toEqual(widget1URL)
+
+        // Check the iframe URL
+        expect(await page.evaluate(() => document.querySelector('iframe')!.src)).toContain('widget1.html')
+
+        await invokeAPI('update', 'HelloWidget', { id: 'TryToChangeThis', x: 123, url: widget2URL })
+
+        webView = await getFromAPI('getWebView', 'HelloWidget')
+
+        expect(webView.id).toEqual('HelloWidget') // ID not changed
+        expect(webView.x).toEqual(123) // <--- changed!
+        expect(webView.y).toEqual(69) // Y still present
+        expect(webView.url).toEqual(widget2URL) // <--- changed!
+
+        // URL should *STILL* be the original URl
+        // Update does *NOT* move or redirect (use move() and redirect() for those)
+        expect(await page.evaluate(() => document.querySelector('iframe')!.src)).toContain('widget1.html')
+    })
 
     // TODO use a 'isAddedToUI' call in here
     it('can add web view to the UI (addToUI)', async () => {
@@ -194,6 +211,11 @@ describe('WebViewsHost interface for Skyrim Platform', () => {
         expect((await page.$$('iframe[data-webview-id=MyCoolWebView1]')).length).toEqual(1)
         expect((await page.$$('iframe[data-webview-id=MyCoolWebView2]')).length).toEqual(1)
     })
+
+    //
+    test.todo('can reload web view')
+
+    test.todo('can redirect webview to a different URL')
 
     it('can get browser/screen dimensions', async () => {
         const actualHeight = await page.evaluate(() => window.innerHeight)
