@@ -144,7 +144,15 @@ describe('WebViewsHost interface for Skyrim Platform', () => {
         expect(await page.evaluate(() => document.querySelectorAll('iframe').length)).toEqual(0)
     })
 
-    test.todo('web view is removed from UI when unregistered')
+    it('web view is removed from UI when unregistered', async () => {
+        await invokeAPI('registerWebView', { id: 'MyCoolWebView', url: widget1URL })
+        await invokeAPI('addToUI', 'MyCoolWebView')
+        expect((await page.$$('iframe')).length).toEqual(1)
+
+        await invokeAPI('unregisterWebView', 'MyCoolWebView')
+
+        expect((await page.$$('iframe')).length).toEqual(0)
+    })
 
     // it('cannot add multiple web views with the same identifier', async () => {
     //     await page.evaluate((widget1URL) => { (window as any).__webViewsHost__.registerWebView({ id: 'MyCoolWebView', url: widget1URL }) }, widget1URL)

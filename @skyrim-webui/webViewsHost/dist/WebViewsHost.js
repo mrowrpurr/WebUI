@@ -12,7 +12,7 @@ class WebViewsHost {
         this.webViews.set(webView.id, webView);
     }
     unregisterWebView(id) {
-        // TODO remove from the UI if present
+        this.removeFromUI(id);
         this.webViews.delete(id);
     }
     getWebView(replyId, id) {
@@ -28,7 +28,6 @@ class WebViewsHost {
         }
     }
     removeFromUI(id) {
-        // replace this with new predicate method: isInUI()
         if (this.iframes.has(id)) {
             document.body.removeChild(this.iframes.get(id));
             this.iframes.delete(id);
