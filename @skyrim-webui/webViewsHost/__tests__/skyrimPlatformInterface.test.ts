@@ -9,15 +9,29 @@ describe('WebViewsHost interface for Skyrim Platform', () => {
     let browser: Browser
     let page: Page
     let browserMessages: Array<any>
+    let apiResponseCallbacks: Map<string, (response: any) => void>
 
     beforeAll(async () => { browser = await puppeteer.launch() })
     afterAll(async () => { await browser.close() })
 
-    // Setup
     beforeEach(async () => {
         browserMessages = new Array<any>()
+        apiResponseCallbacks = new Map<string, (data: any) => void>()
+
         page = await browser.newPage()
-        await page.exposeFunction('onSkyrimPlatformMessage', (args: any) => { browserMessages.push(args) })
+        
+        await page.exposeFunction('onSkyrimPlatformMessage', (args: any) => {
+            browserMessages.push(args)
+            if (args && args.length == 4 && args[0] == 'WebUI' && args[1] == 'Reply') {
+                const replyId = args[2]
+                const response = args[3]
+                if (apiResponseCallbacks.has(replyId)) {
+                    apiResponseCallbacks.get(replyId)!(response)
+                    apiResponseCallbacks.delete(replyId)
+                }
+            }
+        })
+
         await page.exposeFunction('consoleLogToTests', (...args: any[]) => { console.log(args) })
         await page.goto(`file://${__dirname}/../../../WebUI/__WebUI__/webViewsHost.html`)
         await page.addScriptTag({ url: `file://${__dirname}/../../testFixtures/delegateSkyrimPlatformMessagesToPuppeteer.js` })
@@ -28,35 +42,26 @@ describe('WebViewsHost interface for Skyrim Platform', () => {
         await page.evaluate((functionName, args) => { (window as any).__webViewsHost__[functionName](...args) }, functionName, args)
     }
 
+    async function getFromAPI(functionName: string, ...args: any[]) {
+        return new Promise<any>(resolve => {
+            const replyId = getReplyId()
+            apiResponseCallbacks.set(replyId, resolve)
+            invokeAPI(functionName, replyId, ...args)
+        })
+    }
+
     const getReplyId = () => `${Math.random()}_${Math.random()}`
 
-    /*
-     * Tests for the API interface provided by WebViewsHost for Skyrim Platform
-     */
-
-    /*
-     * Skyrim Platform ---> executeJavascript window.__webViewsHost__.[API FUNCTION]
-     * WebViewsHost    ---> window.skyrimPlatform.sendMessage
-     */
+    test.todo('returns responses via a browser message: WebUI, Reply, [ReplyID], Response')
 
     it('can getWebViewIds', async () => {
-        // Is Empty By Default
-        let replyId = getReplyId()
-        await page.evaluate((replyId) => { (window as any).__webViewsHost__.getWebViewIds(replyId) }, replyId)
-        expect(browserMessages[0]).toEqual(
-            ['WebUI', 'Reply', replyId, []]
-        )
+        expect(await getFromAPI('getWebViewIds')).toEqual([])
 
-        // Register WebViews
         await invokeAPI('registerWebView', { id: 'MyFirstWebView', url: 'file:///index.html' })
+        expect(await getFromAPI('getWebViewIds')).toEqual(['MyFirstWebView'])
+        
         await invokeAPI('registerWebView', { id: 'MySecondWebView', url: 'file:///index.html' })
-
-        // Returns Ids of Registered WebViews
-        replyId = getReplyId()
-        await invokeAPI('getWebViewIds', replyId)
-        expect(browserMessages[1]).toEqual(
-            ['WebUI', 'Reply', replyId, ['MyFirstWebView', 'MySecondWebView']]
-        )
+        expect(await getFromAPI('getWebViewIds')).toEqual(['MyFirstWebView', 'MySecondWebView'])
     })
 
     it('can registerWebView', async () => {
@@ -71,21 +76,13 @@ describe('WebViewsHost interface for Skyrim Platform', () => {
     })
 
     it('can getWebView', async () => {
-        const webViewInfo = {
-            id: 'MyCoolWebView',
-            url: widget1URL,
-            x: 69,
-            y: 420
-        }
+        const webViewInfo = { id: 'MyCoolWebView', url: widget1URL, x: 69, y: 420 }
+
+        expect(await getFromAPI('getWebView', 'MyCoolWebView')).toEqual(null)
 
         await invokeAPI('registerWebView', webViewInfo)
 
-        const replyId = getReplyId()
-        await invokeAPI('getWebView', replyId, 'MyCoolWebView')
-        expect(browserMessages).toHaveLength(1)
-        expect(browserMessages[0]).toEqual(
-            ['WebUI', 'Reply', replyId, webViewInfo]
-        )
+        expect(await getFromAPI('getWebView', 'MyCoolWebView')).toEqual(webViewInfo)
     })
 
     it('can unregisterWebView', async () => {
@@ -129,24 +126,11 @@ describe('WebViewsHost interface for Skyrim Platform', () => {
 
     it('can check if a web view has been added to the UI', async () => {
         await invokeAPI('registerWebView', { id: 'MyCoolWebView', url: widget1URL })
-
-        let replyId = getReplyId()
-        expect(browserMessages).toHaveLength(0)
-        expect(await invokeAPI('isInUI', replyId, 'MyCoolWebView'))
-        expect(browserMessages).toHaveLength(1)
-        expect(browserMessages[0]).toEqual(
-            ['WebUI', 'Reply', replyId, false]
-        )
+        expect(await getFromAPI('isInUI', 'MyCoolWebView')).toEqual(false)
 
         await invokeAPI('addToUI', 'MyCoolWebView')
 
-        replyId = getReplyId()
-        expect(browserMessages).toHaveLength(1)
-        expect(await invokeAPI('isInUI', replyId, 'MyCoolWebView'))
-        expect(browserMessages).toHaveLength(2)
-        expect(browserMessages[1]).toEqual(
-            ['WebUI', 'Reply', replyId, true]
-        )
+        expect(await getFromAPI('isInUI', 'MyCoolWebView')).toEqual(true)
     })
 
     it('can remove web view from the UI - removeFromUI', async () => {
