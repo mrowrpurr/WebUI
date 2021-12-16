@@ -1,35 +1,49 @@
 import WebView from './WebView'
 
 export default class WebViewsHost {
-    webViews = new Map<string, WebView>()
+    private webViews = new Map<string, WebView>()
+    private iframes = new Map<string, HTMLIFrameElement>()
 
-    public getWebViewIds(replyId: string) {
+    getWebViewIds(replyId: string) {
         this.reply(replyId, Array.from(this.webViews.keys()))
     }
 
-    public registerWebView(webView: WebView) {
+    registerWebView(webView: WebView) {
         this.webViews.set(webView.id, webView)
     }
     
-    public unregisterWebView(id: string) {
+    unregisterWebView(id: string) {
         // TODO remove from the UI if present
         this.webViews.delete(id)
     }
 
-    public getWebView(replyId: string, id: string) {
+    getWebView(replyId: string, id: string) {
         this.reply(replyId, this.webViews.get(id))
     }
 
-    public addToUI(id: string) {
+    addToUI(id: string) {
         const webView = this.webViews.get(id)
         if (webView) {
             const iframe = document.createElement('iframe')
+            this.iframes.set(id, iframe)
             iframe.src = webView.url
             document.body.appendChild(iframe)
         }
     }
 
-    reply(replyId: string, data: any) {
+    removeFromUI(id: string) {
+        // replace this with new predicate method: isInUI()
+        if (this.iframes.has(id)) {
+            document.body.removeChild(this.iframes.get(id)!)
+            this.iframes.delete(id)
+        }
+    }
+
+    isInUI(replyId: string, id: string) {
+        this.reply(replyId, this.iframes.has(id))
+    }
+
+    private reply(replyId: string, data: any) {
         (window as any).skyrimPlatform.sendMessage(['WebUI', 'Reply', replyId, data])
     }
 }

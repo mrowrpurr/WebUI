@@ -127,6 +127,28 @@ describe('WebViewsHost interface for Skyrim Platform', () => {
         expect(iframeHtml).toContain('I am widget 1')
     })
 
+    it('can check if a web view has been added to the UI', async () => {
+        await invokeAPI('registerWebView', { id: 'MyCoolWebView', url: widget1URL })
+
+        let replyId = getReplyId()
+        expect(browserMessages).toHaveLength(0)
+        expect(await invokeAPI('isInUI', replyId, 'MyCoolWebView'))
+        expect(browserMessages).toHaveLength(1)
+        expect(browserMessages[0]).toEqual(
+            ['WebUI', 'Reply', replyId, false]
+        )
+
+        await invokeAPI('addToUI', 'MyCoolWebView')
+
+        replyId = getReplyId()
+        expect(browserMessages).toHaveLength(1)
+        expect(await invokeAPI('isInUI', replyId, 'MyCoolWebView'))
+        expect(browserMessages).toHaveLength(2)
+        expect(browserMessages[1]).toEqual(
+            ['WebUI', 'Reply', replyId, true]
+        )
+    })
+
     it('can remove web view from the UI - removeFromUI', async () => {
         await invokeAPI('registerWebView', { id: 'MyCoolWebView', url: widget1URL })
         await invokeAPI('addToUI', 'MyCoolWebView')
