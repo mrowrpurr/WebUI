@@ -1,7 +1,7 @@
 {
   "artificialDelayMilliseconds": 300,
   "keepExistingTerminalsOpen": false,
-  "runOnStartup": false,
+  "runOnStartup": true,
   "terminals": [
     {
       "splitTerminals": [
