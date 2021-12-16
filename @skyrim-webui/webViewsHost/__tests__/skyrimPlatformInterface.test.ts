@@ -154,19 +154,17 @@ describe('WebViewsHost interface for Skyrim Platform', () => {
         expect((await page.$$('iframe')).length).toEqual(0)
     })
 
-    // it('cannot add multiple web views with the same identifier', async () => {
-    //     await page.evaluate((widget1URL) => { (window as any).__webViewsHost__.registerWebView({ id: 'MyCoolWebView', url: widget1URL }) }, widget1URL)
-    //     await page.evaluate(() => { (window as any).__webViewsHost__.addToUI('MyCoolWebView') })
+    it('cannot add multiple web views with the same identifier', async () => {
+        expect((await page.$$('iframe')).length).toEqual(0)
+        await invokeAPI('registerWebView', { id: 'MyCoolWebView', url: widget1URL })
+        await invokeAPI('addToUI', 'MyCoolWebView')
 
-    //     expect(await page.evaluate(() => document.querySelectorAll('iframe').length)).toEqual(1)
+        expect((await page.$$('iframe')).length).toEqual(1)
 
-    //     await page.evaluate(() => { (window as any).__webViewsHost__.addToUI('MyCoolWebView') })
+        await invokeAPI('addToUI', 'MyCoolWebView')
 
-    //     // There should still be only 1 iframe!
-    //     expect(await page.evaluate(() => document.querySelectorAll('iframe').length)).toEqual(1)
-    // })
-
-    test.todo('can check if a web view is currently added to the UI')
+        expect((await page.$$('iframe')).length).toEqual(1) // There should still be only 1 iframe!
+    })
 
     test.todo('gives iframes a custom attribute containing the WebView ID')
 

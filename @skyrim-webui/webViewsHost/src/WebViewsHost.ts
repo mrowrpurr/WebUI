@@ -23,7 +23,7 @@ export default class WebViewsHost {
 
     addToUI(id: string) {
         const webView = this.webViews.get(id)
-        if (webView) {
+        if (webView && ! this.iframes.has(webView.id)) {
             const iframe = document.createElement('iframe')
             this.iframes.set(id, iframe)
             iframe.src = webView.url

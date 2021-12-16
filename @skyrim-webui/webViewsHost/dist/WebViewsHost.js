@@ -20,7 +20,7 @@ class WebViewsHost {
     }
     addToUI(id) {
         const webView = this.webViews.get(id);
-        if (webView) {
+        if (webView && !this.iframes.has(webView.id)) {
             const iframe = document.createElement('iframe');
             this.iframes.set(id, iframe);
             iframe.src = webView.url;
