@@ -28,6 +28,10 @@ export default class WebViewsHostClient {
         this.sendRequest('registerWebView', webView)
     }
 
+    unregisterWebView(id: string) {
+        this.sendRequest('unregisterWebView', id)
+    }
+
     async getWebViewIds(): Promise<Array<number>> {
         return this.getResponse('getWebViewIds')
     }
@@ -36,9 +40,9 @@ export default class WebViewsHostClient {
         return this.getResponse('getWebView', id)
     }
 
-    // addToUI(id: string) {
-    //     this.sendRequest('addToUI', id)
-    // }
+    addToUI(id: string) {
+        this.sendRequest('addToUI', id)
+    }
 
     async getResponse(functionName: string, ...args: any[]) {
         return new Promise<any>(resolve => {

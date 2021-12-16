@@ -18,8 +18,10 @@ describe('WebViewsHost interface for Skyrim Platform', () => {
         browserMessages = new Array<any>()
         page = await browser.newPage()
         await page.exposeFunction('onSkyrimPlatformMessage', (args: any) => { browserMessages.push(args) })
+        await page.exposeFunction('consoleLogToTests', (...args: any[]) => { console.log(args) })
         await page.goto(`file://${__dirname}/../../../WebUI/__WebUI__/webViewsHost.html`)
         await page.addScriptTag({ url: `file://${__dirname}/../../testFixtures/delegateSkyrimPlatformMessagesToPuppeteer.js` })
+        await page.addScriptTag({ url: `file://${__dirname}/../../testFixtures/delegateConsoleLogToTest.js` })
     })
 
     const getReplyId = () => `${Math.random()}_${Math.random()}`

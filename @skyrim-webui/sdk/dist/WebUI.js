@@ -42,6 +42,9 @@ System.register("Users/mrowr/Dropbox/Skyrim/Mods/WebUI/@skyrim-webui/sdk/src/@sk
                 registerWebView(webView) {
                     this.sendRequest('registerWebView', webView);
                 }
+                unregisterWebView(id) {
+                    this.sendRequest('unregisterWebView', id);
+                }
                 getWebViewIds() {
                     return __awaiter(this, void 0, void 0, function* () {
                         return this.getResponse('getWebViewIds');
@@ -52,9 +55,9 @@ System.register("Users/mrowr/Dropbox/Skyrim/Mods/WebUI/@skyrim-webui/sdk/src/@sk
                         return this.getResponse('getWebView', id);
                     });
                 }
-                // addToUI(id: string) {
-                //     this.sendRequest('addToUI', id)
-                // }
+                addToUI(id) {
+                    this.sendRequest('addToUI', id);
+                }
                 getResponse(functionName, ...args) {
                     return __awaiter(this, void 0, void 0, function* () {
                         return new Promise(resolve => {
@@ -106,7 +109,6 @@ System.register("Users/mrowr/Dropbox/Skyrim/Mods/WebUI/@skyrim-webui/sdk/__tests
                     yield page.addScriptTag({ url: `file://${__dirname}/../../testFixtures/delegateSkyrimPlatformMessagesToPuppeteer.js` });
                     yield page.addScriptTag({ url: `file://${__dirname}/../../testFixtures/delegateConsoleLogToTest.js` });
                 }));
-                // const getReplyId = () => `${Math.random()}_${Math.random()}`
                 /*
                  * Tests for the API interface provided by WebViewsHost for Skyrim Platform (using the SDK Client)
                  */
@@ -118,6 +120,13 @@ System.register("Users/mrowr/Dropbox/Skyrim/Mods/WebUI/@skyrim-webui/sdk/__tests
                     expect(yield client.getWebViewIds()).toHaveLength(0);
                     client.registerWebView({ id: 'widget1', url: widget1URL });
                     expect(yield client.getWebViewIds()).toEqual(['widget1']);
+                }));
+                it('can getWebViewIds', () => __awaiter(void 0, void 0, void 0, function* () {
+                    expect(yield client.getWebViewIds()).toEqual([]);
+                    client.registerWebView({ id: 'widget1', url: widget1URL });
+                    expect(yield client.getWebViewIds()).toEqual(['widget1']);
+                    client.registerWebView({ id: 'widget2', url: widget2URL });
+                    expect(yield client.getWebViewIds()).toEqual(['widget1', 'widget2']);
                 }));
                 it('can getWebView', () => __awaiter(void 0, void 0, void 0, function* () {
                     expect(yield client.getWebView('widget1')).toEqual(null);
@@ -136,77 +145,25 @@ System.register("Users/mrowr/Dropbox/Skyrim/Mods/WebUI/@skyrim-webui/sdk/__tests
                     expect(webView.id).toEqual('widget2');
                     expect(webView.url).toEqual(widget2URL);
                 }));
-                // it('can getWebViewIds', async () => {
-                //     // Is Empty By Default
-                //     let replyId = getReplyId()
-                //     await page.evaluate((replyId) => { (window as any).__webViewsHost__.getWebViewIds(replyId) }, replyId)
-                //     expect(browserMessages[0]).toEqual(
-                //         ['WebUI', 'Reply', replyId, []]
-                //     )
-                //     // Register WebViews
-                //     await page.evaluate(() => { (window as any).__webViewsHost__.registerWebView({ id: 'MyFirstWebView', url: 'file:///index.html' }) })
-                //     await page.evaluate(() => { (window as any).__webViewsHost__.registerWebView({ id: 'MySecondWebView', url: 'file:///index.html' }) })
-                //     // Returns Ids of Registered WebViews
-                //     replyId = getReplyId()
-                //     await page.evaluate((replyId) => { (window as any).__webViewsHost__.getWebViewIds(replyId) }, replyId)
-                //     expect(browserMessages[1]).toEqual(
-                //         ['WebUI', 'Reply', replyId, ['MyFirstWebView', 'MySecondWebView']]
-                //     )
-                // })
-                // it('can registerWebView', async () => {
-                //     await page.evaluate((widget1URL) => { (window as any).__webViewsHost__.registerWebView({ id: 'MyCoolWebView', url: widget1URL }) }, widget1URL)
-                //     const replyId = getReplyId()
-                //     await page.evaluate((replyId) => { (window as any).__webViewsHost__.getWebViewIds(replyId) }, replyId)
-                //     expect(browserMessages).toHaveLength(1)
-                //     expect(browserMessages[0]).toEqual(
-                //         ['WebUI', 'Reply', replyId, ['MyCoolWebView']]
-                //     )
-                // })
-                // it('can getWebView', async () => {
-                //     const webViewInfo = {
-                //         id: 'MyCoolWebView',
-                //         url: widget1URL,
-                //         x: 69,
-                //         y: 420
-                //     }
-                //     await page.evaluate((webViewInfo) => { (window as any).__webViewsHost__.registerWebView(webViewInfo)}, webViewInfo)
-                //     const replyId = getReplyId()
-                //     await page.evaluate((replyId) => { (window as any).__webViewsHost__.getWebView(replyId, 'MyCoolWebView') }, replyId)
-                //     expect(browserMessages).toHaveLength(1)
-                //     expect(browserMessages[0]).toEqual(
-                //         ['WebUI', 'Reply', replyId, webViewInfo]
-                //     )
-                // })
+                it('can unregisterWebView', () => __awaiter(void 0, void 0, void 0, function* () {
+                    client.registerWebView({ id: 'widget1', url: widget1URL });
+                    client.registerWebView({ id: 'widget2', url: widget1URL });
+                    expect(yield client.getWebViewIds()).toEqual(['widget1', 'widget2']);
+                    client.unregisterWebView('widget1');
+                    expect(yield client.getWebViewIds()).toEqual(['widget2']);
+                    client.unregisterWebView('widget2');
+                    expect(yield client.getWebViewIds()).toEqual([]);
+                }));
+                it('can addToUI', () => __awaiter(void 0, void 0, void 0, function* () {
+                    expect((yield page.$$('iframe')).length).toEqual(0);
+                    client.registerWebView({ id: 'widget1', url: widget1URL });
+                    client.addToUI('widget1');
+                    expect((yield page.$$('iframe')).length).toEqual(1);
+                    const iframeHandle = yield page.$('iframe');
+                    expect(yield iframeHandle.evaluate(iframe => iframe.getAttribute('src'))).toEqual(widget1URL);
+                }));
                 // it('can unregisterWebView', async () => {
-                //     // Register
-                //     await page.evaluate((widget1URL) => { (window as any).__webViewsHost__.registerWebView({ id: 'MyCoolWebView', url: widget1URL }) }, widget1URL)
-                //     // ID returned
-                //     let replyId = getReplyId()
-                //     await page.evaluate((replyId) => { (window as any).__webViewsHost__.getWebViewIds(replyId) }, replyId)
-                //     expect(browserMessages).toHaveLength(1)
-                //     expect(browserMessages[0]).toEqual(
-                //         ['WebUI', 'Reply', replyId, ['MyCoolWebView']]
-                //     )
-                //     // Unregister
-                //     await page.evaluate(() => { (window as any).__webViewsHost__.unregisterWebView('MyCoolWebView') })
-                //     // ID no longer returned
-                //     replyId = getReplyId()
-                //     await page.evaluate((replyId) => { (window as any).__webViewsHost__.getWebViewIds(replyId) }, replyId)
-                //     expect(browserMessages[1]).toEqual(
-                //         ['WebUI', 'Reply', replyId, []]
-                //     )
-                // })
                 // it('can add web view to the UI - addToUI', async () => {
-                //     await page.evaluate((widget1URL) => { (window as any).__webViewsHost__.registerWebView({ id: 'MyCoolWebView', url: widget1URL }) }, widget1URL)
-                //     expect(await page.evaluate(() => document.querySelectorAll('iframe').length)).toEqual(0)
-                //     await page.evaluate(() => { (window as any).__webViewsHost__.addToUI('MyCoolWebView') })
-                //     expect(await page.evaluate(() => document.querySelectorAll('iframe').length)).toEqual(1)
-                //     expect(await page.evaluate(() => document.querySelector('iframe')?.getAttribute('src'))).toEqual(widget1URL)
-                //     const iframe = await page.waitForSelector('iframe')
-                //     const frame = await iframe!.contentFrame();
-                //     const iframeHtml = await frame?.evaluate(() => document.querySelector('*')?.outerHTML)
-                //     expect(iframeHtml).toContain('I am widget 1')
-                // })
                 // test.todo('cannot add multiple web views with the same identifier')
                 // test.todo('web views added to UI are put into the properly style positions')
                 // test.todo('can reposition web view currently added to UI')
