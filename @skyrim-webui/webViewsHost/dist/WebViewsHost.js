@@ -24,6 +24,7 @@ class WebViewsHost {
             const iframe = document.createElement('iframe');
             this.iframes.set(id, iframe);
             iframe.src = webView.url;
+            iframe.dataset.webviewId = id;
             document.body.appendChild(iframe);
         }
     }

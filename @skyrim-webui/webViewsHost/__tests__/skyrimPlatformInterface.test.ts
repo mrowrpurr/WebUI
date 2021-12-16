@@ -11,6 +11,7 @@ describe('WebViewsHost interface for Skyrim Platform', () => {
     let browserMessages: Array<any>
     let apiResponseCallbacks: Map<string, (response: any) => void>
 
+    // beforeAll(async () => { browser = await puppeteer.launch({ devtools: true }) })
     beforeAll(async () => { browser = await puppeteer.launch() })
     afterAll(async () => { await browser.close() })
 
@@ -166,9 +167,26 @@ describe('WebViewsHost interface for Skyrim Platform', () => {
         expect((await page.$$('iframe')).length).toEqual(1) // There should still be only 1 iframe!
     })
 
-    test.todo('gives iframes a custom attribute containing the WebView ID')
+    it('gives iframes a custom attribute containing the WebView ID', async() => {
+        await invokeAPI('registerWebView', { id: 'MyCoolWebView1', url: widget1URL })
+        await invokeAPI('registerWebView', { id: 'MyCoolWebView2', url: widget2URL })
+
+        expect((await page.$$('iframe[data-webview-id=MyCoolWebView1]')).length).toEqual(0)
+        expect((await page.$$('iframe[data-webview-id=MyCoolWebView2]')).length).toEqual(0)
+
+        await invokeAPI('addToUI', 'MyCoolWebView1')
+
+        expect((await page.$$('iframe[data-webview-id=MyCoolWebView1]')).length).toEqual(1)
+        expect((await page.$$('iframe[data-webview-id=MyCoolWebView2]')).length).toEqual(0)
+
+        await invokeAPI('addToUI', 'MyCoolWebView2')
+
+        expect((await page.$$('iframe[data-webview-id=MyCoolWebView1]')).length).toEqual(1)
+        expect((await page.$$('iframe[data-webview-id=MyCoolWebView2]')).length).toEqual(1)
+    })
 
     test.todo('web views added to UI are put into the properly style positions')
+
     test.todo('can reposition web view currently added to UI')
 
     test.todo('can remove web view from the UI - removeFromUI')
@@ -178,4 +196,8 @@ describe('WebViewsHost interface for Skyrim Platform', () => {
     test.todo('can unhide web view in the UI - show')
     
     test.todo('can toggle web view in the UI - toggle')
+
+    test.todo('can RESIZE web views!!!!')
+
+    test.todo('can DRAG & DROP to move web views!!!!')
 })
