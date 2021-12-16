@@ -28,10 +28,7 @@ export default class WebViewsHost {
             this.iframes.set(id, iframe)
             iframe.src = webView.url
             iframe.dataset.webviewId = id
-            iframe.style.width = `${window.innerWidth * (webView.width / 100)}px`
-            iframe.style.height = `${window.innerHeight * (webView.height / 100)}px`
-            iframe.style.left = `${window.innerWidth * (webView.x / 100)}px`
-            iframe.style.top = `${window.innerHeight * (webView.y / 100)}px`
+            this.setIframePosition(iframe, webView)
             document.body.appendChild(iframe)
         }
     }
@@ -53,5 +50,19 @@ export default class WebViewsHost {
 
     private reply(replyId: string, data: any) {
         (window as any).skyrimPlatform.sendMessage(['WebUI', 'Reply', replyId, data])
+    }
+
+    private setIframePosition(iframe: HTMLIFrameElement, webView: WebView) {
+        if (webView.positionType == 'absolute') {
+            iframe.style.width = webView.width.toString()
+            iframe.style.height = webView.height.toString()
+            iframe.style.left = webView.x.toString()
+            iframe.style.top = webView.y.toString()
+        } else {
+            iframe.style.width = `${window.innerWidth * (webView.width / 100)}px`
+            iframe.style.height = `${window.innerHeight * (webView.height / 100)}px`
+            iframe.style.left = `${window.innerWidth * (webView.x / 100)}px`
+            iframe.style.top = `${window.innerHeight * (webView.y / 100)}px`
+        }
     }
 }

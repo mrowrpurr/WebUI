@@ -5,6 +5,7 @@ export interface WebViewProps {
     y?: number
     width?: number
     height?: number
+    positionType?: string
 }
 
 export default class WebView {
@@ -14,6 +15,7 @@ export default class WebView {
     public y = 0
     public width = 100
     public height = 100
+    public positionType = 'percentage'
 
     constructor(props: WebViewProps) {
         this.id = props.id
@@ -22,5 +24,6 @@ export default class WebView {
         if (props.y) this.y = props.y
         if (props.width) this.width = props.width
         if (props.height) this.height = props.height
+        if (props.positionType) this.positionType = props.positionType
     }
 }

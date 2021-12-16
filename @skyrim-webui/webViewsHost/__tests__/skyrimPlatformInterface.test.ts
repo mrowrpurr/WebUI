@@ -195,16 +195,38 @@ describe('WebViewsHost interface for Skyrim Platform', () => {
         expect(width).toEqual(actualWidth)
     })
 
-    test.todo('can specify absolute positioning')
+    it('can specify absolute positioning', async () => {
+        await invokeAPI('registerWebView', {
+            id: 'MyCoolWebView',
+            url: widget1URL,
+            positionType: 'absolute',
+            width: 11,
+            height: 22,
+            x: 33,
+            y: 44
+        })
+        await invokeAPI('addToUI', 'MyCoolWebView')
+
+        const width = await page.evaluate(() => document.querySelector('iframe')?.style.width)
+        const height = await page.evaluate(() => document.querySelector('iframe')?.style.height)
+        const x = await page.evaluate(() => document.querySelector('iframe')?.style.left)
+        const y = await page.evaluate(() => document.querySelector('iframe')?.style.top)
+
+        expect(width).toEqual('11px')
+        expect(height).toEqual('22px')
+        expect(x).toEqual('33px')
+        expect(y).toEqual('44px')
+    })
 
     it('can specify percentage positioning', async () => {
         await invokeAPI('registerWebView', {
             id: 'MyCoolWebView',
             url: widget1URL,
+            positionType: 'percentage',
             width: 80,
             height: 25,
             x: 10,
-            y: 37.5 // (100-25)/2
+            y: 20
         })
         await invokeAPI('addToUI', 'MyCoolWebView')
 
@@ -218,7 +240,32 @@ describe('WebViewsHost interface for Skyrim Platform', () => {
         expect(width).toEqual(`${windowWidth * (80/100)}px`)
         expect(height).toEqual(`${windowHeight * (25/100)}px`)
         expect(x).toEqual(`${windowWidth * (10 / 100)}px`)
-        expect(y).toEqual(`${windowHeight * (37.5 / 100)}px`) // (100-25)/2
+        expect(y).toEqual(`${windowHeight * (20 / 100)}px`)
+    })
+
+    it('defaults to using percentage positioning', async () => {
+        await invokeAPI('registerWebView', {
+            id: 'MyCoolWebView',
+            url: widget1URL,
+            positionType: 'percentage',
+            width: 80,
+            height: 25,
+            x: 10,
+            y: 20
+        })
+        await invokeAPI('addToUI', 'MyCoolWebView')
+
+        const windowHeight = await page.evaluate(() => window.innerHeight)
+        const windowWidth = await page.evaluate(() => window.innerWidth)
+        const width = await page.evaluate(() => document.querySelector('iframe')?.style.width)
+        const height = await page.evaluate(() => document.querySelector('iframe')?.style.height)
+        const x = await page.evaluate(() => document.querySelector('iframe')?.style.left)
+        const y = await page.evaluate(() => document.querySelector('iframe')?.style.top)
+
+        expect(width).toEqual(`${windowWidth * (80/100)}px`)
+        expect(height).toEqual(`${windowHeight * (25/100)}px`)
+        expect(x).toEqual(`${windowWidth * (10 / 100)}px`)
+        expect(y).toEqual(`${windowHeight * (20 / 100)}px`)
     })
 
     test.todo('can set the z-index of web views')
