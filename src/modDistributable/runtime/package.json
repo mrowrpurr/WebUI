@@ -1,5 +1,5 @@
 {
-  "name": "@skyrim-webui/runtime",
+  "name": "webui-private-runtime",
   "version": "1.0.0",
   "description": "Skyrim Platform Runtime for WebUI",
   "author": "Mrowr Purr <mrowr.purr@gmail.com>",

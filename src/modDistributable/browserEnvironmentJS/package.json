@@ -1,5 +1,5 @@
 {
-  "name": "@skyrim-webui/webViewsHost",
+  "name": "webui-private-browserEnv",
   "version": "1.0.0",
   "description": "Implementation of WebViewsHost JavaScript frontend which hosts all WebViews for WebUI",
   "main": "index.js",
