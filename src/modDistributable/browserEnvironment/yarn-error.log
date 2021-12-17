@@ -1,0 +1,55 @@
+Arguments: 
+  C:\Program Files\nodejs\node.exe C:\Users\mrowr\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js
+
+PATH: 
+  C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\Program Files\ImageMagick-6.9.12-Q16-HDRI;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files\Intel\WiFi\bin\;C:\Program Files\Common Files\Intel\WirelessCommon\;C:\Program Files\Git\cmd;C:\Program Files\dotnet\;C:\Users\mrowr\Dropbox\Skyrim\Tools\Other\pngquant;C:\Program Files\AutoHotkey;C:\Program Files\nodejs\;C:\Ruby30-x64\bin;C:\Users\mrowr\AppData\Local\Microsoft\WindowsApps;C:\Program Files\Intel\WiFi\bin\;C:\Program Files\Common Files\Intel\WirelessCommon\;C:\Users\mrowr\AppData\Local\GitHubDesktop\bin;C:\Users\mrowr\Dropbox\Skyrim\Tools\Bethesda Toolkit;C:\Users\mrowr\.dotnet\tools;C:\Users\mrowr\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\mrowr\AppData\Roaming\npm;C:\Users\mrowr\Dropbox\Skyrim\Tools\Pyro;
+
+Yarn version: 
+  1.22.17
+
+Node version: 
+  14.18.1
+
+Platform: 
+  win32 x64
+
+Trace: 
+  Error: https://registry.yarnpkg.com/jest-circus/-/jest-circus-27.4.5.tgz: ENOENT: no such file or directory, open 'C:\Users\mrowr\AppData\Local\Yarn\Cache\v6\npm-jest-circus-27.4.5-70bfb78e0200cab9b84747bf274debacaa538467-integrity\node_modules\jest-circus\.yarn-tarball.tgz'
+
+npm manifest: 
+  {
+    "name": "webui-private-browserEnv",
+    "version": "1.0.0",
+    "description": "Implementation of WebViewsHost JavaScript frontend which hosts all WebViews for WebUI",
+    "main": "index.js",
+    "scripts": {
+      "build:watch": "tsc-watch -p tsconfig.build.json --onSuccess \"npm run build:deploy\"",
+      "test:watch": "jest --watch",
+      "test": "jest",
+      "build": "tsc -p tsconfig.build.json",
+      "pack": "webpack",
+      "deploy": "@powershell copy build/webViewsHost.js ../../WebUI/__WebUI__/",
+      "build:deploy": "webpack && npm run deploy"
+    },
+    "author": "Mrowr Purr <mrowr.purr@gmail.com>",
+    "license": "MIT",
+    "devDependencies": {
+      "@types/jest": "^27.0.3",
+      "@types/puppeteer": "^5.4.4",
+      "jest": "^27.4.4",
+      "puppeteer": "^13.0.0",
+      "ts-jest": "^27.1.1",
+      "ts-loader": "^9.2.6",
+      "tsc": "^2.0.3",
+      "tsc-watch": "^4.5.0",
+      "typescript": "^4.5.3",
+      "webpack": "^5.65.0",
+      "webpack-cli": "^4.9.1"
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile

@@ -1,0 +1,63 @@
+{
+  "artificialDelayMilliseconds": 300,
+  "keepExistingTerminalsOpen": false,
+  "runOnStartup": true,
+  "terminals": [
+    {
+      "splitTerminals": [
+        {
+          "name": "Examples HTTP Server",
+          "commands": ["yarn -g http-server", "http-server"]
+        }
+      ]
+    },
+    {
+      "splitTerminals": [
+        {
+          "name": "Browser Env : Tests",
+          "commands": ["cd src/modDistributable/browserEnvironment", "yarn", "yarn test:watch"]
+        }
+      ]
+    },
+    {
+      "splitTerminals": [
+        {
+          "name": "Browser Env : Webpack",
+          "commands": ["cd src/modDistributable/browserEnvironment", "yarn", "yarn build:watch"]
+        }
+      ]
+    },
+    {
+      "splitTerminals": [
+        {
+          "name": "Backend : Tests",
+          "commands": ["cd src/@skyrim-webui/backend", "yarn", "yarn test:watch"]
+        }
+      ]
+    },
+    {
+      "splitTerminals": [
+        {
+          "name": "Backend : Deploy",
+          "commands": ["cd src/@skyrim-webui/backend", "yarn", "yarn build:watch"]
+        }
+      ]
+    },
+        {
+      "splitTerminals": [
+        {
+          "name": "Runtime : Tests",
+          "commands": ["cd src/modDistributable/runtime", "yarn", "yarn test:watch"]
+        }
+      ]
+    },
+    {
+      "splitTerminals": [
+        {
+          "name": "Runtime : Deploy",
+          "commands": ["cd src/modDistributable/runtime", "yarn", "yarn build:watch"]
+        }
+      ]
+    }
+  ]
+}

@@ -34,7 +34,7 @@ describe('WebViewsHost interface for Skyrim Platform', () => {
         })
 
         await page.exposeFunction('consoleLogToTests', (...args: any[]) => { console.log(args) })
-        await page.goto(`file://${__dirname}/../../../../WebUI/__WebUI__/webViewsHost.html`)
+        await page.goto(`file://${__dirname}/../../../../WebUI/__WebUI__/browserEnvironment.html`)
         await page.addScriptTag({ url: `file://${__dirname}/../../../testFixtures/delegateSkyrimPlatformMessagesToPuppeteer.js` })
         await page.addScriptTag({ url: `file://${__dirname}/../../../testFixtures/delegateConsoleLogToTest.js` })
     })

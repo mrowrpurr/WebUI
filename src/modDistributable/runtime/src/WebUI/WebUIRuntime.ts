@@ -2,7 +2,7 @@
 import { browser } from 'skyrimPlatform'
 
 export class WebUIRuntime {
-    public static run(webViewsHostURI = 'file:///Data/WebUI/__WebUI__/webViewsHost.html') {
+    public static run(webViewsHostURI = 'file:///Data/WebUI/__WebUI__/browserEnvironment.html') {
         new WebUIRuntime().run(webViewsHostURI)
     } 
 

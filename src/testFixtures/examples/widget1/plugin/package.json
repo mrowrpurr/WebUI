@@ -1,0 +1,30 @@
+{
+  "name": "webui-testfixtures-widget1",
+  "version": "1.0.0",
+  "description": "Test Fixture - Widget1",
+  "author": "Mrowr Purr <mrowr.purr@gmail.com>",
+  "license": "MIT",
+  "files": [
+    "lib/**/*"
+  ],
+  "scripts": {
+    "setup": "node ./scripts/setup.js",
+    "deploy": "node ./scripts/deploy.js",
+    "build": "tsc -p tsconfig.build.json",
+    "build:watch": "tsc-watch -p tsconfig.build.json",
+    "build:deploy": "npm run build && npm run deploy",
+    "build:deploy:watch": "tsc-watch -p tsconfig.build.json --onSuccess \"npm run deploy\"",
+    "test": "jest",
+    "test:watch": "jest --watch"
+  },
+  "devDependencies": {
+    "@types/jest": "^27.0.2",
+    "fs-extra": "^10.0.0",
+    "glob": "^7.2.0",
+    "jest": "^27.3.1",
+    "ts-jest": "^27.0.7",
+    "tsc": "^2.0.3",
+    "tsc-watch": "^4.5.0",
+    "typescript": "^4.5.2"
+  }
+}

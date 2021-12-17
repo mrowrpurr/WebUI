@@ -9,7 +9,7 @@ module.exports = {
     },
     output: {
         path: path.resolve(__dirname, './build'),
-        filename: "webViewsHost.js" // <--- Will be compiled to this single file
+        filename: "widget1.js" // <--- Will be compiled to this single file
     },
     resolve: {
         extensions: [".ts", ".tsx", ".js"],

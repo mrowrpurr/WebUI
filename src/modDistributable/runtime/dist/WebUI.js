@@ -10,7 +10,7 @@ System.register("Steam/steamapps/common/Skyrim Special Edition - Modding/Data/Pl
         }
     };
 });
-System.register("Users/mrowr/Dropbox/Skyrim/Mods/WebUI/@skyrim-webui/runtime/src/WebUI/WebUIRuntime", ["Steam/steamapps/common/Skyrim Special Edition - Modding/Data/Platform/Modules/skyrimPlatform"], function (exports_2, context_2) {
+System.register("Users/mrowr/Dropbox/Skyrim/Mods/WebUI/src/modDistributable/runtime/src/WebUI/WebUIRuntime", ["Steam/steamapps/common/Skyrim Special Edition - Modding/Data/Platform/Modules/skyrimPlatform"], function (exports_2, context_2) {
     "use strict";
     var skyrimPlatform_1, WebUIRuntime;
     var __moduleName = context_2 && context_2.id;
@@ -22,7 +22,7 @@ System.register("Users/mrowr/Dropbox/Skyrim/Mods/WebUI/@skyrim-webui/runtime/src
         ],
         execute: function () {
             WebUIRuntime = class WebUIRuntime {
-                static run(webViewsHostURI = 'file:///Data/WebUI/__WebUI__/webViewsHost.html') {
+                static run(webViewsHostURI = 'file:///Data/WebUI/__WebUI__/browserEnvironment.html') {
                     new WebUIRuntime().run(webViewsHostURI);
                 }
                 run(webViewsHostURI) {
@@ -36,7 +36,7 @@ System.register("Users/mrowr/Dropbox/Skyrim/Mods/WebUI/@skyrim-webui/runtime/src
         }
     };
 });
-System.register("Users/mrowr/Dropbox/Skyrim/Mods/WebUI/@skyrim-webui/runtime/src/index", ["Steam/steamapps/common/Skyrim Special Edition - Modding/Data/Platform/Modules/skyrimPlatform", "Users/mrowr/Dropbox/Skyrim/Mods/WebUI/@skyrim-webui/runtime/src/WebUI/WebUIRuntime"], function (exports_3, context_3) {
+System.register("Users/mrowr/Dropbox/Skyrim/Mods/WebUI/src/modDistributable/runtime/src/index", ["Steam/steamapps/common/Skyrim Special Edition - Modding/Data/Platform/Modules/skyrimPlatform", "Users/mrowr/Dropbox/Skyrim/Mods/WebUI/src/modDistributable/runtime/src/WebUI/WebUIRuntime"], function (exports_3, context_3) {
     "use strict";
     var skyrimPlatform_2, WebUIRuntime_1;
     var __moduleName = context_3 && context_3.id;

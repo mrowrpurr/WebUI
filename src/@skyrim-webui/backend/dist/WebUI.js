@@ -7,7 +7,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-System.register("Users/mrowr/Dropbox/Skyrim/Mods/WebUI/@skyrim-webui/sdk/src/@skyrim-webui/sdk/WebView", [], function (exports_1, context_1) {
+System.register("Users/mrowr/Dropbox/Skyrim/Mods/WebUI/src/@skyrim-webui/backend/src/@skyrim-webui/sdk/WebView", [], function (exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     return {
@@ -16,7 +16,7 @@ System.register("Users/mrowr/Dropbox/Skyrim/Mods/WebUI/@skyrim-webui/sdk/src/@sk
         }
     };
 });
-System.register("Users/mrowr/Dropbox/Skyrim/Mods/WebUI/@skyrim-webui/sdk/src/@skyrim-webui/sdk/WebViewsHostClient", [], function (exports_2, context_2) {
+System.register("Users/mrowr/Dropbox/Skyrim/Mods/WebUI/src/@skyrim-webui/backend/src/@skyrim-webui/sdk/WebViewsHostClient", [], function (exports_2, context_2) {
     "use strict";
     var WebViewsHostClient;
     var __moduleName = context_2 && context_2.id;
@@ -78,7 +78,7 @@ System.register("Users/mrowr/Dropbox/Skyrim/Mods/WebUI/@skyrim-webui/sdk/src/@sk
         }
     };
 });
-System.register("Users/mrowr/Dropbox/Skyrim/Mods/WebUI/@skyrim-webui/sdk/__tests__/WebViewsHostClient.test", ["puppeteer", "Users/mrowr/Dropbox/Skyrim/Mods/WebUI/@skyrim-webui/sdk/src/@skyrim-webui/sdk/WebViewsHostClient"], function (exports_3, context_3) {
+System.register("Users/mrowr/Dropbox/Skyrim/Mods/WebUI/src/@skyrim-webui/backend/__tests__/WebViewsHostClient.test", ["puppeteer", "Users/mrowr/Dropbox/Skyrim/Mods/WebUI/src/@skyrim-webui/backend/src/@skyrim-webui/sdk/WebViewsHostClient"], function (exports_3, context_3) {
     "use strict";
     var puppeteer, WebViewsHostClient_1;
     var __moduleName = context_3 && context_3.id;
@@ -93,8 +93,8 @@ System.register("Users/mrowr/Dropbox/Skyrim/Mods/WebUI/@skyrim-webui/sdk/__tests
         ],
         execute: function () {
             describe('WebViewsHostClient SDK for Skyrim Platform', () => {
-                const widget1URL = `file://${__dirname}/../../testFixtures/html/widget1.html`;
-                const widget2URL = `file://${__dirname}/../../testFixtures/html/widget1.html`;
+                const widget1URL = `file://${__dirname}/../../../testFixtures/html/widget1.html`;
+                const widget2URL = `file://${__dirname}/../../../testFixtures/html/widget1.html`;
                 let client;
                 let browser;
                 let page;
@@ -105,9 +105,9 @@ System.register("Users/mrowr/Dropbox/Skyrim/Mods/WebUI/@skyrim-webui/sdk/__tests
                     client = new WebViewsHostClient_1.default((script) => { page.evaluate(script); });
                     yield page.exposeFunction('onSkyrimPlatformMessage', (args) => { client.onBrowserMessage(args); });
                     yield page.exposeFunction('consoleLogToTests', (...args) => { console.log(args); });
-                    yield page.goto(`file://${__dirname}/../../../WebUI/__WebUI__/webViewsHost.html`);
-                    yield page.addScriptTag({ url: `file://${__dirname}/../../testFixtures/delegateSkyrimPlatformMessagesToPuppeteer.js` });
-                    yield page.addScriptTag({ url: `file://${__dirname}/../../testFixtures/delegateConsoleLogToTest.js` });
+                    yield page.goto(`file://${__dirname}/../../../../WebUI/__WebUI__/browserEnvironment.html`);
+                    yield page.addScriptTag({ url: `file://${__dirname}/../../../testFixtures/delegateSkyrimPlatformMessagesToPuppeteer.js` });
+                    yield page.addScriptTag({ url: `file://${__dirname}/../../../testFixtures/delegateConsoleLogToTest.js` });
                 }));
                 /*
                  * Tests for the API interface provided by WebViewsHost for Skyrim Platform (using the SDK Client)
@@ -187,7 +187,7 @@ System.register("Steam/steamapps/common/Skyrim Special Edition - Modding/Data/Pl
         }
     };
 });
-System.register("Users/mrowr/Dropbox/Skyrim/Mods/WebUI/@skyrim-webui/sdk/src/@skyrim-webui/sdk/index", ["Users/mrowr/Dropbox/Skyrim/Mods/WebUI/@skyrim-webui/sdk/src/@skyrim-webui/sdk/WebViewsHostClient", "Steam/steamapps/common/Skyrim Special Edition - Modding/Data/Platform/Modules/skyrimPlatform"], function (exports_5, context_5) {
+System.register("Users/mrowr/Dropbox/Skyrim/Mods/WebUI/src/@skyrim-webui/backend/src/@skyrim-webui/sdk/index", ["Users/mrowr/Dropbox/Skyrim/Mods/WebUI/src/@skyrim-webui/backend/src/@skyrim-webui/sdk/WebViewsHostClient", "Steam/steamapps/common/Skyrim Special Edition - Modding/Data/Platform/Modules/skyrimPlatform"], function (exports_5, context_5) {
     "use strict";
     var WebViewsHostClient_2, skyrimPlatform_1, webViewsHostClient;
     var __moduleName = context_5 && context_5.id;
