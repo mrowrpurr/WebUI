@@ -33,3 +33,4 @@ exports.getWebViewIds = getWebViewIds;
 // export function addToUI(id: string) {
 //     getWebViewsHostClient().addToUI(id)
 // }
+//# sourceMappingURL=index.js.map

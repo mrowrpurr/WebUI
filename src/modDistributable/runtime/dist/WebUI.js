@@ -36,24 +36,19 @@ System.register("Users/mrowr/Dropbox/Skyrim/Mods/WebUI/src/modDistributable/runt
         }
     };
 });
-System.register("Users/mrowr/Dropbox/Skyrim/Mods/WebUI/src/modDistributable/runtime/src/index", ["Steam/steamapps/common/Skyrim Special Edition - Modding/Data/Platform/Modules/skyrimPlatform", "Users/mrowr/Dropbox/Skyrim/Mods/WebUI/src/modDistributable/runtime/src/WebUI/WebUIRuntime"], function (exports_3, context_3) {
+System.register("Users/mrowr/Dropbox/Skyrim/Mods/WebUI/src/modDistributable/runtime/src/index", ["Users/mrowr/Dropbox/Skyrim/Mods/WebUI/src/modDistributable/runtime/src/WebUI/WebUIRuntime"], function (exports_3, context_3) {
     "use strict";
-    var skyrimPlatform_2, WebUIRuntime_1;
+    var WebUIRuntime_1;
     var __moduleName = context_3 && context_3.id;
     return {
         setters: [
-            function (skyrimPlatform_2_1) {
-                skyrimPlatform_2 = skyrimPlatform_2_1;
-            },
             function (WebUIRuntime_1_1) {
                 WebUIRuntime_1 = WebUIRuntime_1_1;
             }
         ],
         execute: function () {
-            if (!skyrimPlatform_2.storage['browserLoaded']) {
-                WebUIRuntime_1.WebUIRuntime.run();
-                skyrimPlatform_2.storage['browserLoaded'] = true;
-            }
+            // if (! storage['browserLoaded']) {
+            WebUIRuntime_1.WebUIRuntime.run();
         }
     };
 });

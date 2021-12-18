@@ -2,6 +2,7 @@
   "name": "@skyrim-webui/backend",
   "version": "1.0.0",
   "description": "Skyrim Platform Runtime for WebUI",
+  "main": "dist/index.js",
   "author": "Mrowr Purr <mrowr.purr@gmail.com>",
   "license": "MIT",
   "files": [
