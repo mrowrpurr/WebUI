@@ -1,0 +1,29 @@
+{
+  "name": "@skyrim-webui/backend",
+  "version": "1.0.0",
+  "description": "Skyrim Platform Runtime for WebUI",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "author": "Mrowr Purr <mrowr.purr@gmail.com>",
+  "license": "MIT",
+  "files": [
+    "lib/**/*"
+  ],
+  "scripts": {
+    "setup": "node ./scripts/setup.js",
+    "build": "tsc -p tsconfig.build.json",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "build:watch": " tsc -p tsconfig.build.json --watch"
+  },
+  "devDependencies": {
+    "@types/jest": "^27.0.2",
+    "@types/puppeteer": "^5.4.4",
+    "glob": "^7.2.0",
+    "jest": "^27.3.1",
+    "puppeteer": "^13.0.0",
+    "ts-jest": "^27.0.7",
+    "tsc": "^2.0.3",
+    "typescript": "^4.5.2"
+  }
+}

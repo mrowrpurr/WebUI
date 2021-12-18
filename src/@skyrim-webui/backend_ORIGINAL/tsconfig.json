@@ -14,10 +14,10 @@
     "baseUrl": ".",
     "lib": ["esnext"],
     "typeRoots": ["node_modules/@types"],
-    "outDir": "dist",
-    "declaration": true
+    "declaration": true,
+    "outDir": "dist"
   },
   "include": [
     "src/**/*.ts",
-  ],
+  ]
 }

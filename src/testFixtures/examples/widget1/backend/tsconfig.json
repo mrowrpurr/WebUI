@@ -14,10 +14,14 @@
     "baseUrl": ".",
     "lib": ["esnext"],
     "typeRoots": ["node_modules/@types"],
-    "outDir": "dist",
-    "declaration": true
+    "paths": {
+      "skyrimPlatform": ["C:/Steam/steamapps/common/Skyrim Special Edition - Modding/Data/Platform/Modules/skyrimPlatform"],
+      "@/*": ["libs/*"],
+      "~/*": ["src/*"]
+    }
   },
   "include": [
     "src/**/*.ts",
+    "src/**/*.d.ts",
   ],
 }
