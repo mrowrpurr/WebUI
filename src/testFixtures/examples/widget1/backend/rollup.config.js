@@ -28,6 +28,9 @@ export default defineConfig({
     commonjs({
       include: 'node_modules/**',
     }),
+    commonjs({
+      include: '../../../../@skyrim-webui/backend/dist/**',
+    }),
     typescript()
   ],
 })
