@@ -1,0 +1,1 @@
+import { getWebViewHostClient } from '@skyrim-webui/backend'

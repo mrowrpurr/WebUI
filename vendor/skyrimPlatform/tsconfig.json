@@ -4,12 +4,14 @@
     "noImplicitAny": true,
     "noImplicitThis": true,
     "strict": true,
+    "target": "es6",
     "module": "commonjs",
-    "target": "ES6",
     "moduleResolution": "node",
-    "outDir": "dist"
+    "outDir": "dist",
+    "sourceMap": true,
+    "declaration": true
   },
   "include": [
-    "src/**/*.ts"
+    "./src/**/*.ts",
   ]
 }

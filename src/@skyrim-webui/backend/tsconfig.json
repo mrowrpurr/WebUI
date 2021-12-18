@@ -4,14 +4,13 @@
     "noImplicitAny": true,
     "noImplicitThis": true,
     "strict": true,
-    "module": "System",
+    "module": "commonjs",
     "target": "ES6",
     "moduleResolution": "node",
-    "baseUrl": "C:/Steam/steamapps/common/Skyrim Special Edition - Modding/Data/Platform/Modules",
-    "outFile": "dist\\WebUI.js"
+    "outDir": "dist"
   },
   "include": [
-    "./**/*.ts"
-  ],
-  "moduleResolution": "node"
+    "src/**/*.ts",
+    "__tests__/**/*.ts"
+  ]
 }
