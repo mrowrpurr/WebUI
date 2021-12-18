@@ -14,7 +14,8 @@
     "baseUrl": ".",
     "lib": ["esnext"],
     "typeRoots": ["node_modules/@types"],
-    "declaration": true
+    "declaration": true,
+    "outDir": "dist"
   },
   "include": [
     "src/**/*.ts",
