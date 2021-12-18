@@ -4,11 +4,10 @@
     "noImplicitAny": true,
     "noImplicitThis": true,
     "strict": true,
-    "module": "System",
+    "module": "commonjs",
     "target": "ES6",
     "moduleResolution": "node",
-    "baseUrl": "C:/Steam/steamapps/common/Skyrim Special Edition - Modding/Data/Platform/Modules",
-    "outFile": "dist\\webui-testfixtures-widget1.js"
+    "outDir": "dist"
   },
   "include": [
     "./src/**/*.ts",
