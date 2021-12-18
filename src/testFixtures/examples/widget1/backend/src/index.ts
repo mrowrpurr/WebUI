@@ -1,9 +1,9 @@
 import { getWebViewsHostClient } from '@skyrim-webui/backend'
-import { once, printConsole } from 'skyrimPlatform'
+// import { once, printConsole } from 'skyrimPlatform'
 
-once('tick', () => {
-    printConsole('HELLO FROM WIDGET 1')
-})
+// once('tick', () => {
+//     printConsole('HELLO FROM WIDGET 1')
+// })
 
 const webViewsHostClient = getWebViewsHostClient()
 

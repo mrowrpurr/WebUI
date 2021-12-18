@@ -1,18 +1,22 @@
 {
+  "verbose": true,
   "compilerOptions": {
+    "target": "es5",
+    "module": "es2015",
+    "strict": true,
     "alwaysStrict": true,
     "noImplicitAny": true,
     "noImplicitThis": true,
-    "strict": true,
-    "target": "es6",
-    "module": "commonjs",
     "moduleResolution": "node",
-    "outDir": "dist",
-    "sourceMap": true,
+    "esModuleInterop": true,
+    "removeComments": true,
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": ".",
+    "lib": ["esnext"],
+    "typeRoots": ["node_modules/@types"],
     "declaration": true
   },
   "include": [
-    "./src/**/*.ts",
-    "./__tests__/**/*.ts",
+    "src/**/*.ts",
   ]
 }

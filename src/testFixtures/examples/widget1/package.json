@@ -1,5 +1,0 @@
-{
-  "dependencies": {
-    "@skyrim-webui/backend": "file:../../../@skyrim-webui/backend"
-  }
-}

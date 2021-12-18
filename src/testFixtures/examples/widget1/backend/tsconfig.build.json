@@ -1,16 +1,25 @@
 {
+  "verbose": true,
   "compilerOptions": {
+    "target": "es5",
+    "module": "es2015",
+    "strict": true,
     "alwaysStrict": true,
     "noImplicitAny": true,
     "noImplicitThis": true,
-    "strict": true,
-    "module": "commonjs",
-    "target": "ES6",
     "moduleResolution": "node",
-    "outDir": "dist"
+    "esModuleInterop": true,
+    "removeComments": true,
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": ".",
+    "lib": [
+      "esnext"
+    ],
+    "typeRoots": [
+      "node_modules/@types"
+    ],
   },
   "include": [
-    "./src/**/*.ts",
-  ],
-  "moduleResolution": "node"
+    "src/**/*.ts",
+  ]
 }
