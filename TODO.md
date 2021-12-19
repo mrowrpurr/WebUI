@@ -1,6 +1,6 @@
 # WebUI
 
-## SDK
+## Public SDK
 
 ### `@skyrim-webui/sdk`
 
@@ -34,7 +34,7 @@
 
 ---
 
-## Runtime (`private`)
+## Core WebUI Runtime (`private`)
 
 ### `@skyrim-webui/browserEnvironment` (frontend)
 
@@ -64,7 +64,7 @@
 
 ## Examples
 
-### `...`
+### `WebViewManager`
 
 - [ ] 
   - [ ] 
