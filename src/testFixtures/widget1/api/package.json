@@ -1,0 +1,17 @@
+{
+  "name": "skyrim-webui-widget1",
+  "version": "1.0.0",
+  "description": "Example widget1 for Skyrim WebUI",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack"
+  },
+  "author": "Mrowr Purr <mrowr.purr@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "@skyrim-webui/sdk": "../../../@skyrim-webui/sdk"
+  },
+  "devDependencies": {
+    "@skyrim-webui/development-dependencies": "../../../@skyrim-webui/dev"
+  }
+}

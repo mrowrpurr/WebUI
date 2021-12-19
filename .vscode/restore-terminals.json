@@ -1,0 +1,15 @@
+{
+  "artificialDelayMilliseconds": 300,
+  "keepExistingTerminalsOpen": false,
+  "runOnStartup": false,
+  "terminals": [
+    {
+      "splitTerminals": [
+        {
+          "name": "Examples HTTP Server",
+          "commands": ["yarn -g http-server", "http-server -c-1"]
+        }
+      ]
+    }
+  ]
+}

@@ -12,15 +12,13 @@
     "removeComments": true,
     "allowSyntheticDefaultImports": true,
     "baseUrl": ".",
-   "lib": ["esnext", "dom"],
+    "lib": ["esnext", "dom"],
     "typeRoots": ["node_modules/@types"],
     "declaration": true,
-    "outDir": "dist",
-    "paths": {
-      "skyrimPlatform": ["../../../vendor/skyrimPlatform"]
-    }
+    "outDir": "dist"
   },
   "include": [
     "src/**/*.ts",
+    "__tests__/**/*.ts"
   ]
 }
