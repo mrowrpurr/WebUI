@@ -8,5 +8,8 @@
   "scripts": {},
   "devDependencies": {
     "@skyrim-webui/development-dependencies": "../../@skyrim-webui/dev"
+  },
+  "dependencies": {
+    "@skyrim-webui/types": "../../@skyrim-webui/types"
   }
 }

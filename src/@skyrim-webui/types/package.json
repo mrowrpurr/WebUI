@@ -1,13 +1,10 @@
 {
-  "name": "@skyrim-webui/sdk",
+  "name": "@skyrim-webui/types",
   "version": "1.0.0",
   "description": "TODO",
   "main": "dist/index.js",
   "scripts": {
-    "build": "tsc -p tsconfig.build.json",
-    "build:watch": "tsc-watch -p tsconfig.build.json",
-    "test": "jest",
-    "test:watch": "jest --watch"
+    "build": "tsc"
   },
   "repository": {
     "type": "git",
@@ -16,16 +13,12 @@
   "keywords": [
     "Skyrim"
   ],
-  "author": "Mrowr Purr <mrowr.purr@gmail.com>",
+  "author": "Mrowr Purr <mrowr.pur@gmail.com>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/mrowrpurr/WebUI/issues"
   },
   "homepage": "https://github.com/mrowrpurr/WebUI#readme",
-  "dependencies": {
-    "@skyrim-webui/types": "../types",
-    "@types/skyrimPlatform": "https://github.com/skyrim-types/skyrimPlatform.git"
-  },
   "devDependencies": {
     "@skyrim-webui/development-dependencies": "../dev"
   }

@@ -22,5 +22,8 @@
   "homepage": "https://github.com/mrowrpurr/WebUI#readme",
   "devDependencies": {
     "@skyrim-webui/development-dependencies": "../dev"
+  },
+  "dependencies": {
+    "@skyrim-webui/types": "../types"
   }
 }

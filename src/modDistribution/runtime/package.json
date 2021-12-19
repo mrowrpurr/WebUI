@@ -11,5 +11,8 @@
   },
   "devDependencies": {
     "@skyrim-webui/development-dependencies": "file:../../@skyrim-webui/dev"
+  },
+  "dependencies": {
+    "@skyrim-webui/types": "../../@skyrim-webui/types"
   }
 }
