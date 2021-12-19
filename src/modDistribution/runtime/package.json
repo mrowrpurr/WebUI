@@ -10,8 +10,6 @@
     "watch": "tsc-watch --onSuccess \"yarn webpack\""
   },
   "devDependencies": {
-    "@skyrim-webui/development-dependencies": "file:..\\..\\@skyrim-webui\\dev",
-    "tsc-watch": "^4.5.0",
-    "webpack-shell-plugin-next": "^2.2.2"
+    "@skyrim-webui/development-dependencies": "file:../../@skyrim-webui/dev"
   }
 }
