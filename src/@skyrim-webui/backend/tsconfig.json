@@ -14,10 +14,13 @@
     "baseUrl": ".",
     "lib": ["esnext"],
     "typeRoots": ["node_modules/@types"],
+    "declaration": true,
     "outDir": "dist",
-    "declaration": true
+    "paths": {
+      "skyrimPlatform": ["../../../vendor/skyrimPlatform"]
+    }
   },
   "include": [
     "src/**/*.ts",
-  ],
+  ]
 }

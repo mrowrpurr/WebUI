@@ -9,7 +9,10 @@
     "moduleResolution": "node",
     "outDir": "dist",
     "sourceMap": true,
-    "declaration": true
+    "declaration": true,
+    "paths": {
+      "skyrimPlatform": ["../../../vendor/skyrimPlatform"]
+    }
   },
   "include": [
     "./src/**/*.ts"
