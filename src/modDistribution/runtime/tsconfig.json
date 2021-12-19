@@ -12,7 +12,7 @@
     "removeComments": true,
     "allowSyntheticDefaultImports": true,
     "baseUrl": ".",
-    "lib": ["esnext"],
+    "lib": ["esnext", "dom"],
     "typeRoots": ["node_modules/@types"],
     "declaration": true,
     "outDir": "dist",

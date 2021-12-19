@@ -7,9 +7,11 @@
   "author": "Mrowr Purr <mrowr.purr@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "webpack": "webpack"
+    "watch": "tsc-watch --onSuccess \"yarn webpack\""
   },
   "devDependencies": {
-    "@skyrim-webui/development-dependencies": "file:..\\..\\@skyrim-webui\\dev"
+    "@skyrim-webui/development-dependencies": "file:..\\..\\@skyrim-webui\\dev",
+    "tsc-watch": "^4.5.0",
+    "webpack-shell-plugin-next": "^2.2.2"
   }
 }
