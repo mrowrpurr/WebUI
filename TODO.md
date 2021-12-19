@@ -66,5 +66,6 @@
 
 ### `WebViewManager`
 
-- [ ] 
-  - [ ] 
+- [ ] Shows up in UI
+- [ ] Can add a WebView with ID and URL
+- [ ] Shows list of WebViews

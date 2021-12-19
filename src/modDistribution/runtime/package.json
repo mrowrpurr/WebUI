@@ -1,0 +1,15 @@
+{
+  "name": "@skyrim-webui/runtime",
+  "version": "1.0.0",
+  "description": "Internal core runtime for Skyrim Web UI",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "author": "Mrowr Purr <mrowr.purr@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "webpack": "webpack"
+  },
+  "devDependencies": {
+    "@skyrim-webui/development-dependencies": "file:..\\..\\@skyrim-webui\\dev"
+  }
+}

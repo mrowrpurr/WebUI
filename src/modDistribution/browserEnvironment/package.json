@@ -1,0 +1,12 @@
+{
+  "name": "@skyrim-webui/browserEnvironment",
+  "version": "1.0.0",
+  "description": "",
+  "author": "Mrowr Purr <mrowr.purr@gmail.com>",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+  },
+  "devDependencies": {
+  }
+}
