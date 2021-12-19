@@ -1,7 +1,7 @@
 {
-  "name": "skyrim-webui-widget1",
+  "name": "skyrim-webui-widget1-api",
   "version": "1.0.0",
-  "description": "Example widget1 for Skyrim WebUI",
+  "description": "Example widget1 API Backend for Skyrim WebUI",
   "main": "index.js",
   "scripts": {
     "build": "webpack"

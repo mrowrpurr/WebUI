@@ -6,7 +6,7 @@ const folderName = path.basename(__dirname)
 
 //////////////////////////////////
 // Configure this for each plugin
-const filename = `${folderName}.js`
+const filename = `widget1.js`
 //////////////////////////////////
 
 module.exports = {

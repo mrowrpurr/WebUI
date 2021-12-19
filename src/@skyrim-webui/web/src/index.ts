@@ -1,0 +1,1 @@
+export const SomethingFromWeb = 'Hi from something from web'

@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "author": "Mrowr Purr <mrowr.purr@gmail.com>",
-  "main": "index.js",
+  "main": "dist/index.js",
   "license": "MIT",
-  "scripts": {
-  },
+  "scripts": {},
   "devDependencies": {
+    "@skyrim-webui/development-dependencies": "../../@skyrim-webui/dev"
   }
 }

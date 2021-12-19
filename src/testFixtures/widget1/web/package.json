@@ -1,0 +1,29 @@
+{
+  "name": "skyrim-webui-widget1-web",
+  "version": "1.0.0",
+  "description": "Example widget1 Web Frontend for Skyrim WebUI",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "webpack",
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mrowrpurr/WebUI.git"
+  },
+  "keywords": [
+    "Skyrim"
+  ],
+  "author": "Mrowr Purr <mrowr.purr@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mrowrpurr/WebUI/issues"
+  },
+  "homepage": "https://github.com/mrowrpurr/WebUI#readme",
+  "devDependencies": {
+    "@skyrim-webui/development-dependencies": "../../../@skyrim-webui/dev"
+  },
+  "dependencies": {
+    "@skyrim-webui/web": "../../../@skyrim-webui/web"
+  }
+}
