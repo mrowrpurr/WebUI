@@ -6,7 +6,7 @@ const folderName = path.basename(__dirname)
 
 //////////////////////////////////
 // Configure this for each plugin
-const filename = `WebUI.js`
+const filename = `WebUI.Papyrus.js`
 //////////////////////////////////
 
 module.exports = {

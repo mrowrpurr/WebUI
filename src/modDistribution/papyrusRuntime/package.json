@@ -1,7 +1,7 @@
 {
-  "name": "@skyrim-webui/runtime",
+  "name": "@skyrim-webui/papyrus-runtime",
   "version": "1.0.0",
-  "description": "Internal core runtime for Skyrim Web UI",
+  "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "Mrowr Purr <mrowr.purr@gmail.com>",
@@ -16,7 +16,6 @@
     "@skyrim-webui/development-dependencies": "file:../../@skyrim-webui/dev"
   },
   "dependencies": {
-    "@skyrim-webui/types": "../../@skyrim-webui/types",
-    "@types/skyrimPlatform": "https://github.com/skyrim-types/skyrimPlatform.git"
+    "@skyrim-webui/types": "../../@skyrim-webui/types"
   }
 }

@@ -5,7 +5,9 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "webpack",
-    "test": "jest"
+    "build:watch": "tsc-watch --onSuccess \"yarn webpack\"",
+    "test": "jest",
+    "test:watch": "jest --watch"
   },
   "repository": {
     "type": "git",
