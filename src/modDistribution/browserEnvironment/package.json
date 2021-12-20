@@ -5,7 +5,12 @@
   "author": "Mrowr Purr <mrowr.purr@gmail.com>",
   "main": "dist/index.js",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "build": "webpack",
+    "build:watch": "tsc-watch --onSuccess \"yarn webpack\"",
+    "test": "jest",
+    "test:watch": "jest --watch"
+  },
   "devDependencies": {
     "@skyrim-webui/development-dependencies": "../../@skyrim-webui/dev"
   },
