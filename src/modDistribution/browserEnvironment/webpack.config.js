@@ -16,7 +16,7 @@ module.exports = {
     devtool: "inline-source-map",
     plugins: [
         new WebpackShellPluginNext({
-            onDoneWatch: { scripts: [`xcopy "${path.join(buildFolder, filename)}" "${webUiDestinationDirectory}"`] }
+            onDoneWatch: { scripts: [`xcopy "${path.join(buildFolder, filename)}" "${webUiDestinationDirectory}" /Y`] }
         })
     ],
     entry: {
