@@ -1,0 +1,33 @@
+{
+  "name": "@skyrim-webui/testutil",
+  "version": "1.0.0",
+  "description": "TODO",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "build:watch": "tsc-watch -p tsconfig.build.json",
+    "test": "jest",
+    "test:watch": "jest --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mrowrpurr/WebUI.git"
+  },
+  "keywords": [
+    "Skyrim"
+  ],
+  "author": "Mrowr Purr <mrowr.purr@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mrowrpurr/WebUI/issues"
+  },
+  "homepage": "https://github.com/mrowrpurr/WebUI#readme",
+  "devDependencies": {
+    "@skyrim-webui/development-dependencies": "../dev"
+  },
+  "dependencies": {
+    "@types/puppeteer": "^5.4.4",
+    "@types/skyrimPlatform": "https://github.com/skyrim-types/skyrimPlatform",
+    "puppeteer": "^13.0.0"
+  }
+}

@@ -1,7 +1,7 @@
 {
   "artificialDelayMilliseconds": 300,
   "keepExistingTerminalsOpen": false,
-  "runOnStartup": false,
+  "runOnStartup": true,
   "terminals": [
     {
       "splitTerminals": [
@@ -40,6 +40,22 @@
         {
           "name": "@ web BUILD",
           "commands": ["cd src/@skyrim-webui/web", "yarn", "yarn build:watch"]
+        }
+      ]
+    },
+    {
+      "splitTerminals": [
+        {
+          "name": "@ testutil TEST",
+          "commands": ["cd src/@skyrim-webui/testUtil", "yarn", "yarn test:watch"]
+        }
+      ]
+    },
+    {
+      "splitTerminals": [
+        {
+          "name": "@ testutil BUILD",
+          "commands": ["cd src/@skyrim-webui/testUtil", "yarn", "yarn build:watch"]
         }
       ]
     },
