@@ -1,7 +1,7 @@
 {
-  "name": "@skyrim-webui/example-hello-world",
+  "name": "@skyrim-webui/example-hello-world-frontend",
   "version": "1.0.0",
-  "description": "Hello World example WebUI WebView",
+  "description": "Web frontend for Hello World example",
   "keywords": [
     "skyrim",
     "platform"

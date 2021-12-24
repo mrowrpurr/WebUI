@@ -29,5 +29,8 @@
   },
   "bugs": {
     "url": "https://github.com/mrowrpurr/WebUI/issues"
+  },
+  "dependencies": {
+    "@skyrim-webui/development-dependencies": "^1.0.0"
   }
 }
