@@ -1,22 +1,29 @@
 import { IWebViewsHost, IWebView } from '@skyrim-webui/types'
+import WebViewsHostSkyrimPlatformAPI from './WebViewsHostSkyrimPlatformAPI'
 
 export default class WebViewsHost implements IWebViewsHost {
     private _window: Window | undefined
+    private _webViews = new Map<string, IWebView>()
 
     id = 'WebViewHostExtension'
 
     scripts = [] // WebViewsHost uniquely has no scripts because it is bundled with WebUI.BrowserEnvironment
 
-    async register(webView: IWebView): Promise<boolean> {
-        return true
+    async registerWebView(webView: IWebView): Promise<boolean> {
+        if (this._webViews.has(webView.id))
+            return false
+        else {
+            this._webViews.set(webView.id, webView)
+            return true
+        }
     }
 
-    async unregister(id: string): Promise<boolean> {
+    async unregisterWebView(id: string): Promise<boolean> {
         return true
     }
 
     async getWebViewIds(): Promise<Array<string>> {
-        return new Array<string>()   
+        return Array.from(this._webViews.keys())
     }
 
     async getWebViews(): Promise<Array<IWebView>> {
@@ -32,10 +39,8 @@ export default class WebViewsHost implements IWebViewsHost {
     }
 
     async onRegister(window: Window): Promise<boolean> {
-        this._window = window;
-
-        (window as any).webViewsHost = 'WASSSSUP!?'
-        
+        this._window = window; // <--- TODO USE THIS
+        (window as any).__webViewsHost__SkyrimPlatformAPI = new WebViewsHostSkyrimPlatformAPI(this)
         return true
     }
 

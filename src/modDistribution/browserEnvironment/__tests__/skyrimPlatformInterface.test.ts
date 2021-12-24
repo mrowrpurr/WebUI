@@ -41,7 +41,7 @@ describe('WebViewsHost interface for Skyrim Platform', () => {
     })
 
     async function invokeAPI(functionName: string, ...args: any[]) {
-        await page.evaluate((functionName, args) => { (window as any).__webViewsHost__[functionName](...args) }, functionName, args)
+        await page.evaluate((functionName, args) => { (window as any)['__webViewsHost__SkyrimPlatformAPI'][functionName](...args) }, functionName, args)
     }
 
     async function getFromAPI(functionName: string, ...args: any[]) {
@@ -64,21 +64,21 @@ describe('WebViewsHost interface for Skyrim Platform', () => {
 
     test.todo('returns responses via a browser message: WebUI, Reply, [ReplyID], Response')
 
-    it('does literally anything', async () => {
-        // page.eval
-        const webViewsFoo = await page.evaluate(() => { return (window as any).webViewsHost })
-        expect(webViewsFoo).toEqual('What is the ID of the window.webViewsHost?')
-    })
-
-    // it('can getWebViewIds', async () => {
-    //     expect(await getFromAPI('getWebViewIds')).toEqual([])
-
-    //     await invokeAPI('registerWebView', { id: 'MyFirstWebView', url: 'file:///index.html' })
-    //     expect(await getFromAPI('getWebViewIds')).toEqual(['MyFirstWebView'])
-        
-    //     await invokeAPI('registerWebView', { id: 'MySecondWebView', url: 'file:///index.html' })
-    //     expect(await getFromAPI('getWebViewIds')).toEqual(['MyFirstWebView', 'MySecondWebView'])
+    // it('does literally anything', async () => {
+    //     // page.eval
+    //     const webViewsFoo = await page.evaluate(() => { return (window as any).id })
+    //     expect(webViewsFoo).toEqual('What is the ID of the window.webViewsHost?')
     // })
+
+    it('can getWebViewIds', async () => {
+        expect(await getFromAPI('getWebViewIds')).toEqual([])
+
+        await invokeAPI('registerWebView', { id: 'MyFirstWebView', url: 'file:///index.html' })
+        expect(await getFromAPI('getWebViewIds')).toEqual(['MyFirstWebView'])
+        
+        await invokeAPI('registerWebView', { id: 'MySecondWebView', url: 'file:///index.html' })
+        expect(await getFromAPI('getWebViewIds')).toEqual(['MyFirstWebView', 'MySecondWebView'])
+    })
 
     // it('can registerWebView', async () => {
     //     await page.evaluate((widget1URL) => { (window as any).__webViewsHost__.registerWebView({ id: 'MyCoolWebView', url: widget1URL }) }, widget1URL)

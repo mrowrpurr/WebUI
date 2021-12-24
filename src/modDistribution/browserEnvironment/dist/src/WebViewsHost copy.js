@@ -34,27 +34,19 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-import WebViewsHostSkyrimPlatformAPI from './WebViewsHostSkyrimPlatformAPI';
 var WebViewsHost = (function () {
     function WebViewsHost() {
-        this._webViews = new Map();
         this.id = 'WebViewHostExtension';
         this.scripts = [];
     }
-    WebViewsHost.prototype.registerWebView = function (webView) {
+    WebViewsHost.prototype.register = function (webView) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
-                if (this._webViews.has(webView.id))
-                    return [2, false];
-                else {
-                    this._webViews.set(webView.id, webView);
-                    return [2, true];
-                }
-                return [2];
+                return [2, true];
             });
         });
     };
-    WebViewsHost.prototype.unregisterWebView = function (id) {
+    WebViewsHost.prototype.unregister = function (id) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 return [2, true];
@@ -64,7 +56,7 @@ var WebViewsHost = (function () {
     WebViewsHost.prototype.getWebViewIds = function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
-                return [2, Array.from(this._webViews.keys())];
+                return [2, new Array()];
             });
         });
     };
@@ -93,7 +85,7 @@ var WebViewsHost = (function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 this._window = window;
-                window.__webViewsHost__SkyrimPlatformAPI = new WebViewsHostSkyrimPlatformAPI(this);
+                window.webViewsHost = this;
                 return [2, true];
             });
         });

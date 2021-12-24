@@ -121,7 +121,7 @@ describe('WebViewsHost interface for Skyrim Platform', function () {
                 switch (_a.label) {
                     case 0: return [4, page.evaluate(function (functionName, args) {
                             var _a;
-                            (_a = window.__webViewsHost__)[functionName].apply(_a, args);
+                            (_a = window['__webViewsHost__SkyrimPlatformAPI'])[functionName].apply(_a, args);
                         }, functionName, args)];
                     case 1:
                         _a.sent();
@@ -163,14 +163,29 @@ describe('WebViewsHost interface for Skyrim Platform', function () {
     }
     var getReplyId = function () { return "".concat(Math.random(), "_").concat(Math.random()); };
     test.todo('returns responses via a browser message: WebUI, Reply, [ReplyID], Response');
-    it('does literally anything', function () { return __awaiter(void 0, void 0, void 0, function () {
-        var webViewsFoo;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4, page.evaluate(function () { return window.webViewsHost; })];
+    it('can getWebViewIds', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var _a, _b, _c;
+        return __generator(this, function (_d) {
+            switch (_d.label) {
+                case 0:
+                    _a = expect;
+                    return [4, getFromAPI('getWebViewIds')];
                 case 1:
-                    webViewsFoo = _a.sent();
-                    expect(webViewsFoo).toEqual('What is the ID of the window.webViewsHost?');
+                    _a.apply(void 0, [_d.sent()]).toEqual([]);
+                    return [4, invokeAPI('registerWebView', { id: 'MyFirstWebView', url: 'file:///index.html' })];
+                case 2:
+                    _d.sent();
+                    _b = expect;
+                    return [4, getFromAPI('getWebViewIds')];
+                case 3:
+                    _b.apply(void 0, [_d.sent()]).toEqual(['MyFirstWebView']);
+                    return [4, invokeAPI('registerWebView', { id: 'MySecondWebView', url: 'file:///index.html' })];
+                case 4:
+                    _d.sent();
+                    _c = expect;
+                    return [4, getFromAPI('getWebViewIds')];
+                case 5:
+                    _c.apply(void 0, [_d.sent()]).toEqual(['MyFirstWebView', 'MySecondWebView']);
                     return [2];
             }
         });
