@@ -117,7 +117,7 @@
       "splitTerminals": [
         {
           "name": "widget1 [API] TEST",
-          "commands": ["cd src/testFixtures/widget1/api", "yarn", "yarn test:watch"]
+          "commands": ["cd src/fixtures/widget1/api", "yarn", "yarn test:watch"]
         }
       ]
     },
@@ -125,7 +125,7 @@
       "splitTerminals": [
         {
           "name": "widget1 [API] BUILD",
-          "commands": ["cd src/testFixtures/widget1/api", "yarn", "yarn build:watch"]
+          "commands": ["cd src/fixtures/widget1/api", "yarn", "yarn build:watch"]
         }
       ]
     },
@@ -133,7 +133,7 @@
       "splitTerminals": [
         {
           "name": "widget1 [WEB] TEST",
-          "commands": ["cd src/testFixtures/widget1/web", "yarn", "yarn test:watch"]
+          "commands": ["cd src/fixtures/widget1/web", "yarn", "yarn test:watch"]
         }
       ]
     },
@@ -141,7 +141,7 @@
       "splitTerminals": [
         {
           "name": "widget1 [WEB] BUILD",
-          "commands": ["cd src/testFixtures/widget1/web", "yarn", "yarn build:watch"]
+          "commands": ["cd src/fixtures/widget1/web", "yarn", "yarn build:watch"]
         }
       ]
     }

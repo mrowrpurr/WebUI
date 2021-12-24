@@ -112,7 +112,7 @@
 	var webViewsHostClient = getWebViewsHostClient_1();
 	webViewsHostClient.registerWebView({
 	    id: "widget1",
-	    url: "http://localhost:8080/src/testFixtures/examples/widget1/frontend/"
+	    url: "http://localhost:8080/src/fixtures/examples/widget1/frontend/"
 	});
 	webViewsHostClient.addToUI("widget1");
 

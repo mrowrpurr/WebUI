@@ -4,8 +4,8 @@ import * as fs from 'fs'
 
 describe('WebViewsHost interface for Skyrim Platform', () => {
 
-    const widget1URL = `file://${__dirname}/../../../testFixtures/html/widget1.html`
-    const widget2URL = `file://${__dirname}/../../../testFixtures/html/widget1.html`
+    const widget1URL = `file://${__dirname}/../../../fixtures/html/widget1.html`
+    const widget2URL = `file://${__dirname}/../../../fixtures/html/widget2.html`
 
     let browser: Browser
     let page: Page
@@ -32,9 +32,9 @@ describe('WebViewsHost interface for Skyrim Platform', () => {
         })
 
         await page.exposeFunction('consoleLogToTests', (...args: any[]) => { console.log(args) })
-        await page.goto(`file://${__dirname}/../../../../WebUI/__WebUI__/WebUI.html`)
-        await page.addScriptTag({ url: `file://${__dirname}/../../../testFixtures/delegateSkyrimPlatformMessagesToPuppeteer.js` })
-        await page.addScriptTag({ url: `file://${__dirname}/../../../testFixtures/delegateConsoleLogToTest.js` })
+        await page.goto(`file://${__dirname}/../../../WebUI/__WebUI__/WebUI.html`)
+        await page.addScriptTag({ url: `file://${__dirname}/../../../fixtures/delegateSkyrimPlatformMessagesToPuppeteer.js` })
+        await page.addScriptTag({ url: `file://${__dirname}/../../../fixtures/delegateConsoleLogToTest.js` })
     })
 
     async function invokeAPI(functionName: string, ...args: any[]) {

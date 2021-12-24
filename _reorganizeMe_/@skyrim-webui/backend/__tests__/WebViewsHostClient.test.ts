@@ -4,8 +4,8 @@ import WebViewsHostClient from '../src/@skyrim-webui/sdk/WebViewsHostClient'
 
 describe('WebViewsHostClient SDK for Skyrim Platform', () => {
 
-    const widget1URL = `file://${__dirname}/../../../testFixtures/html/widget1.html`
-    const widget2URL = `file://${__dirname}/../../../testFixtures/html/widget1.html`
+    const widget1URL = `file://${__dirname}/../../../fixtures/html/widget1.html`
+    const widget2URL = `file://${__dirname}/../../../fixtures/html/widget1.html`
 
     let client: WebViewsHostClient
     let browser: Browser
@@ -20,8 +20,8 @@ describe('WebViewsHostClient SDK for Skyrim Platform', () => {
         await page.exposeFunction('onSkyrimPlatformMessage', (args: any) => { client.onBrowserMessage(args) })
         await page.exposeFunction('consoleLogToTests', (...args: any[]) => { console.log(args) })
         await page.goto(`file://${__dirname}/../../../../WebUI/__WebUI__/browserEnvironment.html`)
-        await page.addScriptTag({ url: `file://${__dirname}/../../../testFixtures/delegateSkyrimPlatformMessagesToPuppeteer.js` })
-        await page.addScriptTag({ url: `file://${__dirname}/../../../testFixtures/delegateConsoleLogToTest.js` })
+        await page.addScriptTag({ url: `file://${__dirname}/../../../fixtures/delegateSkyrimPlatformMessagesToPuppeteer.js` })
+        await page.addScriptTag({ url: `file://${__dirname}/../../../fixtures/delegateConsoleLogToTest.js` })
     })
 
     /*
