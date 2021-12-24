@@ -1,10 +1,15 @@
 import { IBrowserEnvironment, IBrowserExtension } from '@skyrim-webui/types'
 
 export default class BrowserEnvironment implements IBrowserEnvironment {
+    private _window: Window
     extensions = new Map<string, IBrowserExtension>()
 
+    constructor(window: Window) {
+        this._window = window
+    }
+
     async register(extension: IBrowserExtension): Promise<boolean> {
-        return true
+        return extension.onRegister(this._window)
     }
 
     async unregister(id: string): Promise<boolean> {

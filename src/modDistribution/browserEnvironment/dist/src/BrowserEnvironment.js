@@ -35,13 +35,14 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 var BrowserEnvironment = (function () {
-    function BrowserEnvironment() {
+    function BrowserEnvironment(window) {
         this.extensions = new Map();
+        this._window = window;
     }
     BrowserEnvironment.prototype.register = function (extension) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
-                return [2, true];
+                return [2, extension.onRegister(this._window)];
             });
         });
     };

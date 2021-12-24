@@ -164,13 +164,13 @@ describe('WebViewsHost interface for Skyrim Platform', function () {
     var getReplyId = function () { return "".concat(Math.random(), "_").concat(Math.random()); };
     test.todo('returns responses via a browser message: WebUI, Reply, [ReplyID], Response');
     it('does literally anything', function () { return __awaiter(void 0, void 0, void 0, function () {
-        var foo;
+        var webViewsFoo;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4, page.evaluate(function () { return window.foo; })];
+                case 0: return [4, page.evaluate(function () { return window.webViewsHost; })];
                 case 1:
-                    foo = _a.sent();
-                    expect(foo).toEqual('FOO VALUE FROM Browser Environment');
+                    webViewsFoo = _a.sent();
+                    expect(webViewsFoo).toEqual('What is the ID of the window.webViewsHost?');
                     return [2];
             }
         });

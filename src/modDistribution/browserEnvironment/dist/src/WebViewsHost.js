@@ -37,7 +37,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 var WebViewsHost = (function () {
     function WebViewsHost() {
         this.id = 'WebViewHostExtension';
-        this.scripts = ['TODO'];
+        this.scripts = [];
     }
     WebViewsHost.prototype.register = function (webView) {
         return __awaiter(this, void 0, void 0, function () {
@@ -81,9 +81,11 @@ var WebViewsHost = (function () {
             });
         });
     };
-    WebViewsHost.prototype.onRegister = function () {
+    WebViewsHost.prototype.onRegister = function (window) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
+                this._window = window;
+                window.webViewsHost = 'WASSSSUP!?';
                 return [2, true];
             });
         });
@@ -92,6 +94,13 @@ var WebViewsHost = (function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 return [2, true];
+            });
+        });
+    };
+    WebViewsHost.prototype.addScriptsAndWaitForLoad = function (scripts) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2];
             });
         });
     };

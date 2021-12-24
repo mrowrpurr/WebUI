@@ -1,7 +1,6 @@
-import Api from './Api';
 import BrowserEnvironment from './BrowserEnvironment';
-import Connection from './Connection';
-import WebView from './WebView';
+var browserEnvironment = new BrowserEnvironment(window);
+window.browserEnv = browserEnvironment;
 import WebViewsHost from './WebViewsHost';
-export { Api, BrowserEnvironment, Connection, WebView, WebViewsHost };
+browserEnvironment.register(new WebViewsHost());
 window.foo = "Hello?";

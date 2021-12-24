@@ -66,8 +66,8 @@ describe('WebViewsHost interface for Skyrim Platform', () => {
 
     it('does literally anything', async () => {
         // page.eval
-        const foo = await page.evaluate(() => { return (window as any).foo })
-        expect(foo).toEqual('FOO VALUE FROM Browser Environment')
+        const webViewsFoo = await page.evaluate(() => { return (window as any).webViewsHost })
+        expect(webViewsFoo).toEqual('What is the ID of the window.webViewsHost?')
     })
 
     // it('can getWebViewIds', async () => {

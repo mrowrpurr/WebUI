@@ -1,8 +1,11 @@
 import { IWebViewsHost, IWebView } from '@skyrim-webui/types'
 
 export default class WebViewsHost implements IWebViewsHost {
+    private _window: Window | undefined
+
     id = 'WebViewHostExtension'
-    scripts = ['TODO']
+
+    scripts = [] // WebViewsHost uniquely has no scripts because it is bundled with WebUI.BrowserEnvironment
 
     async register(webView: IWebView): Promise<boolean> {
         return true
@@ -28,11 +31,19 @@ export default class WebViewsHost implements IWebViewsHost {
         return true
     }
 
-    async onRegister(): Promise<boolean> {
+    async onRegister(window: Window): Promise<boolean> {
+        this._window = window;
+
+        (window as any).webViewsHost = 'WASSSSUP!?'
+        
         return true
     }
 
     async onUnregister(): Promise<boolean> {
         return true
     }
+
+    private async addScriptsAndWaitForLoad(scripts: Array<string>) {
+
+    } 
 }
