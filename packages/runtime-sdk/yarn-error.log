@@ -33,18 +33,18 @@ npm manifest:
     "description": "Skyrim Platform runtime for Skyrim WebUI framework",
     "keywords": [
       "skyrim",
-      "platform"
+      "skyrim platform"
     ],
     "author": "Mrowr Purr <mrowr.purr@gmail.com>",
     "homepage": "https://github.com/mrowrpurr/WebUI",
     "license": "MIT",
     "main": "dist/index.js",
     "directories": {
-      "lib": "lib",
+      "src": "src",
       "test": "__tests__"
     },
     "files": [
-      "lib"
+      "src"
     ],
     "publishConfig": {
       "access": "public"

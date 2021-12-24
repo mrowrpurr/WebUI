@@ -4,18 +4,18 @@
   "description": "JavaScript runtime for Skyrim WebUI framework",
   "keywords": [
     "skyrim",
-    "platform"
+    "skyrim platform"
   ],
   "author": "Mrowr Purr <mrowr.purr@gmail.com>",
   "homepage": "https://github.com/mrowrpurr/WebUI",
   "license": "MIT",
   "main": "dist/index.js",
   "directories": {
-    "lib": "lib",
+    "src": "src",
     "test": "__tests__"
   },
   "files": [
-    "lib"
+    "src"
   ],
   "publishConfig": {
     "access": "public"
@@ -25,7 +25,10 @@
     "url": "git+https://github.com/mrowrpurr/WebUI.git"
   },
   "scripts": {
-    "test": "echo \"Error: run tests from root\" && exit 1"
+    "build": "webpack",
+    "build:watch": "tsc-watch --onSuccess \"yarn webpack\"",
+    "test": "jest",
+    "test:watch": "jest --watch"
   },
   "bugs": {
     "url": "https://github.com/mrowrpurr/WebUI/issues"
@@ -35,6 +38,8 @@
   },
   "devDependencies": {
     "@skyrim-webui/development-dependencies": "^1.0.0",
-    "@skyrim-webui/test-util": "^1.0.0"
+    "@skyrim-webui/test-util": "^1.0.0",
+    "@types/jest": "^27.0.3",
+    "jest": "^27.4.5"
   }
 }

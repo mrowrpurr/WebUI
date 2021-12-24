@@ -9,7 +9,6 @@
     "noImplicitThis": true,
     "moduleResolution": "node",
     "esModuleInterop": true,
-    "removeComments": true,
     "allowSyntheticDefaultImports": true,
     "baseUrl": ".",
     "lib": ["esnext", "dom"],
@@ -21,4 +20,4 @@
     "src/**/*.ts",
     "__tests__/**/*.ts"
   ]
-}
+, "../../src/@skyrim-webui/web/src/Api.ts"}

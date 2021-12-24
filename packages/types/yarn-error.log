@@ -1,0 +1,66 @@
+Arguments: 
+  C:\Program Files\nodejs\node.exe C:\Users\mrowr\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js
+
+PATH: 
+  C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\Program Files\ImageMagick-6.9.12-Q16-HDRI;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files\Intel\WiFi\bin\;C:\Program Files\Common Files\Intel\WirelessCommon\;C:\Program Files\Git\cmd;C:\Program Files\dotnet\;C:\Users\mrowr\Dropbox\Skyrim\Tools\Other\pngquant;C:\Program Files\AutoHotkey;C:\Program Files\nodejs\;C:\Ruby30-x64\bin;C:\Users\mrowr\AppData\Local\Microsoft\WindowsApps;C:\Program Files\Intel\WiFi\bin\;C:\Program Files\Common Files\Intel\WirelessCommon\;C:\Users\mrowr\AppData\Local\GitHubDesktop\bin;C:\Users\mrowr\Dropbox\Skyrim\Tools\Bethesda Toolkit;C:\Users\mrowr\.dotnet\tools;C:\Users\mrowr\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\mrowr\AppData\Roaming\npm;C:\Users\mrowr\Dropbox\Skyrim\Tools\Pyro;C:\Users\mrowr\Dropbox\Skyrim\Tools\Papyrus2Typescript;
+
+Yarn version: 
+  1.22.17
+
+Node version: 
+  14.18.1
+
+Platform: 
+  win32 x64
+
+Trace: 
+  SyntaxError: C:\Users\mrowr\Dropbox\Skyrim\Mods\WebUI\packages\types\package.json: Unexpected token } in JSON at position 364
+      at JSON.parse (<anonymous>)
+      at C:\Users\mrowr\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:1625:59
+      at Generator.next (<anonymous>)
+      at step (C:\Users\mrowr\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:310:30)
+      at C:\Users\mrowr\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:321:13
+
+npm manifest: 
+  {
+    "name": "@skyrim-webui/types",
+    "version": "1.0.0",
+    "description": "Shared TypeScript types for WebUI packages",
+    "keywords": [
+      "skyrim",
+      "skyrim platform"
+    ],
+    "author": "Mrowr Purr <mrowr.purr@gmail.com>",
+    "homepage": "https://github.com/mrowrpurr/WebUI",
+    "license": "MIT",
+    "main": "dist/index.js",
+    "directories": {
+      "src": "src",
+    },
+    "files": [
+      "src"
+    ],
+    "publishConfig": {
+      "access": "public"
+    },
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/mrowrpurr/WebUI.git"
+    },
+    "scripts": {
+      "build": "tsc",
+      "build:watch": "tsc --watch"
+    },
+    "bugs": {
+      "url": "https://github.com/mrowrpurr/WebUI/issues"
+    },
+    "devDependencies": {
+      "@skyrim-webui/development-dependencies": "^1.0.0"
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile

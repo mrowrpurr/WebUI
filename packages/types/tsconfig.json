@@ -9,20 +9,14 @@
     "noImplicitThis": true,
     "moduleResolution": "node",
     "esModuleInterop": true,
-    "removeComments": true,
     "allowSyntheticDefaultImports": true,
     "baseUrl": ".",
     "lib": ["esnext", "dom"],
     "typeRoots": ["node_modules/@types"],
     "declaration": true,
-    "outDir": "dist",
-    "paths": {
-      "@skyrim-webui/browser-environment": ["src/index"],
-      "@skyrim-webui/browser-environment/*": ["src/*"]
-    }
+    "outDir": "dist"
   },
   "include": [
-    "src/**/*.ts",
-    "__tests__/**/*.ts"
+    "src/**/*.ts"
   ]
 }

@@ -12,7 +12,7 @@
     "removeComments": true,
     "allowSyntheticDefaultImports": true,
     "baseUrl": ".",
-    "lib": ["esnext"],
+    "src": ["esnext"],
     "typeRoots": ["node_modules/@types"],
     "paths": {
       "skyrimPlatform": ["C:/Steam/steamapps/common/Skyrim Special Edition - Modding/Data/Platform/Modules/skyrimPlatform"],

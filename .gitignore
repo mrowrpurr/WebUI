@@ -2,3 +2,5 @@ node_modules
 skyrim.config.js
 *.zip
 *.tgz
+build
+dist

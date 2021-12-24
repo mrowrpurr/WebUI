@@ -4,18 +4,17 @@
   "description": "Shared TypeScript types for WebUI packages",
   "keywords": [
     "skyrim",
-    "platform"
+    "skyrim platform"
   ],
   "author": "Mrowr Purr <mrowr.purr@gmail.com>",
   "homepage": "https://github.com/mrowrpurr/WebUI",
   "license": "MIT",
   "main": "dist/index.js",
   "directories": {
-    "lib": "lib",
-    "test": "__tests__"
+    "src": "src"
   },
   "files": [
-    "lib"
+    "src"
   ],
   "publishConfig": {
     "access": "public"
@@ -25,7 +24,8 @@
     "url": "git+https://github.com/mrowrpurr/WebUI.git"
   },
   "scripts": {
-    "test": "echo \"Error: run tests from root\" && exit 1"
+    "build": "tsc",
+    "build:watch": "tsc --watch"
   },
   "bugs": {
     "url": "https://github.com/mrowrpurr/WebUI/issues"
