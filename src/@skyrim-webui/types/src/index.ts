@@ -3,7 +3,7 @@ import IBrowserEnvironment from './IBrowserEnvironment'
 import IBrowserExtension from './IBrowserExtension'
 import IConnection from './IConnection'
 import IWebView, { WebViewPosition, WebViewScreenPosition } from './IWebView'
-import IWebViewsHost from './IWebViewsHost'
+import IWebViewsHost, { ScreenDimensions } from './IWebViewsHost'
 
 export {
     IApi,
@@ -13,5 +13,6 @@ export {
     IWebView,
     IWebViewsHost,
     WebViewPosition,
-    WebViewScreenPosition
+    WebViewScreenPosition,
+    ScreenDimensions
 }

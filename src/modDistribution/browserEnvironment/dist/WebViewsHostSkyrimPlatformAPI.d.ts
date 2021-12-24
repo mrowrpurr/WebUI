@@ -10,4 +10,6 @@ export default class WebViewsHostSkyrimPlatformAPI {
     updateWebView(webView: IWebView): void;
     getWebView(replyId: string, id: string): Promise<void>;
     addWebViewToUI(id: string): void;
+    removeWebViewFromUI(id: string): void;
+    getScreenDimensions(replyId: string): Promise<void>;
 }

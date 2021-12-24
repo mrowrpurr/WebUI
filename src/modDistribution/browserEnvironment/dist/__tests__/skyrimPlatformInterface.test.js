@@ -276,4 +276,76 @@ describe('WebViewsHost interface for Skyrim Platform', function () {
             }
         });
     }); });
+    it('can remove web view from the UI (removeFromUI)', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var _a, _b;
+        return __generator(this, function (_c) {
+            switch (_c.label) {
+                case 0: return [4, invokeAPI('registerWebView', { id: 'MyCoolWebView', url: widget1URL })];
+                case 1:
+                    _c.sent();
+                    return [4, invokeAPI('addWebViewToUI', 'MyCoolWebView')];
+                case 2:
+                    _c.sent();
+                    _a = expect;
+                    return [4, page.evaluate(function () { return document.querySelectorAll('iframe').length; })];
+                case 3:
+                    _a.apply(void 0, [_c.sent()]).toEqual(1);
+                    return [4, invokeAPI('removeWebViewFromUI', 'MyCoolWebView')];
+                case 4:
+                    _c.sent();
+                    _b = expect;
+                    return [4, page.evaluate(function () { return document.querySelectorAll('iframe').length; })];
+                case 5:
+                    _b.apply(void 0, [_c.sent()]).toEqual(0);
+                    return [2];
+            }
+        });
+    }); });
+    it('can get browser/screen dimensions', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var actualHeight, actualWidth, dimensions;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4, page.evaluate(function () { return window.innerHeight; })];
+                case 1:
+                    actualHeight = _a.sent();
+                    return [4, page.evaluate(function () { return window.innerWidth; })];
+                case 2:
+                    actualWidth = _a.sent();
+                    return [4, getFromAPI('getScreenDimensions')];
+                case 3:
+                    dimensions = _a.sent();
+                    expect(dimensions.height).toEqual(actualHeight);
+                    expect(dimensions.width).toEqual(actualWidth);
+                    return [2];
+            }
+        });
+    }); });
+    it('can specify absolute positioning', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var _a, width, height, x, y;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
+                case 0: return [4, invokeAPI('registerWebView', {
+                        id: 'MyCoolWebView',
+                        url: widget1URL,
+                        position: {
+                            type: 'absolute',
+                            info: { width: 11, height: 22, x: 33, y: 44 }
+                        }
+                    })];
+                case 1:
+                    _b.sent();
+                    return [4, invokeAPI('addWebViewToUI', 'MyCoolWebView')];
+                case 2:
+                    _b.sent();
+                    return [4, getElementPosition('iframe')];
+                case 3:
+                    _a = _b.sent(), width = _a[0], height = _a[1], x = _a[2], y = _a[3];
+                    expect(width).toEqual('11px');
+                    expect(height).toEqual('22px');
+                    expect(x).toEqual('33px');
+                    expect(y).toEqual('44px');
+                    return [2];
+            }
+        });
+    }); });
 });

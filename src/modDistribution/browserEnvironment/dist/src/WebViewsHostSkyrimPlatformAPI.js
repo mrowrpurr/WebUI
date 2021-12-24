@@ -85,6 +85,25 @@ var WebViewsHostSkyrimPlatformAPI = (function () {
     WebViewsHostSkyrimPlatformAPI.prototype.addWebViewToUI = function (id) {
         this._webViewsHost.addWebViewToUI(id);
     };
+    WebViewsHostSkyrimPlatformAPI.prototype.removeWebViewFromUI = function (id) {
+        this._webViewsHost.removeWebViewFromUI(id);
+    };
+    WebViewsHostSkyrimPlatformAPI.prototype.getScreenDimensions = function (replyId) {
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, _b;
+            return __generator(this, function (_c) {
+                switch (_c.label) {
+                    case 0:
+                        _a = this.reply;
+                        _b = [replyId];
+                        return [4, this._webViewsHost.getScreenDimensions()];
+                    case 1:
+                        _a.apply(this, _b.concat([_c.sent()]));
+                        return [2];
+                }
+            });
+        });
+    };
     return WebViewsHostSkyrimPlatformAPI;
 }());
 export default WebViewsHostSkyrimPlatformAPI;

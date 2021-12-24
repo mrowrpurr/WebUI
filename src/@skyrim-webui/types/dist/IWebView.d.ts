@@ -11,7 +11,7 @@ export interface WebViewPosition {
 export default interface IWebView {
     id: string;
     url: string;
-    position: WebViewPosition;
+    position: WebViewPosition | undefined;
     isMenu: boolean;
     addToUI: () => Promise<boolean>;
     removeFromUI: () => Promise<boolean>;

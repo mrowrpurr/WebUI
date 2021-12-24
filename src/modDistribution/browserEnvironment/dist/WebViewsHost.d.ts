@@ -1,4 +1,4 @@
-import { IWebViewsHost, IWebView } from '@skyrim-webui/types';
+import { IWebViewsHost, IWebView, ScreenDimensions, WebViewPosition } from '@skyrim-webui/types';
 export default class WebViewsHost implements IWebViewsHost {
     private _window;
     private _webViews;
@@ -19,5 +19,9 @@ export default class WebViewsHost implements IWebViewsHost {
     showWebView(id: string): Promise<boolean>;
     hideWebView(id: string): Promise<boolean>;
     setWebViewMenuMode(id: string, menuMode: boolean): Promise<boolean>;
+    getScreenDimensions(): Promise<ScreenDimensions>;
+    moveWebView(id: string, position: WebViewPosition): Promise<boolean>;
+    redirectWebViewUrl(id: string, url: string): Promise<boolean>;
+    private setIframePosition;
     private addScriptsAndWaitForLoad;
 }

@@ -138,6 +138,7 @@ var WebViewsHost = (function () {
                 this._iframes.set(id, iframe);
                 iframe.src = webView.url;
                 iframe.dataset.webviewId = id;
+                this.setIframePosition(iframe, webView);
                 return [2, new Promise(function (resolve) {
                         iframe.onload = function (e) { return resolve(true); };
                         document.body.appendChild(iframe);
@@ -148,7 +149,13 @@ var WebViewsHost = (function () {
     WebViewsHost.prototype.removeWebViewFromUI = function (id) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
-                return [2, false];
+                if (this._iframes.has(id)) {
+                    document.body.removeChild(this._iframes.get(id));
+                    return [2, true];
+                }
+                else
+                    return [2, false];
+                return [2];
             });
         });
     };
@@ -172,6 +179,46 @@ var WebViewsHost = (function () {
                 return [2, false];
             });
         });
+    };
+    WebViewsHost.prototype.getScreenDimensions = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2, { width: window.innerWidth, height: window.innerHeight }];
+            });
+        });
+    };
+    WebViewsHost.prototype.moveWebView = function (id, position) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2, false];
+            });
+        });
+    };
+    WebViewsHost.prototype.redirectWebViewUrl = function (id, url) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2, false];
+            });
+        });
+    };
+    WebViewsHost.prototype.setIframePosition = function (iframe, webView) {
+        if (webView.position && webView.position.type) {
+            if (webView.position.type == 'absolute') {
+                iframe.style.width = webView.position.info.width.toString();
+                iframe.style.height = webView.position.info.height.toString();
+                iframe.style.left = webView.position.info.x.toString();
+                iframe.style.top = webView.position.info.y.toString();
+            }
+            else if (webView.position.info.position.type == 'percentage') {
+                iframe.style.width = "".concat(window.innerWidth * (webView.position.info.width / 100), "px");
+                iframe.style.height = "".concat(window.innerHeight * (webView.position.info.height / 100), "px");
+                iframe.style.left = "".concat(window.innerWidth * (webView.position.info.x / 100), "px");
+                iframe.style.top = "".concat(window.innerHeight * (webView.position.info.y / 100), "px");
+            }
+            else {
+                console.error("Unknown WebView position type: ".concat(webView.position.type));
+            }
+        }
     };
     WebViewsHost.prototype.addScriptsAndWaitForLoad = function (scripts) {
         return __awaiter(this, void 0, void 0, function () {

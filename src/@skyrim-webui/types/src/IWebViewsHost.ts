@@ -1,5 +1,10 @@
 import IBrowserExtension from './IBrowserExtension'
-import IWebView from './IWebView'
+import IWebView, { WebViewPosition } from './IWebView'
+
+export interface ScreenDimensions {
+    width: number
+    height: number
+}
 
 export default interface IWebViewsHost extends IBrowserExtension {
     registerWebView(webView: IWebView): Promise<boolean>
@@ -14,4 +19,7 @@ export default interface IWebViewsHost extends IBrowserExtension {
     showWebView(id: string): Promise<boolean>
     hideWebView(id: string): Promise<boolean>
     setWebViewMenuMode(id: string, menuMode: boolean): Promise<boolean>
+    getScreenDimensions(): Promise<ScreenDimensions>
+    moveWebView(id: string, position: WebViewPosition): Promise<boolean>
+    redirectWebViewUrl(id: string, url: string): Promise<boolean>
 }

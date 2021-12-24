@@ -1,4 +1,4 @@
-import { IWebViewsHost, IWebView } from '@skyrim-webui/types'
+import { IWebViewsHost, IWebView, ScreenDimensions, WebViewPosition } from '@skyrim-webui/types'
 import WebViewsHostSkyrimPlatformAPI from './WebViewsHostSkyrimPlatformAPI'
 
 export default class WebViewsHost implements IWebViewsHost {
@@ -77,7 +77,7 @@ export default class WebViewsHost implements IWebViewsHost {
         this._iframes.set(id, iframe)
         iframe.src = webView.url
         iframe.dataset.webviewId = id
-        // this.setIframePosition(iframe, webView)
+        this.setIframePosition(iframe, webView)
         return new Promise<boolean>(resolve => {
             iframe.onload = (e) => resolve(true)
             document.body.appendChild(iframe)
@@ -85,7 +85,11 @@ export default class WebViewsHost implements IWebViewsHost {
     }
 
     async removeWebViewFromUI(id: string): Promise<boolean> {
-        return false
+        if (this._iframes.has(id)) {
+            document.body.removeChild(this._iframes.get(id)!)
+            return true
+        } else
+            return false
     }
     
     async showWebView(id: string): Promise<boolean> {
@@ -98,6 +102,36 @@ export default class WebViewsHost implements IWebViewsHost {
     
     async setWebViewMenuMode(id: string, menuMode: boolean): Promise<boolean> {
         return false
+    }
+
+    async getScreenDimensions(): Promise<ScreenDimensions> {
+        return { width: window.innerWidth, height: window.innerHeight }
+    }
+
+    async moveWebView(id: string, position: WebViewPosition): Promise<boolean> {
+        return false
+    }
+
+    async redirectWebViewUrl(id: string, url: string): Promise<boolean> {
+        return false
+    }
+
+    private setIframePosition(iframe: HTMLIFrameElement, webView: IWebView) {
+        if (webView.position && webView.position.type) {
+            if (webView.position.type == 'absolute') {
+                iframe.style.width = webView.position.info.width.toString()
+                iframe.style.height = webView.position.info.height.toString()
+                iframe.style.left = webView.position.info.x.toString()
+                iframe.style.top = webView.position.info.y.toString()
+            } else if (webView.position.info.position.type == 'percentage') {
+                iframe.style.width = `${window.innerWidth * (webView.position.info.width / 100)}px`
+                iframe.style.height = `${window.innerHeight * (webView.position.info.height / 100)}px`
+                iframe.style.left = `${window.innerWidth * (webView.position.info.x / 100)}px`
+                iframe.style.top = `${window.innerHeight * (webView.position.info.y / 100)}px`
+            } else {
+                console.error(`Unknown WebView position type: ${webView.position.type}`)
+            }
+        }
     }
 
     private async addScriptsAndWaitForLoad(scripts: Array<string>) {
