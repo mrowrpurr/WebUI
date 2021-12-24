@@ -38,9 +38,26 @@ import WebViewsHostSkyrimPlatformAPI from './WebViewsHostSkyrimPlatformAPI';
 var WebViewsHost = (function () {
     function WebViewsHost() {
         this._webViews = new Map();
+        this._iframes = new Map();
         this.id = 'WebViewHostExtension';
         this.scripts = [];
     }
+    WebViewsHost.prototype.onRegister = function (window) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                this._window = window;
+                window.__webViewsHost__SkyrimPlatformAPI = new WebViewsHostSkyrimPlatformAPI(this);
+                return [2, true];
+            });
+        });
+    };
+    WebViewsHost.prototype.onUnregister = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2, true];
+            });
+        });
+    };
     WebViewsHost.prototype.registerWebView = function (webView) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
@@ -57,7 +74,28 @@ var WebViewsHost = (function () {
     WebViewsHost.prototype.unregisterWebView = function (id) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
-                return [2, true];
+                if (this._webViews.has(id)) {
+                    this._webViews.delete(id);
+                    return [2, true];
+                }
+                else
+                    return [2, false];
+                return [2];
+            });
+        });
+    };
+    WebViewsHost.prototype.updateWebView = function (webView) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                console.log("UPDATING WEB VIEW", webView);
+                if (this._webViews.has(webView.id)) {
+                    this._webViews.set(webView.id, webView);
+                    console.log("UPDATED THE WEB VIEW", webView.id);
+                    return [2, true];
+                }
+                else
+                    return [2, false];
+                return [2];
             });
         });
     };
@@ -78,7 +116,7 @@ var WebViewsHost = (function () {
     WebViewsHost.prototype.getWebView = function (id) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
-                return [2];
+                return [2, this._webViews.get(id)];
             });
         });
     };
@@ -89,19 +127,49 @@ var WebViewsHost = (function () {
             });
         });
     };
-    WebViewsHost.prototype.onRegister = function (window) {
+    WebViewsHost.prototype.addWebViewToUI = function (id) {
         return __awaiter(this, void 0, void 0, function () {
+            var webView, iframe;
             return __generator(this, function (_a) {
-                this._window = window;
-                window.__webViewsHost__SkyrimPlatformAPI = new WebViewsHostSkyrimPlatformAPI(this);
-                return [2, true];
+                if (!this._webViews.has(id) || this._iframes.has(id))
+                    return [2, false];
+                webView = this._webViews.get(id);
+                iframe = document.createElement('iframe');
+                this._iframes.set(id, iframe);
+                iframe.src = webView.url;
+                iframe.dataset.webviewId = id;
+                return [2, new Promise(function (resolve) {
+                        iframe.onload = function (e) { return resolve(true); };
+                        document.body.appendChild(iframe);
+                    })];
             });
         });
     };
-    WebViewsHost.prototype.onUnregister = function () {
+    WebViewsHost.prototype.removeWebViewFromUI = function (id) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
-                return [2, true];
+                return [2, false];
+            });
+        });
+    };
+    WebViewsHost.prototype.showWebView = function (id) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2, false];
+            });
+        });
+    };
+    WebViewsHost.prototype.hideWebView = function (id) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2, false];
+            });
+        });
+    };
+    WebViewsHost.prototype.setWebViewMenuMode = function (id, menuMode) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2, false];
             });
         });
     };

@@ -60,6 +60,31 @@ var WebViewsHostSkyrimPlatformAPI = (function () {
     WebViewsHostSkyrimPlatformAPI.prototype.registerWebView = function (webView) {
         this._webViewsHost.registerWebView(webView);
     };
+    WebViewsHostSkyrimPlatformAPI.prototype.unregisterWebView = function (id) {
+        this._webViewsHost.unregisterWebView(id);
+    };
+    WebViewsHostSkyrimPlatformAPI.prototype.updateWebView = function (webView) {
+        this._webViewsHost.updateWebView(webView);
+    };
+    WebViewsHostSkyrimPlatformAPI.prototype.getWebView = function (replyId, id) {
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, _b;
+            return __generator(this, function (_c) {
+                switch (_c.label) {
+                    case 0:
+                        _a = this.reply;
+                        _b = [replyId];
+                        return [4, this._webViewsHost.getWebView(id)];
+                    case 1:
+                        _a.apply(this, _b.concat([_c.sent()]));
+                        return [2];
+                }
+            });
+        });
+    };
+    WebViewsHostSkyrimPlatformAPI.prototype.addWebViewToUI = function (id) {
+        this._webViewsHost.addWebViewToUI(id);
+    };
     return WebViewsHostSkyrimPlatformAPI;
 }());
 export default WebViewsHostSkyrimPlatformAPI;

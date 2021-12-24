@@ -4,12 +4,11 @@ import * as fs from 'fs'
 
 describe('WebViewsHost interface for Skyrim Platform', () => {
 
-    const widget1URL = `file://${__dirname}/../../../../testFixtures/html/widget1.html`
-    const widget2URL = `file://${__dirname}/../../../../testFixtures/html/widget1.html`
+    const widget1URL = `file://${__dirname}/../../../testFixtures/html/widget1.html`
+    const widget2URL = `file://${__dirname}/../../../testFixtures/html/widget1.html`
 
     let browser: Browser
     let page: Page
-    let browserMessages: Array<any>
     let apiResponseCallbacks: Map<string, (response: any) => void>
 
     // beforeAll(async () => { browser = await puppeteer.launch({ devtools: true }) })
@@ -17,13 +16,11 @@ describe('WebViewsHost interface for Skyrim Platform', () => {
     afterAll(async () => { await browser.close() })
 
     beforeEach(async () => {
-        browserMessages = new Array<any>()
         apiResponseCallbacks = new Map<string, (data: any) => void>()
 
         page = await browser.newPage()
         
         await page.exposeFunction('onSkyrimPlatformMessage', (args: any) => {
-            browserMessages.push(args)
             if (args && args.length == 4 && args[0] == 'WebUI' && args[1] == 'Reply') {
                 const replyId = args[2]
                 const response = args[3]
@@ -80,44 +77,33 @@ describe('WebViewsHost interface for Skyrim Platform', () => {
         expect(await getFromAPI('getWebViewIds')).toEqual(['MyFirstWebView', 'MySecondWebView'])
     })
 
-    // it('can registerWebView', async () => {
-    //     await page.evaluate((widget1URL) => { (window as any).__webViewsHost__.registerWebView({ id: 'MyCoolWebView', url: widget1URL }) }, widget1URL)
+    it('can getWebView', async () => {
+        const webViewInfo = { id: 'MyCoolWebView', url: widget1URL, x: 69, y: 420 }
 
-    //     const replyId = getReplyId()
-    //     await page.evaluate((replyId) => { (window as any).__webViewsHost__.getWebViewIds(replyId) }, replyId)
-    //     expect(browserMessages).toHaveLength(1)
-    //     expect(browserMessages[0]).toEqual(
-    //         ['WebUI', 'Reply', replyId, ['MyCoolWebView']]
-    //     )
-    // })
+        expect(await getFromAPI('getWebView', 'MyCoolWebView')).toEqual(null)
 
-    // it('can getWebView', async () => {
-    //     const webViewInfo = { id: 'MyCoolWebView', url: widget1URL, x: 69, y: 420 }
+        await invokeAPI('registerWebView', webViewInfo)
 
-    //     expect(await getFromAPI('getWebView', 'MyCoolWebView')).toEqual(null)
+        expect(await getFromAPI('getWebView', 'MyCoolWebView')).toEqual(webViewInfo)
+    })
 
-    //     await invokeAPI('registerWebView', webViewInfo)
+    it('can unregisterWebView', async () => {
+        await invokeAPI('registerWebView', { id: 'MyCoolWebView1', url: widget1URL })
+        await invokeAPI('registerWebView', { id: 'MyCoolWebView2', url: widget2URL })
+        expect(await getFromAPI('getWebViewIds')).toEqual(['MyCoolWebView1', 'MyCoolWebView2'])
 
-    //     expect(await getFromAPI('getWebView', 'MyCoolWebView')).toEqual(webViewInfo)
-    // })
+        await invokeAPI('unregisterWebView', 'MyCoolWebView1')
 
-    // it('can unregisterWebView', async () => {
-    //     await invokeAPI('registerWebView', { id: 'MyCoolWebView1', url: widget1URL })
-    //     await invokeAPI('registerWebView', { id: 'MyCoolWebView2', url: widget2URL })
-    //     expect(await getFromAPI('getWebViewIds')).toEqual(['MyCoolWebView1', 'MyCoolWebView2'])
+        expect(await getFromAPI('getWebViewIds')).toEqual(['MyCoolWebView2'])
 
-    //     await invokeAPI('unregisterWebView', 'MyCoolWebView1')
+        await invokeAPI('unregisterWebView', 'MyCoolWebView2')
 
-    //     expect(await getFromAPI('getWebViewIds')).toEqual(['MyCoolWebView2'])
-
-    //     await invokeAPI('unregisterWebView', 'MyCoolWebView2')
-
-    //     expect(await getFromAPI('getWebViewIds')).toEqual([])
-    // })
+        expect(await getFromAPI('getWebViewIds')).toEqual([])
+    })
 
     // it('can update web view values', async () => {
     //     await invokeAPI('registerWebView', { id: 'HelloWidget', x: 420, y: 69, url: widget1URL })
-    //     await invokeAPI('addToUI', 'HelloWidget')
+    //     await invokeAPI('addWebViewToUI', 'HelloWidget')
 
     //     let webView = await getFromAPI('getWebView', 'HelloWidget')
 
@@ -129,48 +115,48 @@ describe('WebViewsHost interface for Skyrim Platform', () => {
     //     // Check the iframe URL
     //     expect(await page.evaluate(() => document.querySelector('iframe')!.src)).toContain('widget1.html')
 
-    //     await invokeAPI('update', 'HelloWidget', { id: 'TryToChangeThis', x: 123, url: widget2URL })
+    //     await invokeAPI('updateWebView', { id: 'HelloWidget', x: 123, url: widget2URL })
 
     //     webView = await getFromAPI('getWebView', 'HelloWidget')
 
-    //     expect(webView.id).toEqual('HelloWidget') // ID not changed
+    //     expect(webView.id).toEqual('HelloWidget')
     //     expect(webView.x).toEqual(123) // <--- changed!
-    //     expect(webView.y).toEqual(69) // Y still present
+    //     expect(webView.y).toEqual(69) // Y becomes the defaeult again
     //     expect(webView.url).toEqual(widget2URL) // <--- changed!
 
-    //     // URL should *STILL* be the original URl
-    //     // Update does *NOT* move or redirect (use move() and redirect() for those)
-    //     expect(await page.evaluate(() => document.querySelector('iframe')!.src)).toContain('widget1.html')
+    //     // // URL should *STILL* be the original URl
+    //     // // Update does *NOT* move or redirect (use move() and redirect() for those)
+    //     // expect(await page.evaluate(() => document.querySelector('iframe')!.src)).toContain('widget1.html')
     // })
 
-    // // TODO use a 'isAddedToUI' call in here
-    // it('can add web view to the UI (addToUI)', async () => {
-    //     await invokeAPI('registerWebView', { id: 'MyCoolWebView', url: widget1URL })
+    // TODO use a 'isAddedToUI' call in here
+    it('can add web view to the UI (addWebViewToUI)', async () => {
+        await invokeAPI('registerWebView', { id: 'MyCoolWebView', url: widget1URL })
 
-    //     expect(await page.evaluate(() => document.querySelectorAll('iframe').length)).toEqual(0)
+        expect(await page.evaluate(() => document.querySelectorAll('iframe').length)).toEqual(0)
 
-    //     await invokeAPI('addToUI', 'MyCoolWebView')
+        await invokeAPI('addWebViewToUI', 'MyCoolWebView')
 
-    //     expect(await page.evaluate(() => document.querySelectorAll('iframe').length)).toEqual(1)
-    //     expect(await page.evaluate(() => document.querySelector('iframe')?.getAttribute('src'))).toEqual(widget1URL)
-    //     const iframe = await page.waitForSelector('iframe')
-    //     const frame = await iframe!.contentFrame();
-    //     const iframeHtml = await frame?.evaluate(() => document.querySelector('*')?.outerHTML)
-    //     expect(iframeHtml).toContain('I am widget 1')
-    // })
+        expect(await page.evaluate(() => document.querySelectorAll('iframe').length)).toEqual(1)
+        expect(await page.evaluate(() => document.querySelector('iframe')?.getAttribute('src'))).toEqual(widget1URL)
+        const iframe = await page.waitForSelector('iframe')
+        const frame = await iframe!.contentFrame();
+        const iframeHtml = await frame?.evaluate(() => document.querySelector('*')?.outerHTML)
+        expect(iframeHtml).toContain('I am widget 1')
+    })
 
     // it('can check if a web view has been added to the UI (isInUI)', async () => {
     //     await invokeAPI('registerWebView', { id: 'MyCoolWebView', url: widget1URL })
     //     expect(await getFromAPI('isInUI', 'MyCoolWebView')).toEqual(false)
 
-    //     await invokeAPI('addToUI', 'MyCoolWebView')
+    //     await invokeAPI('addWebViewToUI', 'MyCoolWebView')
 
     //     expect(await getFromAPI('isInUI', 'MyCoolWebView')).toEqual(true)
     // })
 
     // it('can remove web view from the UI (removeFromUI)', async () => {
     //     await invokeAPI('registerWebView', { id: 'MyCoolWebView', url: widget1URL })
-    //     await invokeAPI('addToUI', 'MyCoolWebView')
+    //     await invokeAPI('addWebViewToUI', 'MyCoolWebView')
 
     //     expect(await page.evaluate(() => document.querySelectorAll('iframe').length)).toEqual(1)
 
@@ -181,7 +167,7 @@ describe('WebViewsHost interface for Skyrim Platform', () => {
 
     // it('web view is removed from UI when unregistered', async () => {
     //     await invokeAPI('registerWebView', { id: 'MyCoolWebView', url: widget1URL })
-    //     await invokeAPI('addToUI', 'MyCoolWebView')
+    //     await invokeAPI('addWebViewToUI', 'MyCoolWebView')
     //     expect((await page.$$('iframe')).length).toEqual(1)
 
     //     await invokeAPI('unregisterWebView', 'MyCoolWebView')
@@ -192,11 +178,11 @@ describe('WebViewsHost interface for Skyrim Platform', () => {
     // it('cannot add multiple web views with the same identifier', async () => {
     //     expect((await page.$$('iframe')).length).toEqual(0)
     //     await invokeAPI('registerWebView', { id: 'MyCoolWebView', url: widget1URL })
-    //     await invokeAPI('addToUI', 'MyCoolWebView')
+    //     await invokeAPI('addWebViewToUI', 'MyCoolWebView')
 
     //     expect((await page.$$('iframe')).length).toEqual(1)
 
-    //     await invokeAPI('addToUI', 'MyCoolWebView')
+    //     await invokeAPI('addWebViewToUI', 'MyCoolWebView')
 
     //     expect((await page.$$('iframe')).length).toEqual(1) // There should still be only 1 iframe!
     // })
@@ -208,12 +194,12 @@ describe('WebViewsHost interface for Skyrim Platform', () => {
     //     expect((await page.$$('iframe[data-webview-id=MyCoolWebView1]')).length).toEqual(0)
     //     expect((await page.$$('iframe[data-webview-id=MyCoolWebView2]')).length).toEqual(0)
 
-    //     await invokeAPI('addToUI', 'MyCoolWebView1')
+    //     await invokeAPI('addWebViewToUI', 'MyCoolWebView1')
 
     //     expect((await page.$$('iframe[data-webview-id=MyCoolWebView1]')).length).toEqual(1)
     //     expect((await page.$$('iframe[data-webview-id=MyCoolWebView2]')).length).toEqual(0)
 
-    //     await invokeAPI('addToUI', 'MyCoolWebView2')
+    //     await invokeAPI('addWebViewToUI', 'MyCoolWebView2')
 
     //     expect((await page.$$('iframe[data-webview-id=MyCoolWebView1]')).length).toEqual(1)
     //     expect((await page.$$('iframe[data-webview-id=MyCoolWebView2]')).length).toEqual(1)
@@ -244,7 +230,7 @@ describe('WebViewsHost interface for Skyrim Platform', () => {
     //         x: 33,
     //         y: 44
     //     })
-    //     await invokeAPI('addToUI', 'MyCoolWebView')
+    //     await invokeAPI('addWebViewToUI', 'MyCoolWebView')
 
     //     const [width, height, x, y] = await getElementPosition('iframe')
 
@@ -264,7 +250,7 @@ describe('WebViewsHost interface for Skyrim Platform', () => {
     //         x: 10,
     //         y: 20
     //     })
-    //     await invokeAPI('addToUI', 'MyCoolWebView')
+    //     await invokeAPI('addWebViewToUI', 'MyCoolWebView')
 
     //     const windowHeight = await page.evaluate(() => window.innerHeight)
     //     const windowWidth = await page.evaluate(() => window.innerWidth)
@@ -286,7 +272,7 @@ describe('WebViewsHost interface for Skyrim Platform', () => {
     //         x: 10,
     //         y: 20
     //     })
-    //     await invokeAPI('addToUI', 'MyCoolWebView')
+    //     await invokeAPI('addWebViewToUI', 'MyCoolWebView')
 
     //     const windowHeight = await page.evaluate(() => window.innerHeight)
     //     const windowWidth = await page.evaluate(() => window.innerWidth)
@@ -310,7 +296,7 @@ describe('WebViewsHost interface for Skyrim Platform', () => {
     //         x: 33,
     //         y: 44
     //     })
-    //     await invokeAPI('addToUI', 'MyCoolWebView')
+    //     await invokeAPI('addWebViewToUI', 'MyCoolWebView')
 
     //     let [width, height, x, y] = await getElementPosition('iframe')
 

@@ -6,4 +6,8 @@ export default class WebViewsHostSkyrimPlatformAPI {
     private reply;
     getWebViewIds(replyId: string): Promise<void>;
     registerWebView(webView: IWebView): void;
+    unregisterWebView(id: string): void;
+    updateWebView(webView: IWebView): void;
+    getWebView(replyId: string, id: string): Promise<void>;
+    addWebViewToUI(id: string): void;
 }

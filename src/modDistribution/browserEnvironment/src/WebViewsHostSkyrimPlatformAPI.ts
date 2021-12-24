@@ -16,23 +16,35 @@ export default class WebViewsHostSkyrimPlatformAPI {
         this.reply(replyId, await this._webViewsHost.getWebViewIds())
     }
 
+    // TODO : consider having all functions reply() with the boolean responses
     registerWebView(webView: IWebView) {
         this._webViewsHost.registerWebView(webView)
     }
 
-    // private webViews = new Map<string, IWebView>()
-    // private iframes = new Map<string, HTMLIFrameElement>()
+    unregisterWebView(id: string) {
+        this._webViewsHost.unregisterWebView(id)
+    }
 
-    // // TODO --> unregister
-    // unregisterWebView(id: string) {
-    //     this.removeFromUI(id)
-    //     this.webViews.delete(id)
-    // }
+    updateWebView(webView: IWebView) {
+        this._webViewsHost.updateWebView(webView)
+    }
 
-    // // TODO --> get()
-    // getWebView(replyId: string, id: string) {
-    //     this.reply(replyId, this.webViews.get(id))
-    // }
+    async getWebView(replyId: string, id: string) {
+        this.reply(replyId, await this._webViewsHost.getWebView(id))
+    }
+
+    addWebViewToUI(id: string) {
+        this._webViewsHost.addWebViewToUI(id)
+    }
+
+
+
+
+
+
+
+
+
 
     // update(id: string, { url, positionType, x, y, width, height } : { url?: string, positionType?: string, x?: number, y?: number, width?: number, height?: number }) {
     //     const webView = this.webViews.get(id)
@@ -46,17 +58,6 @@ export default class WebViewsHostSkyrimPlatformAPI {
     //     }
     // }
 
-    // addToUI(id: string) {
-    //     const webView = this.webViews.get(id)
-    //     if (webView && ! this.iframes.has(webView.id)) {
-    //         const iframe = document.createElement('iframe')
-    //         this.iframes.set(id, iframe)
-    //         iframe.src = webView.url
-    //         iframe.dataset.webviewId = id
-    //         this.setIframePosition(iframe, webView)
-    //         document.body.appendChild(iframe)
-    //     }
-    // }
 
     // removeFromUI(id: string) {
     //     if (this.iframes.has(id)) {

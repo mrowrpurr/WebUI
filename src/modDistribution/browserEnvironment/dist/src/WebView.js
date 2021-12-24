@@ -35,13 +35,14 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 var WebView = (function () {
-    function WebView(id) {
+    function WebView(id, url) {
         this.isMenu = false;
         this.position = {
             type: 'absolute',
             info: { x: 0, y: 0, width: 100, height: 100 }
         };
         this.id = id;
+        this.url = url;
     }
     WebView.prototype.addToUI = function () {
         return __awaiter(this, void 0, void 0, function () {

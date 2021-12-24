@@ -45,11 +45,10 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
 };
 import puppeteer from 'puppeteer';
 describe('WebViewsHost interface for Skyrim Platform', function () {
-    var widget1URL = "file://".concat(__dirname, "/../../../../testFixtures/html/widget1.html");
-    var widget2URL = "file://".concat(__dirname, "/../../../../testFixtures/html/widget1.html");
+    var widget1URL = "file://".concat(__dirname, "/../../../testFixtures/html/widget1.html");
+    var widget2URL = "file://".concat(__dirname, "/../../../testFixtures/html/widget1.html");
     var browser;
     var page;
-    var browserMessages;
     var apiResponseCallbacks;
     beforeAll(function () { return __awaiter(void 0, void 0, void 0, function () { return __generator(this, function (_a) {
         switch (_a.label) {
@@ -71,13 +70,11 @@ describe('WebViewsHost interface for Skyrim Platform', function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    browserMessages = new Array();
                     apiResponseCallbacks = new Map();
                     return [4, browser.newPage()];
                 case 1:
                     page = _a.sent();
                     return [4, page.exposeFunction('onSkyrimPlatformMessage', function (args) {
-                            browserMessages.push(args);
                             if (args && args.length == 4 && args[0] == 'WebUI' && args[1] == 'Reply') {
                                 var replyId = args[2];
                                 var response = args[3];
@@ -186,6 +183,95 @@ describe('WebViewsHost interface for Skyrim Platform', function () {
                     return [4, getFromAPI('getWebViewIds')];
                 case 5:
                     _c.apply(void 0, [_d.sent()]).toEqual(['MyFirstWebView', 'MySecondWebView']);
+                    return [2];
+            }
+        });
+    }); });
+    it('can getWebView', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var webViewInfo, _a, _b;
+        return __generator(this, function (_c) {
+            switch (_c.label) {
+                case 0:
+                    webViewInfo = { id: 'MyCoolWebView', url: widget1URL, x: 69, y: 420 };
+                    _a = expect;
+                    return [4, getFromAPI('getWebView', 'MyCoolWebView')];
+                case 1:
+                    _a.apply(void 0, [_c.sent()]).toEqual(null);
+                    return [4, invokeAPI('registerWebView', webViewInfo)];
+                case 2:
+                    _c.sent();
+                    _b = expect;
+                    return [4, getFromAPI('getWebView', 'MyCoolWebView')];
+                case 3:
+                    _b.apply(void 0, [_c.sent()]).toEqual(webViewInfo);
+                    return [2];
+            }
+        });
+    }); });
+    it('can unregisterWebView', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var _a, _b, _c;
+        return __generator(this, function (_d) {
+            switch (_d.label) {
+                case 0: return [4, invokeAPI('registerWebView', { id: 'MyCoolWebView1', url: widget1URL })];
+                case 1:
+                    _d.sent();
+                    return [4, invokeAPI('registerWebView', { id: 'MyCoolWebView2', url: widget2URL })];
+                case 2:
+                    _d.sent();
+                    _a = expect;
+                    return [4, getFromAPI('getWebViewIds')];
+                case 3:
+                    _a.apply(void 0, [_d.sent()]).toEqual(['MyCoolWebView1', 'MyCoolWebView2']);
+                    return [4, invokeAPI('unregisterWebView', 'MyCoolWebView1')];
+                case 4:
+                    _d.sent();
+                    _b = expect;
+                    return [4, getFromAPI('getWebViewIds')];
+                case 5:
+                    _b.apply(void 0, [_d.sent()]).toEqual(['MyCoolWebView2']);
+                    return [4, invokeAPI('unregisterWebView', 'MyCoolWebView2')];
+                case 6:
+                    _d.sent();
+                    _c = expect;
+                    return [4, getFromAPI('getWebViewIds')];
+                case 7:
+                    _c.apply(void 0, [_d.sent()]).toEqual([]);
+                    return [2];
+            }
+        });
+    }); });
+    it('can add web view to the UI (addWebViewToUI)', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var _a, _b, _c, iframe, frame, iframeHtml;
+        return __generator(this, function (_d) {
+            switch (_d.label) {
+                case 0: return [4, invokeAPI('registerWebView', { id: 'MyCoolWebView', url: widget1URL })];
+                case 1:
+                    _d.sent();
+                    _a = expect;
+                    return [4, page.evaluate(function () { return document.querySelectorAll('iframe').length; })];
+                case 2:
+                    _a.apply(void 0, [_d.sent()]).toEqual(0);
+                    return [4, invokeAPI('addWebViewToUI', 'MyCoolWebView')];
+                case 3:
+                    _d.sent();
+                    _b = expect;
+                    return [4, page.evaluate(function () { return document.querySelectorAll('iframe').length; })];
+                case 4:
+                    _b.apply(void 0, [_d.sent()]).toEqual(1);
+                    _c = expect;
+                    return [4, page.evaluate(function () { var _a; return (_a = document.querySelector('iframe')) === null || _a === void 0 ? void 0 : _a.getAttribute('src'); })];
+                case 5:
+                    _c.apply(void 0, [_d.sent()]).toEqual(widget1URL);
+                    return [4, page.waitForSelector('iframe')];
+                case 6:
+                    iframe = _d.sent();
+                    return [4, iframe.contentFrame()];
+                case 7:
+                    frame = _d.sent();
+                    return [4, (frame === null || frame === void 0 ? void 0 : frame.evaluate(function () { var _a; return (_a = document.querySelector('*')) === null || _a === void 0 ? void 0 : _a.outerHTML; }))];
+                case 8:
+                    iframeHtml = _d.sent();
+                    expect(iframeHtml).toContain('I am widget 1');
                     return [2];
             }
         });

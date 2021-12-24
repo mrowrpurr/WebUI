@@ -1,6 +1,7 @@
 import { IWebView } from '@skyrim-webui/types';
 export default class WebView implements IWebView {
-    id: string;
+    readonly id: string;
+    readonly url: string;
     isMenu: boolean;
     position: {
         type: string;
@@ -11,7 +12,7 @@ export default class WebView implements IWebView {
             height: number;
         };
     };
-    constructor(id: string);
+    constructor(id: string, url: string);
     addToUI(): Promise<boolean>;
     removeFromUI(): Promise<boolean>;
     show(): Promise<boolean>;
