@@ -1,10 +1,25 @@
-import { IBrowserEnvironment, IWebViewsHost } from '@skyrim-webui/types'
-import WebViewsHost from './WebViewsHost';
+import { IBrowserEnvironment, IBrowserExtension } from '@skyrim-webui/types'
 
 export default class BrowserEnvironment implements IBrowserEnvironment {
-    WebViewsHost: IWebViewsHost
+    extensions = new Map<string, IBrowserExtension>()
 
-    constructor(webViewHost: IWebViewsHost) {
-        this.WebViewsHost = webViewHost
+    async register(extension: IBrowserExtension): Promise<boolean> {
+        return true
+    }
+
+    async unregister(id: string): Promise<boolean> {
+        return true
+    }
+
+    async setMenuMode(enable = true): Promise<boolean> {
+        return true
+    }
+
+    async setFocused(focused = true): Promise<boolean> {
+        return true
+    }
+
+    async setVisible(focused = true): Promise<boolean> {
+        return true
     }
 }
