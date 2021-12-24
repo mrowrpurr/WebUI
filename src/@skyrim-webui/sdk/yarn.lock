@@ -490,6 +490,11 @@
   dependencies:
     "@sinonjs/commons" "^1.7.0"
 
+"@skyrim-platform/skyrim-platform@^2.3.1":
+  version "2.3.1"
+  resolved "https://registry.yarnpkg.com/@skyrim-platform/skyrim-platform/-/skyrim-platform-2.3.1.tgz#f37ebcd597ed6495ff8ff7352b41561de4c73c7d"
+  integrity sha512-QvuCVSSxtO6fxGa0XYesul9AdJR5EpbeUZFfzMR6GKBhhe5D7tC8TYm+EiN84qS53yh+KNDsO29z2bB51EWonQ==
+
 "@skyrim-webui/development-dependencies@../dev":
   version "1.0.1"
   dependencies:
@@ -506,7 +511,7 @@
     webpack-cli "^4.9.1"
     webpack-shell-plugin-next "^2.2.2"
 
-"@skyrim-webui/types@../types":
+"@skyrim-webui/types@file:../types":
   version "1.0.0"
 
 "@tootallnate/once@1":
@@ -623,10 +628,6 @@
   integrity sha512-3Nau+qi69CN55VwZb0ATtdUAlYlqOOQ3OfQfq0Hqgc4JMFXiQT/XInlwQ9g6LbicDslE6loIFsXFklGh5XmI6Q==
   dependencies:
     "@types/node" "*"
-
-"@types/skyrimPlatform@https://github.com/skyrim-types/skyrimPlatform.git":
-  version "2.3.0"
-  resolved "https://github.com/skyrim-types/skyrimPlatform.git#6aa2d85d0e269775851f24f31dc284db1ca8125b"
 
 "@types/stack-utils@^2.0.0":
   version "2.0.1"

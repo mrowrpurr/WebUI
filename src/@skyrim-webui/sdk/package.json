@@ -23,8 +23,8 @@
   },
   "homepage": "https://github.com/mrowrpurr/WebUI#readme",
   "dependencies": {
-    "@skyrim-webui/types": "../types",
-    "@types/skyrimPlatform": "https://github.com/skyrim-types/skyrimPlatform.git"
+    "@skyrim-platform/skyrim-platform": "^2.3.1",
+    "@skyrim-webui/types": "*"
   },
   "devDependencies": {
     "@skyrim-webui/development-dependencies": "../dev"
