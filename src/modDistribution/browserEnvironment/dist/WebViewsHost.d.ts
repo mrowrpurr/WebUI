@@ -1,2 +1,3 @@
-export default class WebViewsHost {
+import { IWebViewsHost } from '@skyrim-webui/types';
+export default class WebViewsHost implements IWebViewsHost {
 }

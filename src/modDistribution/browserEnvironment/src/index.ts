@@ -11,3 +11,5 @@ export {
     WebView,
     WebViewsHost
 }
+
+(window as any).foo = "Hello?"
