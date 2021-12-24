@@ -1,5 +1,5 @@
 Arguments: 
-  C:\Program Files\nodejs\node.exe C:\Users\mrowr\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js add @skyrim-webui/shared-types
+  C:\Program Files\nodejs\node.exe C:\Users\mrowr\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js add @skyrim-webui/sdk
 
 PATH: 
   C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\Program Files\ImageMagick-6.9.12-Q16-HDRI;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files\Intel\WiFi\bin\;C:\Program Files\Common Files\Intel\WirelessCommon\;C:\Program Files\Git\cmd;C:\Program Files\dotnet\;C:\Users\mrowr\Dropbox\Skyrim\Tools\Other\pngquant;C:\Program Files\AutoHotkey;C:\Program Files\nodejs\;C:\Ruby30-x64\bin;C:\Users\mrowr\AppData\Local\Microsoft\WindowsApps;C:\Program Files\Intel\WiFi\bin\;C:\Program Files\Common Files\Intel\WirelessCommon\;C:\Users\mrowr\AppData\Local\GitHubDesktop\bin;C:\Users\mrowr\Dropbox\Skyrim\Tools\Bethesda Toolkit;C:\Users\mrowr\.dotnet\tools;C:\Users\mrowr\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\mrowr\AppData\Roaming\npm;C:\Users\mrowr\Dropbox\Skyrim\Tools\Pyro;C:\Users\mrowr\Dropbox\Skyrim\Tools\Papyrus2Typescript;
@@ -14,7 +14,7 @@ Platform:
   win32 x64
 
 Trace: 
-  Error: https://registry.yarnpkg.com/@skyrim-webui%2fshared-types: Not found
+  Error: https://registry.yarnpkg.com/@skyrim-webui%2fsdk: Not found
       at Request.params.callback [as _callback] (C:\Users\mrowr\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:67029:18)
       at Request.self.callback (C:\Users\mrowr\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:140883:22)
       at Request.emit (events.js:400:28)
@@ -28,9 +28,9 @@ Trace:
 
 npm manifest: 
   {
-    "name": "@skyrim-webui/runtime-papyrus",
+    "name": "@skyrim-webui/runtime-sdk",
     "version": "1.0.0",
-    "description": "Skyrim Platform runtime for the Papyrus integration of the Skyrim WebUI framework",
+    "description": "Skyrim Platform runtime for Skyrim WebUI framework",
     "keywords": [
       "skyrim",
       "platform"
@@ -61,7 +61,8 @@ npm manifest:
     },
     "dependencies": {
       "@skyrim-platform/skyrim-platform": "^2.3.1",
-      "@skyrim-webui/development-dependencies": "^1.0.0"
+      "@skyrim-webui/development-dependencies": "^1.0.0",
+      "@skyrim-webui/types": "^1.0.0"
     }
   }
 
