@@ -25,7 +25,10 @@
     "url": "git+https://github.com/mrowrpurr/WebUI.git"
   },
   "scripts": {
-    "test": "echo \"Error: run tests from root\" && exit 1"
+    "build": "tsc",
+    "webpack": "webpack",
+    "watch": "tsc-watch --onSuccess \"yarn webpack\"",
+    "dev": "yarn && set DEPLOY_PLUGIN=true && tsc-watch --onSuccess \"yarn webpack\""
   },
   "bugs": {
     "url": "https://github.com/mrowrpurr/WebUI/issues"

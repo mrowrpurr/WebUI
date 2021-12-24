@@ -1,3 +1,17 @@
-import { makeWidgetAppear } from '@skyrim-webui/sdk'
+import { registerWebView } from '@skyrim-webui/sdk'
 
-makeWidgetAppear('http://localhost:8080/packages/example-hello-world-frontend/')
+const webView1 = registerWebView({
+    id: 'HelloWorld',
+    url: 'http://localhost:8080/packages/example-hello-world-frontend/',
+
+})
+
+webView1.show()
+
+const webView2 = registerWebView({
+    id: 'HelloWorld',
+    url: 'http://localhost:8080/packages/example-hello-world-frontend/holiday.html',
+    
+})
+
+webView2.show()
