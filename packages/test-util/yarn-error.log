@@ -14,13 +14,13 @@ Platform:
   win32 x64
 
 Trace: 
-  Error: ENOENT: no such file or directory, lstat 'C:\Users\mrowr\Dropbox\Skyrim\Mods\WebUI\node_modules\@babel\helper-compilation-targets\node_modules\.bin'
+  Error: ENOENT: no such file or directory, lstat 'C:\Users\mrowr\Dropbox\Skyrim\Mods\WebUI\packages\development-dependencies\node_modules\.bin'
 
 npm manifest: 
   {
-    "name": "@skyrim-webui/runtime-sdk",
+    "name": "@skyrim-webui/test-util",
     "version": "1.0.0",
-    "description": "Skyrim Platform runtime for Skyrim WebUI framework",
+    "description": "Common testing utilities used for all @skyrim-webui projects",
     "keywords": [
       "skyrim",
       "skyrim platform"
@@ -50,13 +50,10 @@ npm manifest:
       "url": "https://github.com/mrowrpurr/WebUI/issues"
     },
     "dependencies": {
-      "@skyrim-platform/skyrim-platform": "^2.3.1",
-      "@skyrim-webui/types": "^1.0.0",
-      "@skyrim-webui/sdk": "^1.0.0"
+      "@skyrim-webui/types": "^1.0.0"
     },
     "devDependencies": {
-      "@skyrim-webui/development-dependencies": "^1.0.0",
-      "@skyrim-webui/test-util": "^1.0.0"
+      "@skyrim-webui/development-dependencies": "^1.0.0"
     }
   }
 

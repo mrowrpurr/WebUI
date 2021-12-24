@@ -1,5 +1,5 @@
 Arguments: 
-  C:\Program Files\nodejs\node.exe C:\Users\mrowr\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js add -D @skyrim-webui/development-dependencies
+  C:\Program Files\nodejs\node.exe C:\Users\mrowr\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js
 
 PATH: 
   C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\Program Files\ImageMagick-6.9.12-Q16-HDRI;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files\Intel\WiFi\bin\;C:\Program Files\Common Files\Intel\WirelessCommon\;C:\Program Files\Git\cmd;C:\Program Files\dotnet\;C:\Users\mrowr\Dropbox\Skyrim\Tools\Other\pngquant;C:\Program Files\AutoHotkey;C:\Program Files\nodejs\;C:\Ruby30-x64\bin;C:\Users\mrowr\AppData\Local\Microsoft\WindowsApps;C:\Program Files\Intel\WiFi\bin\;C:\Program Files\Common Files\Intel\WirelessCommon\;C:\Users\mrowr\AppData\Local\GitHubDesktop\bin;C:\Users\mrowr\Dropbox\Skyrim\Tools\Bethesda Toolkit;C:\Users\mrowr\.dotnet\tools;C:\Users\mrowr\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\mrowr\AppData\Roaming\npm;C:\Users\mrowr\Dropbox\Skyrim\Tools\Pyro;C:\Users\mrowr\Dropbox\Skyrim\Tools\Papyrus2Typescript;
@@ -14,7 +14,7 @@ Platform:
   win32 x64
 
 Trace: 
-  Error: EBUSY: resource busy or locked, rmdir 'C:\Users\mrowr\Dropbox\Skyrim\Mods\WebUI\node_modules\.bin'
+  Error: ENOENT: no such file or directory, lstat 'C:\Users\mrowr\Dropbox\Skyrim\Mods\WebUI\packages\development-dependencies\node_modules\.bin'
 
 npm manifest: 
   {
@@ -44,10 +44,22 @@ npm manifest:
       "url": "git+https://github.com/mrowrpurr/WebUI.git"
     },
     "scripts": {
-      "test": "echo \"Error: run tests from root\" && exit 1"
+      "build": "webpack",
+      "build:watch": "tsc-watch --onSuccess \"yarn webpack\"",
+      "test": "jest",
+      "test:watch": "jest --watch"
     },
     "bugs": {
       "url": "https://github.com/mrowrpurr/WebUI/issues"
+    },
+    "dependencies": {
+      "@skyrim-webui/types": "^1.0.0"
+    },
+    "devDependencies": {
+      "@skyrim-webui/development-dependencies": "^1.0.0",
+      "@skyrim-webui/test-util": "^1.0.0",
+      "@types/jest": "^27.0.3",
+      "jest": "^27.4.5"
     }
   }
 
@@ -5481,7 +5493,7 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/punycode/-/punycode-2.1.1.tgz#b58b010ac40c22c5657616c8d2c2c02c7bf479ec"
     integrity sha512-XRsRjdf+j5ml+y/6GKHPZbrF/8p2Yga0JPtdqTIY2Xe5ohJPD9saDJJLPvp9+NSBprVvevdXZybnj2cv8OEd0A==
   
-  puppeteer@^13.0.0, puppeteer@^13.0.1:
+  puppeteer@^13.0.1:
     version "13.0.1"
     resolved "https://registry.yarnpkg.com/puppeteer/-/puppeteer-13.0.1.tgz#9cd9bb8ec090bade183ca186bf342396bdffa135"
     integrity sha512-wqGIx59LzYqWhYcJQphMT+ux0sgatEUbjKG0lbjJxNVqVIT3ZC5m4Bvmq2gHE3qhb63EwS+rNkql08bm4BvO0A==

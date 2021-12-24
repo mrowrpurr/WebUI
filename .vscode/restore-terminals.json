@@ -1,0 +1,149 @@
+{
+  "artificialDelayMilliseconds": 300,
+  "terminals": [
+    {
+      "splitTerminals": [
+        {
+          "name": "Examples HTTP Server",
+          "commands": ["yarn -g http-server", "http-server -c-1"]
+        }
+      ]
+    },
+    {
+      "splitTerminals": [
+        {
+          "name": "@ sdk TEST",
+          "commands": ["cd packages/sdk", "yarn", "yarn test:watch"]
+        }
+      ]
+    },
+    {
+      "splitTerminals": [
+        {
+          "name": "@ sdk BUILD",
+          "commands": ["cd packages/sdk", "yarn", "yarn build:watch"]
+        }
+      ]
+    },
+    {
+      "splitTerminals": [
+        {
+          "name": "@ web TEST",
+          "commands": ["cd packages/web", "yarn", "yarn test:watch"]
+        }
+      ]
+    },
+    {
+      "splitTerminals": [
+        {
+          "name": "@ web BUILD",
+          "commands": ["cd packages/web", "yarn", "yarn build:watch"]
+        }
+      ]
+    },
+    {
+      "splitTerminals": [
+        {
+          "name": "@ testutil TEST",
+          "commands": ["cd packages/test-util", "yarn", "yarn test:watch"]
+        }
+      ]
+    },
+    {
+      "splitTerminals": [
+        {
+          "name": "@ testutil BUILD",
+          "commands": ["cd packages/test-util", "yarn", "yarn build:watch"]
+        }
+      ]
+    },
+    {
+      "splitTerminals": [
+        {
+          "name": "@ types BUILD",
+          "commands": ["cd packages/types", "yarn", "yarn build:watch"]
+        }
+      ]
+    },
+    {
+      "splitTerminals": [
+        {
+          "name": "-> browser TEST",
+          "commands": ["cd packages/runtime-web", "yarn", "yarn test:watch"]
+        }
+      ]
+    },
+    {
+      "splitTerminals": [
+        {
+          "name": "-> browser BUILD",
+          "commands": ["cd packages/runtime-web", "yarn", "yarn build:watch"]
+        }
+      ]
+    },
+    {
+      "splitTerminals": [
+        {
+          "name": "-> runtime TEST",
+          "commands": ["cd packages/runtime-sdk", "yarn", "yarn test:watch"]
+        }
+      ]
+    },
+    {
+      "splitTerminals": [
+        {
+          "name": "-> runtime BUILD",
+          "commands": ["cd packages/runtime-sdk", "yarn", "yarn build:watch"]
+        }
+      ]
+    },
+    {
+      "splitTerminals": [
+        {
+          "name": "-> papyrus TEST",
+          "commands": ["cd packages/runtime-papyrus", "yarn", "yarn test:watch"]
+        }
+      ]
+    },
+    {
+      "splitTerminals": [
+        {
+          "name": "-> papyrus BUILD",
+          "commands": ["cd packages/runtime-papyrus", "yarn", "yarn build:watch"]
+        }
+      ]
+    },
+    {
+      "splitTerminals": [
+        {
+          "name": "hello world [Backend] TEST",
+          "commands": ["cd packages/example-hello-world-backend", "yarn", "yarn test:watch"]
+        }
+      ]
+    },
+    {
+      "splitTerminals": [
+        {
+          "name": "hello world [Backend] BUILD",
+          "commands": ["cd packages/example-hello-world-backend", "yarn dev"]
+        }
+      ]
+    },
+    {
+      "splitTerminals": [
+        {
+          "name": "hello world [Frontend] TEST",
+          "commands": ["cd packages/example-hello-world-frontend", "yarn", "yarn test:watch"]
+        }
+      ]
+    },
+    {
+      "splitTerminals": [
+        {
+          "name": "hello world [Frontend] BUILD",
+          "commands": ["cd packages/example-hello-world-frontend", "yarn", "yarn build:watch"]
+        }
+      ]
+    }
+  ]
+}
