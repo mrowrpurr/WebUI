@@ -1,15 +1,14 @@
 //webpack.config.js
 const path = require('path');
-const fs = require('fs')
 const WebpackShellPluginNext = require('webpack-shell-plugin-next');
 const buildFolder = './build'
 
 //////////////////////////////////
 // Configure this for each plugin
-const filename = `WebUI.BrowserEnvironment.js`
+const filename = `WebUI.js`
 //////////////////////////////////
 
-const webUiDestinationDirectory = path.resolve(__dirname, '..', '..', '..', 'WebUI', '__WebUI__')
+const webUiDestinationDirectory = path.resolve(__dirname, '..', '..', 'WebUI', '__WebUI__')
 
 module.exports = {
     mode: "development",

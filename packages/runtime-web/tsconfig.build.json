@@ -13,7 +13,6 @@
     "allowSyntheticDefaultImports": true,
     "baseUrl": ".",
     "lib": ["esnext", "dom"],
-    "typeRoots": ["node_modules/@types"],
     "declaration": true,
     "outDir": "dist"
   },
