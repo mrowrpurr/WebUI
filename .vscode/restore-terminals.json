@@ -93,7 +93,7 @@
       "splitTerminals": [
         {
           "name": "-> runtime BUILD",
-          "commands": ["cd packages/runtime-sdk", "yarn", "yarn build:watch"]
+          "commands": ["cd packages/runtime-sdk", "yarn dev"]
         }
       ]
     },

@@ -15,7 +15,6 @@ if (! skyrimFolder) {
 }
 
 const path = require('path');
-const packageInfo = require('./package.json')
 const WebpackShellPluginNext = require('webpack-shell-plugin-next');
 
 let plugins = []

@@ -2,13 +2,12 @@ import { IWebViewsHost, IWebView, ScreenDimensions, WebViewPosition } from '@sky
 import WebViewsHostSkyrimPlatformAPI from './WebViewsHostSkyrimPlatformAPI'
 
 export default class WebViewsHost implements IWebViewsHost {
+    id = 'WebViewHostExtension'
+    scripts = [] // WebViewsHost uniquely has no scripts because it is bundled with WebUI.BrowserEnvironment
+
     private _window: Window | undefined
     private _webViews = new Map<string, IWebView>()
     private _iframes = new Map<string, HTMLIFrameElement>()
-
-    id = 'WebViewHostExtension'
-
-    scripts = [] // WebViewsHost uniquely has no scripts because it is bundled with WebUI.BrowserEnvironment
 
     async onRegister(window: Window): Promise<boolean> {
         this._window = window; // <--- TODO USE THIS

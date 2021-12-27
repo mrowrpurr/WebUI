@@ -25,7 +25,10 @@
     "url": "git+https://github.com/mrowrpurr/WebUI.git"
   },
   "scripts": {
-    "test": "echo \"Error: run tests from root\" && exit 1"
+    "build": "tsc -p tsconfig.build.json",
+    "build:watch": "tsc-watch -p tsconfig.build.json",
+    "test": "jest",
+    "test:watch": "jest --watch"
   },
   "bugs": {
     "url": "https://github.com/mrowrpurr/WebUI/issues"
